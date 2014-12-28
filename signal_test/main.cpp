@@ -3,12 +3,17 @@
 #include <stdio.h>
 #include <exception>
 
+#include <QString>
+
 class MyException : public std::exception
 {
     const char* m_what;
 public:
-    MyException(const char* what) { m_what = what; }
-    virtual const char* what() const throw() { return m_what; }
+	MyException(const char* what)  { m_what = what; }
+	virtual ~MyException() throw() {}
+	virtual const char* what() { return m_what; }
+public:
+	QString m_s;
 };
 
 void sighandler(int signum)
