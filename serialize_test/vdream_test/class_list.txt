@@ -1,6 +1,0 @@
-* VIp
-* VVar
-* VSerializable
-* VRep
-VObject
-VTcpClient
