@@ -2,13 +2,22 @@
 #include <QCoreApplication>
 #include "vtypeinfo.h"
 
-class Obj
-{
+class ns {
 public:
-	const char* className()
+	class Obj
 	{
-		return VTypeInfo::className(typeid(*this));
-	}
+	public:
+		virtual ~Obj() {}
+		const char* className()
+		{
+			return VTypeInfo::className(typeid(*this));
+		}
+	};
+
+	class Obj2 : public Obj
+	{
+
+	};
 };
 
 int main(int argc, char *argv[])
@@ -22,14 +31,20 @@ int main(int argc, char *argv[])
 	}
 
 	{
-		Obj obj;
+		ns::Obj obj;
 		const char* className = VTypeInfo::className(typeid(obj));
 		std::cout << className << std::endl;
 	}
 
 	{
-		Obj obj;
+		ns::Obj obj;
 		const char* className = obj.className();
+		std::cout << className << std::endl;
+	}
+
+	{
+		ns::Obj* obj = new ns::Obj2;
+		const char* className = obj->className();
 		std::cout << className << std::endl;
 	}
 }
