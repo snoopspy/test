@@ -1,6 +1,9 @@
-#ifndef VVAR_H
-#define VVAR_H
+#ifndef VVARIANT_H
+#define VVARIANT_H
 
+#include <QMetaObject>
+#include <QMetaProperty>
+#include <QObject>
 #include <QVariant>
 
 #define V_QVAR_CONVERSION(TYPE) \
@@ -11,8 +14,16 @@
 	TYPE(NEWTYPE newType) { MEMBER = newType; } \
 	operator NEWTYPE() { return MEMBER; } \
 
-#define V_PROPERTY_FUNC(TYPE, NAME, GET, SET, MEMBER) \
+#define V_PROPERTY_FUNC(TYPE, GET, SET, MEMBER) \
 	TYPE GET() { return MEMBER; } \
 	void SET(TYPE GET) { MEMBER = GET; }
 
-#endif // VVAR_H
+class VVariant
+{
+public:
+	static void dump(QObject* obj);
+	static void dump(QMetaObject* mobj);
+	static void dump(QMetaProperty *mpro);
+};
+
+#endif // VVARIANT_H

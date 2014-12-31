@@ -3,6 +3,7 @@
 #include "vip.h"
 #include "vtcpclient.h"
 #include "vlog.h"
+#include "vvariant.h"
 
 void sizeofTest()
 {
@@ -44,6 +45,9 @@ void tcpClientTest()
 void logTest()
 {
 	VLog log;
+	log.setShowDateTime(VLog::DateTime);
+	qDebug() << (int)log.showDateTime();
+	VVariant::dump(&log);
 }
 
 int main()

@@ -12,7 +12,7 @@ class VTcpClient : public VObject
 public:
 	VTcpClient() {}
 
-	V_PROPERTY_FUNC(VIp, ip, ip, setIp, m_ip)
+	V_PROPERTY_FUNC(VIp, ip, setIp, m_ip)
 
 public:
 	VIp m_ip;

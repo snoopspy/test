@@ -18,20 +18,20 @@ TEMPLATE = app
 SOURCES += main.cpp \
     vip.cpp \
     vserializable.cpp \
-    vvar.cpp \
     vrep.cpp \
     vtcpclient.cpp \
     vobject.cpp \
-    vlog.cpp
+    vlog.cpp \
+    vvariant.cpp
 
 HEADERS += \
     vip.h \
     vserializable.h \
-    vvar.h \
     vrep.h \
     vtcpclient.h \
     vobject.h \
-    vlog.h
+    vlog.h \
+    vvariant.h
 
 OTHER_FILES += \
     to_do_list.txt

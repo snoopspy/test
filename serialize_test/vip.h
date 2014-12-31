@@ -1,7 +1,7 @@
 #ifndef VIP_H
 #define VIP_H
 
-#include "vvar.h"
+#include "vvariant.h"
 
 class VIp
 {
