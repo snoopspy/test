@@ -8,7 +8,7 @@ QT       += core
 
 QT       -= gui
 
-TARGET = vdream_test
+TARGET = serialize_test
 CONFIG   += console
 CONFIG   -= app_bundle
 
