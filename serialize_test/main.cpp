@@ -2,6 +2,7 @@
 
 #include "vip.h"
 #include "vtcpclient.h"
+#include "vlog.h"
 
 void sizeofTest()
 {
@@ -40,11 +41,17 @@ void tcpClientTest()
 	}
 }
 
+void logTest()
+{
+	VLog log;
+}
+
 int main()
 {
-	sizeofTest();
-	ipTest();
-	tcpClientTest();
+	//sizeofTest();
+	//ipTest();
+	//tcpClientTest();
+	logTest();
 	return 0;
 }
 

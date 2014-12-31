@@ -21,7 +21,8 @@ SOURCES += main.cpp \
     vvar.cpp \
     vrep.cpp \
     vtcpclient.cpp \
-    vobject.cpp
+    vobject.cpp \
+    vlog.cpp
 
 HEADERS += \
     vip.h \
@@ -29,7 +30,8 @@ HEADERS += \
     vvar.h \
     vrep.h \
     vtcpclient.h \
-    vobject.h
+    vobject.h \
+    vlog.h
 
 OTHER_FILES += \
-    class_list.txt
+    to_do_list.txt
