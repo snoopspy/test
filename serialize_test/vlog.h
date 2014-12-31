@@ -25,6 +25,6 @@ public:
 private:
 	VShowDateTime m_showDateTime;
 };
-Q_DECLARE_METATYPE(VLog::VShowDateTime)
+//Q_DECLARE_METATYPE(VLog::VShowDateTime)
 
 #endif // VLOG_H

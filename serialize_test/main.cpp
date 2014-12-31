@@ -46,7 +46,7 @@ void logTest()
 {
 	VLog log;
 	log.setShowDateTime(VLog::DateTime);
-	qDebug() << (int)log.showDateTime();
+	// qDebug() << (int)log.showDateTime();
 	VVariant::dump(&log);
 }
 

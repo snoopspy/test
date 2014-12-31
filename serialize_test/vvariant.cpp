@@ -10,9 +10,9 @@ void VVariant::dump(QObject* obj)
 void VVariant::dump(QMetaObject* mobj)
 {
 	const char* className = mobj->className();
-	int count = mobj->propertyCount();
-	qDebug() << "className" << className << "propertyCount" << count;
-	for (int i = 0; i < count; i++)
+	int propertyCount = mobj->propertyCount();
+	qDebug() << "className" << className << "propertyCount" << propertyCount;
+	for (int i = 0; i < propertyCount; i++)
 	{
 		QMetaProperty mpro = mobj->property(i);
 		dump(&mpro);
@@ -26,5 +26,11 @@ void VVariant::dump(QMetaProperty *mpro)
 	if (mpro->isEnumType())
 	{
 		qDebug() << "enum type";
+		int keyCount = mpro->enumerator().keyCount();
+		for (int i = 0; i < keyCount; i++)
+		{
+			const char* key = mpro->enumerator().key(i);
+			qDebug() << " " << key;
+		}
 	}
 }
