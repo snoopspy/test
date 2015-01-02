@@ -4,32 +4,49 @@
 
 VError::VError()
 {
-	ti = &typeid(VError);
-	msg = "";
-	code = 0;
+	clear();
 }
 
 VError::VError(const VError& rhs)
 {
-	ti = rhs.ti;
 	msg = rhs.msg;
 	code = rhs.code;
 }
 
 VError& VError::operator = (const VError& rhs)
 {
-	if (code == 0)
+	if (code == OK)
 	{
-		ti = rhs.ti;
+		void* _this = (void*)this;
+		void* _rhs = (void*)&rhs;
+		memcpy(_this, _rhs, sizeof(void*)); // virtual method table
 		msg = rhs.msg;
 		code = rhs.code;
 	}
 	return *this;
 }
 
+VError::VError(const QString msg, const int code)
+{
+	this->msg = msg;
+	this->code = code;
+}
+
+VError::VError(const QString msg, const int code, const char* file, const int line, const char* func)
+{
+	this->msg = msg;
+	this->code = code;
+	dump(file, line, func);
+}
+
+VError::~VError()
+{
+}
+
 const char* VError::className()
 {
-	char *res = abi::__cxa_demangle(ti->name(), 0, 0, NULL);
+	//char *res = abi::__cxa_demangle(ti->name(), 0, 0, NULL);
+	char *res = abi::__cxa_demangle(typeid(*this).name(), 0, 0, NULL);
 	return res;
 }
 
@@ -41,6 +58,12 @@ void VError::dump()
 void VError::dump(const char* file, const int line, const char* func)
 {
 	qDebug() << file << line << func << className() << msg << code;
+}
+
+void VError::clear()
+{
+	msg = "";
+	code = OK;
 }
 
 #ifdef GTEST
@@ -79,14 +102,21 @@ TEST_F(VErrTest, AssignTest)
 {
 	VError error;
 
+	error = VError("2 argument", ObjError::OBJ_ERROR_2);
+	error.dump();
+	error.clear();
+
 	error = ObjError("2 argument", ObjError::OBJ_ERROR_2);
 	error.dump();
+	error.clear();
 
 	error = ObjError("5 argument", ObjError::OBJ_ERROR_2, __FILE__, __LINE__, __func__);
-	//error.dump();
+	error.dump();
+	error.clear();
 
 	error = V_ERROR(ObjError, "V_ERROR", ObjError::OBJ_ERROR_2);
 	error.dump();
+	error.clear();
 }
 
 #endif // GTEST
