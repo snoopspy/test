@@ -6,7 +6,7 @@ VError::VError()
 {
 	ti = &typeid(VError);
 	msg = "";
-	code = OK;
+	code = 0;
 }
 
 VError::VError(const VError& rhs)
@@ -18,9 +18,12 @@ VError::VError(const VError& rhs)
 
 VError& VError::operator = (const VError& rhs)
 {
-	ti = rhs.ti;
-	msg = rhs.msg;
-	code = rhs.code;
+	if (code == 0)
+	{
+		ti = rhs.ti;
+		msg = rhs.msg;
+		code = rhs.code;
+	}
 	return *this;
 }
 
@@ -37,7 +40,7 @@ void VError::dump()
 
 void VError::dump(const char* file, const int line, const char* func)
 {
-	qDebug() <<file << line << func << className() << msg << code;
+	qDebug() << file << line << func << className() << msg << code;
 }
 
 #ifdef GTEST
@@ -45,8 +48,19 @@ void VError::dump(const char* file, const int line, const char* func)
 #include <typeinfo>
 #include <QDebug>
 
-class VErrTest : public ::testing::Test
+class VErrTest : public ::testing::Test {};
+
+class Obj {};
+class ObjError : public VError
 {
+public:
+	enum {
+		OBJ_ERROR_1 = 1,
+		OBJ_ERROR_2 = 2
+	};
+
+public:
+	V_ERROR_CTOR(ObjError)
 };
 
 TEST_F(VErrTest, commonTest)
@@ -55,22 +69,9 @@ TEST_F(VErrTest, commonTest)
 	error.dump();
 }
 
-class Obj {};
-class ObjError : public VErr<Obj>
-{
-public:
-	enum {
-		OBJ_ERROR888 = 888,
-		OBJ_ERROR999 = 999
-	};
-
-public:
-	V_ERROR_CTOR(ObjError, Obj)
-};
-
 TEST_F(VErrTest, ObjTest)
 {
-	ObjError objError("888 error", ObjError::OBJ_ERROR888);
+	ObjError objErr("OBJ_ERROR_1", ObjError::OBJ_ERROR_1);
 	//dump(&objError);
 }
 
@@ -78,13 +79,13 @@ TEST_F(VErrTest, AssignTest)
 {
 	VError error;
 
-	error = ObjError("999 error", ObjError::OBJ_ERROR999);
+	error = ObjError("2 argument", ObjError::OBJ_ERROR_2);
 	error.dump();
 
-	error = ObjError("999 error", ObjError::OBJ_ERROR999, __FILE__, __LINE__, __func__);
+	error = ObjError("5 argument", ObjError::OBJ_ERROR_2, __FILE__, __LINE__, __func__);
 	//error.dump();
 
-	error = V_ERROR(ObjError, "999 error", ObjError::OBJ_ERROR999);
+	error = V_ERROR(ObjError, "V_ERROR", ObjError::OBJ_ERROR_2);
 	error.dump();
 }
 
