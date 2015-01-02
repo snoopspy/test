@@ -35,6 +35,11 @@ void VError::dump()
 	qDebug() << className() << msg << code;
 }
 
+void VError::dump(const char* file, const int line, const char* func)
+{
+	qDebug() <<file << line << func << className() << msg << code;
+}
+
 #ifdef GTEST
 #include <gtest/gtest.h>
 #include <typeinfo>
@@ -75,7 +80,12 @@ TEST_F(VErrTest, AssignTest)
 
 	error = ObjError("999 error", ObjError::OBJ_ERROR999);
 	error.dump();
-	//dump(&error);
+
+	error = ObjError("999 error", ObjError::OBJ_ERROR999, __FILE__, __LINE__, __func__);
+	//error.dump();
+
+	error = V_ERROR(ObjError, "999 error", ObjError::OBJ_ERROR999);
+	error.dump();
 }
 
 #endif // GTEST
