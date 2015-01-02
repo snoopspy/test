@@ -17,16 +17,20 @@ public:
 	int code;
 
 public:
-	VError();
+	virtual ~VError();
 	VError(const VError& rhs);
 	VError& operator = (const VError& rhs);
+
+public:
+	VError();
 	VError(const QString msg, const int code);
 	VError(const QString msg, const int code, const char* file, const int line, const char* func);
-	virtual ~VError();
+
+public:
 	const char* className();
+	void clear();
 	void dump();
 	void dump(const char* file, const int line, const char* func);
-	void clear();
 };
 
 #define V_ERROR_CTOR(ERROR_CLASS_NAME) \
