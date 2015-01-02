@@ -1,20 +1,44 @@
+#include <cxxabi.h>
+#include <QDebug>
 #include "verror.h"
+
+VError::VError()
+{
+	ti = &typeid(VError);
+	msg = "";
+	code = OK;
+}
+
+VError::VError(const VError& rhs)
+{
+	ti = rhs.ti;
+	msg = rhs.msg;
+	code = rhs.code;
+}
+
+VError& VError::operator = (const VError& rhs)
+{
+	ti = rhs.ti;
+	msg = rhs.msg;
+	code = rhs.code;
+	return *this;
+}
+
+const char* VError::className()
+{
+	char *res = abi::__cxa_demangle(ti->name(), 0, 0, NULL);
+	return res;
+}
+
+void VError::dump()
+{
+	qDebug() << className() << msg << code;
+}
 
 #ifdef GTEST
 #include <gtest/gtest.h>
 #include <typeinfo>
 #include <QDebug>
-
-void dump(VError* error)
-{
-	//qDebug() << abi::__cxa_demangle(typeid(*error).name(), 0, 0, NULL);
-	qDebug() << error->className();
-	qDebug() << error->code;
-	qDebug() << error->msg;
-}
-
-class Obj;
-//typedef VError<Obj> VObjError;
 
 class VErrTest : public ::testing::Test
 {
@@ -23,36 +47,35 @@ class VErrTest : public ::testing::Test
 TEST_F(VErrTest, commonTest)
 {
 	VError error;
-	dump(&error);
+	error.dump();
 }
 
 class Obj {};
 class ObjError : public VErr<Obj>
 {
 public:
-	ObjError() : VErr<Obj>() {}
-	ObjError(const int code, const QString msg) : VErr<Obj>(code, msg) {}
-};
+	enum {
+		OBJ_ERROR888 = 888,
+		OBJ_ERROR999 = 999
+	};
 
-class Obj2;
-class Obj2Error : public VErr<Obj2>
-{
 public:
-	V_ERROR_CTOR(Obj2Error, Obj2)
+	V_ERROR_CTOR(ObjError, Obj)
 };
 
 TEST_F(VErrTest, ObjTest)
 {
-	ObjError objError(1, "puhahaha");
-	dump(&objError);
+	ObjError objError("888 error", ObjError::OBJ_ERROR888);
+	//dump(&objError);
 }
 
 TEST_F(VErrTest, AssignTest)
 {
 	VError error;
 
-	error = ObjError(999, "this is obj error");
-	dump(&error);
+	error = ObjError("999 error", ObjError::OBJ_ERROR999);
+	error.dump();
+	//dump(&error);
 }
 
 #endif // GTEST

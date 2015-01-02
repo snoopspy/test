@@ -3,7 +3,6 @@
 
 #include <typeinfo>
 #include <QString>
-#include <cxxabi.h>
 
 class VError
 {
@@ -13,41 +12,18 @@ public:
 		FAIL = -1,
 		UNKNOWN = 1
 	};
+
 public:
 	const std::type_info* ti;
-	int code;
 	QString msg;
+	int code;
 
 public:
-	VError()
-	{
-		ti = &typeid(VError);
-		code = OK;
-		msg = "";
-	}
-
-	VError(const VError& rhs)
-	{
-		ti = rhs.ti;
-		code = rhs.code;
-		msg = rhs.msg;
-	}
-
-	VError& operator = (const VError& rhs)
-	{
-		ti = rhs.ti;
-		code = rhs.code;
-		msg = rhs.msg;
-		return *this;
-	}
-
-	const char* className()
-	{
-		//int status;
-		//char *res = abi::__cxa_demangle(ti->name(), 0, 0, &status);
-		char *res = abi::__cxa_demangle(ti->name(), 0, 0, NULL);
-		return res;
-	}
+	VError();
+	VError(const VError& rhs);
+	VError& operator = (const VError& rhs);
+	const char* className();
+	void dump();
 };
 
 template <class T>
@@ -57,20 +33,20 @@ public:
 	VErr()
 	{
 		ti = &typeid(VErr<T>);
-		code = OK;
 		msg = "";
+		code = OK;
 	}
 
-	VErr(const int code, const QString msg)
+	VErr(const QString msg, const int code)
 	{
 		ti = (std::type_info*)&typeid(VErr<T>);
-		this->code = code;
 		this->msg = msg;
+		this->code = code;
 	}
 };
 
 #define V_ERROR_CTOR(ERROR_CLASS_NAME, CLASS_NAME) \
 ERROR_CLASS_NAME() : VErr<CLASS_NAME>() {} \
-ERROR_CLASS_NAME(const int code, const QString msg) : VErr<CLASS_NAME>(code, msg) {}
+ERROR_CLASS_NAME(const QString msg, const int code) : VErr<CLASS_NAME>(msg, code) {}
 
 #endif // VERR_H
