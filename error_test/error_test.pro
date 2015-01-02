@@ -18,7 +18,7 @@ TEMPLATE = app
 
 
 SOURCES += \
-    verr.cpp
+    verror.cpp
 
 HEADERS += \
-    verr.h
+    verror.h
