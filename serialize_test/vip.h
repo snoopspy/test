@@ -1,16 +1,14 @@
 #ifndef VIP_H
 #define VIP_H
 
-#include "vvariant.h"
+#include "vmetaobject.h"
 
 class VIp
 {
 public:
-	V_TYPE_CONVERSION(VIp, quint32, m_ip)
+	VIp() {}
 	V_QVAR_CONVERSION(VIp)
-
-public:
-	VIp() { m_ip = -1; }
+	V_TYPE_CONVERSION(VIp, quint32, m_ip)
 
 private:
 	quint32 m_ip;

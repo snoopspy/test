@@ -1,29 +1,25 @@
 #ifndef VLOG_H
 #define VLOG_H
 
-#include <QObject>
-#include "vvariant.h"
+#include "vmetaobject.h"
+#include "vobject.h"
 
-class VLog : public QObject
+class VLog : public VObject
 {
 	Q_OBJECT
+	Q_PROPERTY(VShowDateTime showDateTime MEMBER showDateTime)
 	Q_ENUMS(VShowDateTime)
-	Q_PROPERTY(VShowDateTime showDateTime READ showDateTime WRITE setShowDateTime)
+
 public:
 	enum VShowDateTime
 	{
 		None,
 		Time,
 		DateTime
-	};
+	} showDateTime;
 
 public:
-	explicit VLog(QObject *parent = 0);
-
-	V_PROPERTY_FUNC(VShowDateTime, showDateTime, setShowDateTime, m_showDateTime)
-
-private:
-	VShowDateTime m_showDateTime;
+	explicit VLog(VObject *parent = 0) : VObject(parent) {}
 };
 //Q_DECLARE_METATYPE(VLog::VShowDateTime)
 

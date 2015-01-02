@@ -10,7 +10,7 @@ class VObject : public QObject, public VSerializable
 	Q_OBJECT
 
 public:
-	VObject() {}
+	VObject(VObject* parent = 0) : QObject(parent) {}
 	virtual ~VObject() {}
 
 public:

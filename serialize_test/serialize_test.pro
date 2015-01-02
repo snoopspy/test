@@ -5,8 +5,9 @@
 #-------------------------------------------------
 
 QT       += core
-
 QT       -= gui
+
+include (../../gtest/gtest.pri)
 
 TARGET = serialize_test
 CONFIG   += console
@@ -22,7 +23,9 @@ SOURCES += main.cpp \
     vtcpclient.cpp \
     vobject.cpp \
     vlog.cpp \
-    vvariant.cpp
+    vcommon.cpp \
+    vstate.cpp \
+    vmetaobject.cpp
 
 HEADERS += \
     vip.h \
@@ -31,7 +34,9 @@ HEADERS += \
     vtcpclient.h \
     vobject.h \
     vlog.h \
-    vvariant.h
+    vcommon.h \
+    vstate.h \
+    vmetaobject.h
 
 OTHER_FILES += \
     to_do_list.txt

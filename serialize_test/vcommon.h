@@ -4,7 +4,6 @@
 class VCommon
 {
 public:
-	VCommon();
 };
 
 #endif // VCOMMON_H

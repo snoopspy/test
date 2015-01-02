@@ -3,7 +3,8 @@
 #include "vip.h"
 #include "vtcpclient.h"
 #include "vlog.h"
-#include "vvariant.h"
+#include "vmetaobject.h"
+#include "vstate.h"
 
 void sizeofTest()
 {
@@ -45,19 +46,30 @@ void tcpClientTest()
 void logTest()
 {
 	VLog log;
-	log.setShowDateTime(VLog::DateTime);
-	// qDebug() << (int)log.showDateTime();
-	VVariant::dump(&log);
+	log.showDateTime = VLog::DateTime;
+	log.setProperty("showDateTime", VLog::None);
+	qDebug() << (int)log.showDateTime;
+	VMetaObject::dump(&log);
 }
 
+void stateTest()
+{
+	Foo foo;
+	qDebug() << "sizeof(Foo)" << sizeof(foo);
+	VMetaObject::dump((QMetaObject*)&Foo::staticMetaObject);
+}
+
+/*
 int main()
 {
 	//sizeofTest();
 	//ipTest();
 	//tcpClientTest();
-	logTest();
+	//logTest();
+	stateTest();
 	return 0;
 }
+*/
 
 /*
 #include <QCoreApplication>

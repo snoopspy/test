@@ -10,7 +10,7 @@ class VTcpClient : public VObject
 	Q_PROPERTY(VIp ip READ ip WRITE setIp)
 
 public:
-	VTcpClient() {}
+	explicit VTcpClient() {}
 
 	V_PROPERTY_FUNC(VIp, ip, setIp, m_ip)
 

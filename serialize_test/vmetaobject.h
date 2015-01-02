@@ -18,12 +18,13 @@
 	TYPE GET() { return MEMBER; } \
 	void SET(TYPE GET) { MEMBER = GET; }
 
-class VVariant
+class VMetaObject
 {
 public:
 	static void dump(QObject* obj);
 	static void dump(QMetaObject* mobj);
 	static void dump(QMetaProperty *mpro);
+	static void dump(QMetaEnum *menum);
 };
 
 #endif // VVARIANT_H
