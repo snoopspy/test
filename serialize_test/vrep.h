@@ -1,8 +1,8 @@
 #ifndef VREP_H
 #define VREP_H
 
-#include <QVariantHash>
+#include <QVariantMap>
 
-typedef QVariantHash VRep;
+typedef QVariantMap VRep;
 
 #endif // VREP_H

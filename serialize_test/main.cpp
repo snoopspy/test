@@ -33,13 +33,13 @@ void tcpClientTest()
 	VRep rep;
 	{
 		VTcpClient tcpClient;
-		tcpClient.setIp(1234);
+		tcpClient.ip = 1234;
 		rep << tcpClient;
 	}
 	{
 		VTcpClient tcpClient;
 		rep >> tcpClient;
-		qDebug() << (quint32)tcpClient.ip();
+		qDebug() << (quint32)tcpClient.ip;
 	}
 }
 
@@ -50,13 +50,6 @@ void logTest()
 	log.setProperty("showDateTime", VLog::None);
 	qDebug() << (int)log.showDateTime;
 	VMetaObject::dump(&log);
-}
-
-void stateTest()
-{
-	Foo foo;
-	qDebug() << "sizeof(Foo)" << sizeof(foo);
-	VMetaObject::dump((QMetaObject*)&Foo::staticMetaObject);
 }
 
 /*

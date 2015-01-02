@@ -33,5 +33,4 @@ TEST_F(VIpTest, loadTest)
 	ASSERT_TRUE(newIp == 1234);
 }
 
-
 #endif // GTEST
