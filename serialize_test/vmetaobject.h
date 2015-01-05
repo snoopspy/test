@@ -21,10 +21,10 @@
 class VMetaObject
 {
 public:
-	static void dump(QObject* obj);
-	static void dump(QMetaObject* mobj);
-	static void dump(QMetaProperty *mpro);
-	static void dump(QMetaEnum *menum);
+	static void dump(QObject* obj, int ident = 0);
+	static void dump(QMetaObject* mobj, QObject* obj = NULL, int ident = 0);
+	static void dump(QMetaProperty *mpro, QObject* obj = NULL, int ident = 0);
+	static void dump(QMetaEnum *menum, QObject* obj = NULL, int ident = 0);
 };
 
 #endif // VVARIANT_H
