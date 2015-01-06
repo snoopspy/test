@@ -11,19 +11,13 @@ bool VSerializable::loadFromFile(QString fileName)
 		return false;
 
 	QByteArray ba = file.readAll();
-	QJsonDocument doc;
-
-	doc = QJsonDocument::fromJson(ba);
 	file.close();
-	qDebug() << doc.toBinaryData();
 
-	QJsonObject obj;
-	obj = doc.object();
-	qDebug() << obj.count();
+	QJsonDocument jdoc = QJsonDocument::fromJson(ba);
 
-	VRep rep;
-	rep = obj.toVariantMap();
+	QJsonObject jobj = jdoc.object();
 
+	VRep rep = jobj.toVariantMap();
 	rep >> *this;
 
 	return true;
@@ -34,18 +28,16 @@ bool VSerializable::saveToFile(QString fileName)
 	VRep rep;
 	rep << *this;
 
-	QJsonObject obj;
-	obj = QJsonObject::fromVariantMap(rep);
+	QJsonObject jobj = QJsonObject::fromVariantMap(rep);
 
-	QJsonDocument doc;
-	doc.setObject(obj);
-	qDebug() << doc.toJson(); // gilgil temp 2015.01.03
+	QJsonDocument jdoc;
+	jdoc.setObject(jobj);
 
 	QFile file(fileName);
 	if (!file.open(QIODevice::WriteOnly))
 		return false;
 
-	file.write(doc.toJson());
+	file.write(jdoc.toJson());
 	file.close();
 
 	return true;
@@ -100,18 +92,5 @@ TEST(SerializeTest, objTest)
 	}
 }
 
-TEST(SerializeTest, tcpClientTest)
-{
-	VTcpClient tcpClient;
-	tcpClient.ip = 1234;
-	tcpClient.port = 80;
-	tcpClient.saveToFile("tcpClient.json");
-	{
-		VTcpClient newTcpClient;
-		newTcpClient.loadFromFile("tcpClient.json");
-		qDebug() << (quint32)newTcpClient.ip;
-		qDebug() << newTcpClient.port;
-	}
-}
 
 #endif // GTEST

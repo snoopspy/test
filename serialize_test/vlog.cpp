@@ -2,13 +2,29 @@
 
 #ifdef GTEST
 #include <gtest/gtest.h>
+#include <QJsonObject>
+
+TEST(VLogTest, sizeTest)
+{
+	printf("sizeof(VLog) is %zu\n", sizeof(VLog));
+}
 
 TEST(VLogTest, dumpTest)
 {
 	VLog log;
-	log.setObjectName("myLog");
 	log.showDateTime = VLog::DateTime;
-	VMetaObject::dump(&log);
+	VMetaDump::dump(&log);
+}
+
+TEST(VLogTest, saveLoadTest)
+{
+	VLog log;
+	log.showDateTime = VLog::DateTime;
+	log.saveToFile("log.json");
+
+	VLog newLog;
+	newLog.loadFromFile("log.json");
+	EXPECT_TRUE(newLog.showDateTime == VLog::DateTime);
 }
 
 #endif // GTEST

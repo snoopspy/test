@@ -25,7 +25,7 @@ SOURCES += main.cpp \
     vlog.cpp \
     vcommon.cpp \
     vstate.cpp \
-    vmetaobject.cpp
+    vmetadump.cpp
 
 HEADERS += \
     vip.h \
@@ -36,7 +36,7 @@ HEADERS += \
     vlog.h \
     vcommon.h \
     vstate.h \
-    vmetaobject.h
+    vmetadump.h
 
 OTHER_FILES += \
     to_do_list.txt

@@ -1,45 +1,52 @@
-#include <QDebug>
-
 #include "vip.h"
 #include "vrep.h"
 
 #ifdef GTEST
 #include <gtest/gtest.h>
 
-class VIpTest : public ::testing::Test
+TEST(VIpTest, sizeTest)
 {
-public:
-	QVariant variant;
-};
-
-class foo
-{
-
-};
-
-TEST_F(VIpTest, commonTest)
-{
-	qDebug() << "sizeof(VIp)" << sizeof(VIp);
+	printf("sizeof(VIp) is %zu\n", sizeof(VIp));
+	EXPECT_TRUE(sizeof(VIp) == sizeof(quint32));
 }
 
-/*
-TEST_F(VIpTest, saveTest)
+TEST(VIpTest, varTest)
 {
 	VIp ip = 1234;
-	variant = ip;
-	qDebug() << "type" << variant.type();
-	qDebug() << "userType" << variant.userType();
-	qDebug() << "typeName" << variant.typeName();
-	ASSERT_EQ(strcmp(variant.typeName(), "VIp"), 0);
-}
-*/
+	QVariant var = QVariant::fromValue<VIp>(ip);
+	VMetaDump::dump(&var);
 
-/*
-TEST_F(VIpTest, loadTest)
-{
-	VIp newIp = variant;
-	ASSERT_TRUE(newIp == 1234);
+	int userType = var.userType();
+	EXPECT_TRUE(userType == qMetaTypeId<VIp>());
+
+	QVariant::Type type = var.type();
+	EXPECT_TRUE((int)type == QMetaType::User);
+
+	QString typeName = var.typeName();
+	EXPECT_TRUE(typeName == "VIp");
 }
-*/
+
+TEST(VIpTest, varCopyTest)
+{
+	VIp ip1 = 1234;
+	QVariant variant = QVariant::fromValue<VIp>(ip1);
+	VIp ip2 = variant.value<VIp>();
+	EXPECT_TRUE(ip2 == 1234);
+}
+
+TEST(VIpTest, copyTest)
+{
+	VIp ip1(1234);
+	VIp ip2 = ip1;
+	EXPECT_TRUE(ip2 == 1234);
+}
+
+TEST(VIpTest, addTest)
+{
+	VIp ip1(1111);
+	VIp ip2(2222);
+	VIp ip3 = ip1 + ip2;
+	EXPECT_TRUE(ip3 == 3333);
+}
 
 #endif // GTEST

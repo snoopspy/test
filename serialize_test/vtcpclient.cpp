@@ -1,32 +1,29 @@
 #include "vtcpclient.h"
-#include <QDebug>
 
 #ifdef GTEST
 #include <gtest/gtest.h>
 
-TEST(VTcpClienTest, dumpTest)
+TEST(VTcpClientTest, dumpTest)
 {
+	VIp::registerConverter();
 	VTcpClient tcpClient;
-	tcpClient.ip = 0x1234;
+	tcpClient.ip = 1234;
 	tcpClient.port = 80;
-	QMetaType::registerConverter<VIp, QString>(VIp::ipToString);
-	VMetaObject::dump(&tcpClient);
+	VMetaDump::dump(&tcpClient);
 }
 
-TEST(VTcpClienTest, saveTest)
+TEST(VTcpClientTest, saveTest)
 {
-	VTcpClient tcpClient;
-	tcpClient.ip = 0x1235;
-	tcpClient.port = 80;
-	VIp::initialize();
-	tcpClient.saveToFile("tcpClient.json");
-	{
-		VTcpClient newTcpClient;
-		newTcpClient.ip.m_ip = 0;
-		newTcpClient.loadFromFile("tcpClient.json");
-		qDebug() << newTcpClient.ip.m_ip;
-		qDebug() << newTcpClient.port;
-	}
+	VIp::registerConverter();
+	VTcpClient tcpClient1;
+	tcpClient1.ip = 1235;
+	tcpClient1.port = 80;
+	tcpClient1.saveToFile("tcpClient.json");
+
+	VTcpClient tcpClient2;
+	tcpClient2.loadFromFile("tcpClient.json");
+	EXPECT_TRUE(tcpClient2.ip == 1235);
+	EXPECT_TRUE(tcpClient2.port == 80);
 }
 
 #endif // GTEST

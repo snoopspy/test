@@ -1,7 +1,7 @@
 #ifndef VLOG_H
 #define VLOG_H
 
-#include "vmetaobject.h"
+#include "vmetadump.h"
 #include "vobject.h"
 
 class VLog : public VObject

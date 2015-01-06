@@ -3,34 +3,28 @@
 #ifdef GTEST
 #include <gtest/gtest.h>
 #include <QDebug>
+#include "vmetadump.h"
 
-class VStateTest : public ::testing::Test
+TEST(VStateTest, sizeTest)
 {
-
-};
-
-TEST_F(VStateTest, commonTest)
-{
-	qDebug() << "sizeof(VState)" << sizeof(VState);
+	printf("sizeof(VState)=%zu\n", sizeof(VState));
+	EXPECT_TRUE(sizeof(VState) == sizeof(int));
 }
 
-TEST_F(VStateTest, saveTest)
+TEST(VStateTest, varTest)
 {
-	VState state  = VState::Opened;
-	QVariant variant = state;
+	VState state = Opened;
+	QVariant var = QVariant::fromValue<VState>(state);
+	VMetaDump::dump(&var);
 
-	switch (state)
-	{
-	case VState::None:;
-	case VState::Closed:;
-	case VState::Opening:;
-	case VState::Opened:;
-	case VState::Closing:;
-	}
+	int userType = var.userType();
+	EXPECT_TRUE(userType == qMetaTypeId<VState>());
 
-	qDebug() << "userType" << variant.userType();
-	qDebug() << "type" << variant.type();
-	qDebug() << "typeName" << variant.typeName();
+	QVariant::Type type = var.type();
+	EXPECT_TRUE((int)type == QMetaType::User);
+
+	QString typeName = var.typeName();
+	EXPECT_TRUE(typeName == "VState");
 }
 
 #endif // GTEST
