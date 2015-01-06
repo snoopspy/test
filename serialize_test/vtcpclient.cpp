@@ -18,12 +18,7 @@ TEST(VTcpClienTest, saveTest)
 	VTcpClient tcpClient;
 	tcpClient.ip = 0x1235;
 	tcpClient.port = 80;
-	bool ok = QMetaType::registerConverter<VIp, QString>(VIp::ipToString);
-	qDebug() << ok;
-	bool ok2 = QMetaType::registerConverter<QString, VIp>(VIp::stringToIp);
-	qDebug() << ok2;
-	bool ok3 = QMetaType::registerConverter<QVariant, VIp>(VIp::variantToIp);
-	qDebug() << ok3;
+	VIp::initialize();
 	tcpClient.saveToFile("tcpClient.json");
 	{
 		VTcpClient newTcpClient;

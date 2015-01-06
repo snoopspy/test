@@ -22,9 +22,20 @@ public:
 	//static VIp fromString(QString s) { VIp res(s.toInt()); return res; }
 	//QString toString() { return QString::number(m_ip); }
 
-	static QString ipToString(const VIp ip);
-	static VIp stringToIp(const QString s);
-	static VIp variantToIp(const QVariant variant);
+	static void initialize()
+	{
+		static bool initialized = false;
+		if (!initialized)
+		{
+			QMetaType::registerConverter<VIp, QString>(VIp::ipToString);
+			QMetaType::registerConverter<QString, VIp>(VIp::stringToIp);
+			initialized = true;
+		}
+	}
+	static QString ipToString(const VIp ip)	{ return QString::number(ip.m_ip);}
+	static VIp stringToIp(const QString s) {return VIp(s.toUInt()); }
+
+	//static VIp variantToIp(const QVariant variant);
 public:
 	quint32 m_ip;
 };

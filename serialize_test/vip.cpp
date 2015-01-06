@@ -3,21 +3,6 @@
 #include "vip.h"
 #include "vrep.h"
 
-QString VIp::ipToString(const VIp ip)
-{
-	return QString::number(ip.m_ip);
-}
-
-VIp VIp::stringToIp(const QString s)
-{
-	return VIp(s.toUInt());
-}
-
-VIp VIp::variantToIp(const QVariant variant)
-{
-	return variant.value<VIp>();
-}
-
 #ifdef GTEST
 #include <gtest/gtest.h>
 

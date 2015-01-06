@@ -12,7 +12,6 @@ void VObject::load(VRep& rep)
 	{
 		QMetaProperty mpro = mobj->property(i);
 		const char* name = mpro.name();
-		//QString value = rep[name].toString();
 		QVariant from = rep[name];
 		QVariant to = this->property(name);
 		QVariant::Type toType = to.type();
@@ -20,7 +19,6 @@ void VObject::load(VRep& rep)
 			to = from;
 		else
 			QMetaType::convert(from.data(), from.type(), to.data(), to.type());
-
 		this->setProperty(name, to);
 	}
 }
@@ -33,7 +31,13 @@ void VObject::save(VRep& rep)
 	{
 		QMetaProperty mpro = mobj->property(i);
 		const char* name = mpro.name();
-		QVariant value = this->property(name);
-		rep.insert(QString(name), value);
+		QVariant from = this->property(name);
+		QVariant::Type fromType = from.type();
+		QVariant to = from;
+		if (fromType != QVariant::UserType)
+			to = from;
+		else
+			QMetaType::convert(from.data(), from.type(), to.data(), to.type());
+		rep[name] = to;
 	}
 }
