@@ -18,7 +18,8 @@ VRep VStrRep::toStrRep(const VRep& rep, const QMetaObject* mobj)
 		QVariant from = it.value();
 		QVariant to   = QVariant(QVariant::String, NULL);
 
-		if (mpro.type() == QVariant::UserType)
+		if (QMetaType::hasRegisteredConverterFunction(from.userType(), to.userType()))
+		//if (mpro.type() == QVariant::UserType)
 		{
 			void* fromData     = from.data();
 			int   fromUserType = from.userType();
@@ -60,7 +61,8 @@ VRep VStrRep::toRep(const VRep& strRep, const QMetaObject* mobj)
 		QVariant from = it.value().toString();
 		QVariant to   = QVariant(mpro.userType(), NULL);
 
-		if (mpro.type() == QVariant::UserType)
+		if (QMetaType::hasRegisteredConverterFunction(from.userType(), to.userType()))
+		//if (mpro.type() == QVariant::UserType)
 		{
 			void* fromData     = from.data();
 			int   fromUserType = from.userType(); // QVariant::String
