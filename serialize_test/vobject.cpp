@@ -14,36 +14,33 @@ void VObject::load(VRep& rep)
 	{
 		QMetaProperty mpro = mobj->property(i);
 		const char* name = mpro.name();
-
-		QVariant from = rep[name];
-
-		QVariant to = this->property(name);
-
-		QVariant::Type toType = to.type();
-		if (toType == QVariant::UserType)
+		QVariant sValue = rep[name].toString();
+		QVariant value = this->property(name);
+		QVariant::Type valueType = value.type();
+		if (valueType == QVariant::UserType)
 		{
-			void* fromData = from.data();
-			int fromUserType = from.userType();
-			void* toData = to.data();
-			int toUserType = to.userType();
-			bool res = QMetaType::convert(fromData, fromUserType, toData, toUserType);
+			void* valueData = value.data();
+			int valueUserType = value.userType();
+			void* sValueData = sValue.data();
+			int sValueUserType = sValue.userType();
+			bool res = QMetaType::convert(sValueData, sValueUserType, valueData, valueUserType);
 			if (!res)
 			{
 				printf("VObject::load QMetaType::convert return false\n");
-				VMetaDump::dump(&from);
-				VMetaDump::dump(&to);
-				to = from;
+				VMetaDump::dump(&sValue);
+				VMetaDump::dump(&value);
+				value = sValue; // gilgil temp 2014.01.06
 			}
 		} else
 		if (mpro.isEnumType())
 		{
 			QMetaEnum menum = mpro.enumerator();
-			QString keys = from.toString();
-			to = menum.keysToValue(qPrintable(keys));
+			QString keys = sValue.toString();
+			value = menum.keysToValue(qPrintable(keys));
 		} else {
-			to = from;
+			value = sValue;
 		}
-		this->setProperty(name, to);
+		this->setProperty(name, value);
 	}
 }
 
@@ -53,36 +50,33 @@ void VObject::save(VRep& rep)
 	int cnt = mobj->propertyCount();
 	for (int i = 0; i < cnt; i++)
 	{
-		QMetaProperty mpro = mobj->property(i);
-		const char* name = mpro.name();
-
-		QVariant from = this->property(name);
-
-		QVariant::Type fromType = from.type();
-
-		QVariant to;
-		if (fromType == QVariant::UserType)
+		QMetaProperty mpro       = mobj->property(i);
+		const char* name         = mpro.name();
+		QVariant value           = this->property(name);
+		QVariant::Type valueType = value.type();
+		QVariant sValue          = "";
+		if (valueType == QVariant::UserType)
 		{
-			void* fromData = from.data();
-			int fromUserType = from.userType();
-			void* toData = to.data();
-			int toUserType = QVariant::String;
-			bool res = QMetaType::convert(fromData, fromUserType, toData, toUserType);
+			void* valueData      = value.data();
+			int   valueUserType  = value.userType();
+			void* sValueData     = sValue.data();
+			int   sValueUserType = sValue.userType();
+			bool res = QMetaType::convert(valueData, valueUserType, sValueData, sValueUserType);
 			if (!res)
 			{
 				printf("VObject::save QMetaType::convert return false\n");
-				VMetaDump::dump(&from);
-				to = from;
+				VMetaDump::dump(&value);
+				sValue = value;  // gilgil temp 2014.01.06
 			}
 		} else
 		if (mpro.isEnumType())
 		{
 			QMetaEnum menum = mpro.enumerator();
-			int index = from.toInt();
-			to = menum.key(index);
+			int index = value.toInt();
+			sValue = menum.key(index);
 		} else {
-			to = from;
+			sValue = value;
 		}
-		rep[name] = to;
+		rep[name] = sValue;
 	}
 }

@@ -7,7 +7,7 @@
 
 class VIp
 {
-	Q_GADGET
+	// Q_GADGET
 
 public:
 	VIp() {}
