@@ -68,7 +68,6 @@ void VError::dump(const char* file, const int line, const char* func)
 
 #ifdef GTEST
 #include <gtest/gtest.h>
-#include <typeinfo>
 #include <QDebug>
 
 class VErrTest : public ::testing::Test {};

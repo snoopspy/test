@@ -10,8 +10,8 @@ public:
 	virtual void load(VRep& rep) = 0;
 	virtual void save(VRep& rep) = 0;
 public:
-	bool loadFromFile(QString fileName);
-	bool saveToFile(QString fileName);
+	bool loadFromFile(QString fileName, const QMetaObject* mobj = NULL);
+	bool saveToFile(QString fileName, const QMetaObject* mobj = NULL);
 };
 
 VRep& operator >> (VRep& rep, VSerializable& serializable);

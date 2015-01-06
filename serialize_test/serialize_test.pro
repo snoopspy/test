@@ -15,6 +15,7 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
+QMAKE_CXXFLAGS += -Wc++0x-compat
 
 SOURCES += main.cpp \
     vip.cpp \
@@ -25,7 +26,8 @@ SOURCES += main.cpp \
     vlog.cpp \
     vcommon.cpp \
     vstate.cpp \
-    vmetadump.cpp
+    vmetadump.cpp \
+    vstrrep.cpp
 
 HEADERS += \
     vip.h \
@@ -36,7 +38,8 @@ HEADERS += \
     vlog.h \
     vcommon.h \
     vstate.h \
-    vmetadump.h
+    vmetadump.h \
+    vstrrep.h
 
 OTHER_FILES += \
     to_do_list.txt

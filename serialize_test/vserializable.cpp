@@ -3,8 +3,9 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include "vserializable.h"
+#include "vstrrep.h" // gilgil temp 2015.01.07
 
-bool VSerializable::loadFromFile(QString fileName)
+bool VSerializable::loadFromFile(QString fileName, const QMetaObject* mobj)
 {
 	QFile file(fileName);
 	if (!file.open(QIODevice::ReadOnly))
@@ -17,16 +18,28 @@ bool VSerializable::loadFromFile(QString fileName)
 
 	QJsonObject jobj = jdoc.object();
 
-	VRep rep = jobj.toVariantMap();
-	rep >> *this;
+	VRep strRep = jobj.toVariantMap();
+	if (mobj == NULL)
+	{
+		this->load(strRep);
+	} else
+	{
+		VRep rep = VStrRep::toRep(strRep, mobj);
+		this->load(rep);
+	}
 
 	return true;
 }
 
-bool VSerializable::saveToFile(QString fileName)
+bool VSerializable::saveToFile(QString fileName, const QMetaObject* mobj)
 {
 	VRep rep;
-	rep << *this;
+	this->save(rep);
+	if (mobj != NULL)
+	{
+		VRep strRep = VStrRep::toStrRep(rep, mobj);
+		rep = strRep;
+	}
 
 	QJsonObject jobj = QJsonObject::fromVariantMap(rep);
 
@@ -57,7 +70,6 @@ VRep& operator << (VRep& rep, VSerializable& serializable)
 
 #ifdef GTEST
 #include <gtest/gtest.h>
-#include "vtcpclient.h"
 
 class Obj : public VSerializable
 {

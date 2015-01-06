@@ -21,12 +21,12 @@ TEST(VTcpClientTest, saveTest)
 	tcpClient1.saveToFile("tcpClient.json");
 
 	VTcpClient tcpClient2;
-	tcpClient2.loadFromFile("tcpClient.json");
+	tcpClient2.loadFromFile("tcpClient.json", tcpClient2.metaObject());
 	EXPECT_TRUE(tcpClient2.ip == 1235);
 	EXPECT_TRUE(tcpClient2.port == 80);
 }
 
-TEST(NestedClient, commonTest)
+TEST(NestedClientTest, commonTest)
 {
 	NestedClient nc;
 	VMetaDump::dump(&nc);

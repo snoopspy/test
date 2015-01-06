@@ -37,7 +37,7 @@ public:
 	}
 	void setTcpClient(VTcpClient* tcpClient)
 	{
-
+		Q_UNUSED(tcpClient)
 	}
 
 	VTcpClient tcpClient;
