@@ -42,18 +42,28 @@ void VMetaObject::dump(QMetaObject* mobj, QObject* obj, int ident)
 	*/
 }
 
+#include "vip.h"
 void VMetaObject::dump(QMetaProperty *mpro, QObject* obj, int ident)
 {
 	const char* name = mpro->name();
 	QVariant var = obj->property(name);
 	QString value = var.toString();
+	/*
+	if (mpro->type() == QMetaType::type("VIp"))
+	{
+		VIp ip = var;
+		ip.m_ip = 65;
+		value = ip;
+	}
+	*/
 	if (mpro->isEnumType())
 	{
 		QMetaEnum menum = mpro->enumerator();
 		value = menum.key(var.toInt());
 	}
 
-	printf("%s%s %s\n", qPrintable(duplicate(' ', ident)), name, qPrintable(value));
+	printf("%s%s %s %s\n", qPrintable(duplicate(' ', ident)), name, qPrintable(value), var.typeName());
+
 	/*
 	if (mpro->isEnumType())
 	{

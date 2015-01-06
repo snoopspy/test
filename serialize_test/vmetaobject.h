@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QVariant>
 
+/*
 #define V_QVAR_CONVERSION(TYPE) \
 	TYPE(QVariant variant) { *this = qvariant_cast<TYPE>(variant); } \
 	operator QVariant() { return QVariant::fromValue<TYPE>(*this); }
@@ -17,6 +18,7 @@
 #define V_PROPERTY_FUNC(TYPE, GET, SET, MEMBER) \
 	TYPE GET() { return MEMBER; } \
 	void SET(TYPE GET) { MEMBER = GET; }
+*/
 
 class VMetaObject
 {

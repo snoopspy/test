@@ -14,6 +14,7 @@ void sizeofTest()
 	qDebug() << "sizeof(VTcpClient)" << sizeof(VTcpClient);
 }
 
+/*
 void ipTest()
 {
 	QVariant variant;
@@ -27,6 +28,7 @@ void ipTest()
 		qDebug() << (quint32)ip;
 	}
 }
+*/
 
 void tcpClientTest()
 {

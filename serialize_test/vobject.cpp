@@ -1,3 +1,4 @@
+#include <QDebug>
 #include <QMetaObject>
 #include <QMetaProperty>
 
@@ -11,8 +12,16 @@ void VObject::load(VRep& rep)
 	{
 		QMetaProperty mpro = mobj->property(i);
 		const char* name = mpro.name();
-		QVariant value = rep[name];
-		this->setProperty(name, value);
+		//QString value = rep[name].toString();
+		QVariant from = rep[name];
+		QVariant to = this->property(name);
+		QVariant::Type toType = to.type();
+		if (toType != QVariant::UserType)
+			to = from;
+		else
+			QMetaType::convert(from.data(), from.type(), to.data(), to.type());
+
+		this->setProperty(name, to);
 	}
 }
 

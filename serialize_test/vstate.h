@@ -16,8 +16,13 @@ public:
 	};
 public:
 	VState() {}
-	V_QVAR_CONVERSION(VState)
-	V_TYPE_CONVERSION(VState, _VState , m_state)
+
+	VState(QVariant variant) { *this = qvariant_cast<VState>(variant); }
+	operator QVariant() { return QVariant::fromValue<VState>(*this); }
+
+
+	VState(_VState state) { m_state = state; }
+	operator _VState() { return m_state; }
 
 private:
 	_VState m_state;

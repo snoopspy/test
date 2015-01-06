@@ -7,14 +7,16 @@
 class VTcpClient : public VObject
 {
 	Q_OBJECT
-	//Q_PROPERTY(VIp ip READ ip WRITE setIp)
+	//Q_PROPERTY(QString ip READ getIp WRITE setIp)
 	Q_PROPERTY(VIp ip MEMBER ip)
 	Q_PROPERTY(int port MEMBER port)
 
 public:
-	explicit VTcpClient() {}
+	VTcpClient() {}
 
 	//V_PROPERTY_FUNC(VIp, ip, setIp, m_ip)
+	//QString getIp() { return ip.toString(); }
+	//void setIp(QString s) { ip = VIp::fromString(s); };
 
 public:
 	VIp ip;
