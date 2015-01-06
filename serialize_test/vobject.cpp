@@ -26,7 +26,7 @@ void VObject::load(VRep& rep)
 			bool res = QMetaType::convert(sValueData, sValueUserType, valueData, valueUserType);
 			if (!res)
 			{
-				printf("VObject::load QMetaType::convert return false\n");
+				printf("VObject::load QMetaType::convert return false name=%s\n", name);
 				VMetaDump::dump(&sValue);
 				VMetaDump::dump(&value);
 				value = sValue; // gilgil temp 2014.01.06
@@ -64,7 +64,7 @@ void VObject::save(VRep& rep)
 			bool res = QMetaType::convert(valueData, valueUserType, sValueData, sValueUserType);
 			if (!res)
 			{
-				printf("VObject::save QMetaType::convert return false\n");
+				printf("VObject::save QMetaType::convert return false name=%s\n", name);
 				VMetaDump::dump(&value);
 				sValue = value;  // gilgil temp 2014.01.06
 			}

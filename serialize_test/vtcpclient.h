@@ -23,4 +23,24 @@ public:
 	int port;
 };
 
+class NestedClient : public VObject
+{
+	Q_OBJECT
+	Q_PROPERTY(VTcpClient* tcpClient READ getTcpClient WRITE setTcpClient)
+public:
+	NestedClient() : VObject(NULL)
+	{
+	}
+	VTcpClient* getTcpClient()
+	{
+		return &tcpClient;
+	}
+	void setTcpClient(VTcpClient* tcpClient)
+	{
+
+	}
+
+	VTcpClient tcpClient;
+};
+
 #endif // VTCPCLIENT_H
