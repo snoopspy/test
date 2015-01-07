@@ -28,7 +28,7 @@ SOURCES += main.cpp \
     vstate.cpp \
     vmetadump.cpp \
     vstrrep.cpp \
-    nestedclient.cpp
+    other.cpp
 
 HEADERS += \
     vip.h \
@@ -41,7 +41,7 @@ HEADERS += \
     vstate.h \
     vmetadump.h \
     vstrrep.h \
-    nestedclient.h
+    other.h
 
 OTHER_FILES += \
     to_do_list.txt

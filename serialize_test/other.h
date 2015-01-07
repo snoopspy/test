@@ -1,5 +1,5 @@
-#ifndef NESTEDCLIENT_H
-#define NESTEDCLIENT_H
+#ifndef OTHER_H
+#define OTHER_H
 
 #include "vtcpclient.h"
 
@@ -18,4 +18,4 @@ public:
 	VTcpClient tcpClient;
 };
 
-#endif // NESTEDCLIENT_H
+#endif // OTHER_H
