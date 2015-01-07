@@ -19,7 +19,7 @@ bool VSerializable::loadFromFile(QString fileName, const QMetaObject* mobj)
 		rep = strRep;
 	} else
 	{
-		VRep rep = VStrRep::strReptoRep(strRep, mobj);
+		rep = VStrRep::strReptoRep(strRep, mobj);
 	}
 	this->load(rep);
 	return true;

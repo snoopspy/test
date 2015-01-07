@@ -7,7 +7,7 @@ class VRep : public QVariantMap
 {
 public:
 	VRep() {}
-	VRep(const QVariantMap& rhs) { *(QVariantMap*)this = rhs; }
+	VRep(const QVariantMap& rhs) { *((QVariantMap*)this) = rhs; }
 
 public:
 	bool loadFromFile(QString fileName);
