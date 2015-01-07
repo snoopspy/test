@@ -1,10 +1,8 @@
 #include <QDebug>
-#include <QFile>
-#include <QJsonDocument>
-#include <QJsonObject>
 #include "vserializable.h"
-#include "vstrrep.h" // gilgil temp 2015.01.07
 
+// ----- gilgil temp 2015.01.07 -----
+/*
 bool VSerializable::loadFromFile(QString fileName, const QMetaObject* mobj)
 {
 	VRep strRep;
@@ -39,6 +37,8 @@ bool VSerializable::saveToFile(QString fileName, const QMetaObject* mobj)
 	}
 	return strRep.saveToFile(fileName);
 }
+*/
+// ----------------------------------
 
 #ifdef GTEST
 #include <gtest/gtest.h>
@@ -67,14 +67,14 @@ TEST(SerializeTest, objTest)
 	Obj obj;
 	obj.i = 999;
 	obj.s = "hello";
-	obj.saveToFile("test.json", NULL);
-	{
-		Obj newObj;
-		newObj.loadFromFile("test.json", NULL);
-		qDebug() << newObj.i;
-		qDebug() << newObj.s;
-	}
-}
 
+	VRep rep;
+	obj.save(rep);
+
+	Obj obj2;
+	obj2.load(rep);
+	EXPECT_TRUE(obj2.i == 999);
+	EXPECT_TRUE(obj2.s == "hello");
+}
 
 #endif // GTEST

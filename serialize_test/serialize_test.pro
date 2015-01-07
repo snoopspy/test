@@ -27,7 +27,6 @@ SOURCES += main.cpp \
     vcommon.cpp \
     vstate.cpp \
     vmetadump.cpp \
-    vstrrep.cpp \
     other.cpp
 
 HEADERS += \
@@ -40,7 +39,6 @@ HEADERS += \
     vcommon.h \
     vstate.h \
     vmetadump.h \
-    vstrrep.h \
     other.h
 
 OTHER_FILES += \
