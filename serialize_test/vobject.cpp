@@ -41,13 +41,13 @@ void VObject::load(VRep& rep)
 		} else
 		if (userType == qMetaTypeId<VObject*>())
 		{
-			VObject* childObj = qvariant_cast<VObject*>(this->property(name));
+			VObject* childObj = this->property(name).value<VObject*>();
 			VRep     childRep = rep[name].toMap();
 			childObj->load(childRep);
 		} else
 		if (userType == qMetaTypeId<VObjectList>())
 		{
-			VObjectList childObjList = qvariant_cast<VObjectList>(this->property(name));
+			VObjectList childObjList = this->property(name).value<VObjectList>();
 			VRep childRepList = rep[name].toMap();
 			printf("%d\n", childRepList.count()); // gilgil temp 2015.01.07
 			for (VRep::iterator it = childRepList.begin(); it != childRepList.end(); it++)
@@ -66,8 +66,8 @@ void VObject::load(VRep& rep)
 				vobj->load(childRep);
 				childObjList.push_back(vobj);
 			}
-			//QVariant to = childObjList;
-			//this->setProperty(name, to);
+			QVariant to = QVariant::fromValue<VObjectList>(childObjList);
+			this->setProperty(name, to);
 		} else
 		{
 			this->setProperty(name, from);
@@ -116,14 +116,14 @@ void VObject::save(VRep& rep)
 		} else
 		if (userType == qMetaTypeId<VObject*>())
 		{
-			VObject* childObj = qvariant_cast<VObject*>(this->property(name));
+			VObject* childObj = this->property(name).value<VObject*>();
 			VRep     childRep;
 			childObj->save(childRep);
 			rep[name] = childRep;
 		} else
 		if (userType == qMetaTypeId<VObjectList>())
 		{
-			VObjectList childObjList = qvariant_cast<VObjectList>(this->property(name));
+			VObjectList childObjList = this->property(name).value<VObjectList>();
 			VRep childRepList;
 			int i = 0;
 			foreach (VObject* childObj, childObjList)

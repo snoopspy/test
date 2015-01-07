@@ -45,10 +45,6 @@ class ObjList : public VObject
 	Q_PROPERTY(VObjectList objList MEMBER objList)
 public:
 	VObjectList objList;
-	VObjectList getObjList()
-	{
-		return objList;
-	}
 };
 
 #endif // OTHER_H
