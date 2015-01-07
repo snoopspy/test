@@ -3,7 +3,7 @@
 #include "vmetadump.h"
 #include "vstrrep.h"
 
-VRep VStrRep::toStrRep(const VRep& rep, const QMetaObject* mobj)
+VRep VStrRep::repToStrRep(const VRep& rep, const QMetaObject* mobj)
 {
 	VRep strRep;
 	int count = mobj->propertyCount();
@@ -46,7 +46,7 @@ VRep VStrRep::toStrRep(const VRep& rep, const QMetaObject* mobj)
 	return strRep;
 }
 
-VRep VStrRep::toRep(const VRep& strRep, const QMetaObject* mobj)
+VRep VStrRep::strReptoRep(const VRep& strRep, const QMetaObject* mobj)
 {
 	VRep rep;
 	int count = mobj->propertyCount();
@@ -58,7 +58,7 @@ VRep VStrRep::toRep(const VRep& strRep, const QMetaObject* mobj)
 		if (it == strRep.end()) continue;
 
 		QString  key  = it.key();
-		QVariant from = it.value().toString();
+		QVariant from = it.value();
 		QVariant to   = QVariant(mpro.userType(), NULL);
 
 		if (QMetaType::hasRegisteredConverterFunction(from.userType(), to.userType()))

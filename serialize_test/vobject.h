@@ -16,6 +16,10 @@ public:
 public:
 	virtual void load(VRep& rep);
 	virtual void save(VRep& rep);
+
+public:
+	bool loadFromFile(QString fileName);
+	bool saveToFile(QString fileName);
 };
 
 #endif // VOBJECT_H

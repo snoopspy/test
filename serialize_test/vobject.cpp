@@ -31,3 +31,13 @@ void VObject::save(VRep& rep)
 		rep[name] = value;
 	}
 }
+
+bool VObject::loadFromFile(QString fileName)
+{
+	return VSerializable::loadFromFile(fileName, this->metaObject());
+}
+
+bool VObject::saveToFile(QString fileName)
+{
+	return VSerializable::saveToFile(fileName, this->metaObject());
+}

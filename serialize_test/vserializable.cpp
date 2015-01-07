@@ -7,27 +7,21 @@
 
 bool VSerializable::loadFromFile(QString fileName, const QMetaObject* mobj)
 {
-	QFile file(fileName);
-	if (!file.open(QIODevice::ReadOnly))
+	VRep strRep;
+	if (!strRep.loadFromFile(fileName))
+	{
 		return false;
-
-	QByteArray ba = file.readAll();
-	file.close();
-
-	QJsonDocument jdoc = QJsonDocument::fromJson(ba);
-
-	QJsonObject jobj = jdoc.object();
-
-	VRep strRep = jobj.toVariantMap();
-	if (mobj == NULL)
-	{
-		this->load(strRep);
-	} else
-	{
-		VRep rep = VStrRep::toRep(strRep, mobj);
-		this->load(rep);
 	}
 
+	VRep rep;
+	if (mobj == NULL)
+	{
+		rep = strRep;
+	} else
+	{
+		VRep rep = VStrRep::strReptoRep(strRep, mobj);
+	}
+	this->load(rep);
 	return true;
 }
 
@@ -35,25 +29,15 @@ bool VSerializable::saveToFile(QString fileName, const QMetaObject* mobj)
 {
 	VRep rep;
 	this->save(rep);
-	if (mobj != NULL)
+	VRep strRep;
+	if (mobj == NULL)
 	{
-		VRep strRep = VStrRep::toStrRep(rep, mobj);
-		rep = strRep;
+		strRep = rep;
+	} else
+	{
+		strRep = VStrRep::repToStrRep(rep, mobj);
 	}
-
-	QJsonObject jobj = QJsonObject::fromVariantMap(rep);
-
-	QJsonDocument jdoc;
-	jdoc.setObject(jobj);
-
-	QFile file(fileName);
-	if (!file.open(QIODevice::WriteOnly))
-		return false;
-
-	file.write(jdoc.toJson());
-	file.close();
-
-	return true;
+	return strRep.saveToFile(fileName);
 }
 
 VRep& operator >> (VRep& rep, VSerializable& serializable)
@@ -95,10 +79,10 @@ TEST(SerializeTest, objTest)
 	Obj obj;
 	obj.i = 999;
 	obj.s = "hello";
-	obj.saveToFile("test.json");
+	obj.saveToFile("test.json", NULL);
 	{
 		Obj newObj;
-		newObj.loadFromFile("test.json");
+		newObj.loadFromFile("test.json", NULL);
 		qDebug() << newObj.i;
 		qDebug() << newObj.s;
 	}

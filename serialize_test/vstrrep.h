@@ -7,8 +7,8 @@
 class VStrRep
 {
 public:
-	static VRep toStrRep(const VRep& rep, const QMetaObject* mobj);
-	static VRep toRep(const VRep& strRep, const QMetaObject* mobj);
+	static VRep repToStrRep(const VRep& rep, const QMetaObject* mobj);
+	static VRep strReptoRep(const VRep& strRep, const QMetaObject* mobj);
 };
 
 #endif // VSTRREP_H

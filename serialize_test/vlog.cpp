@@ -20,10 +20,10 @@ TEST(VLogTest, saveLoadTest)
 {
 	VLog log;
 	log.showDateTime = VLog::DateTime;
-	log.saveToFile("log.json", log.metaObject());
+	log.saveToFile("log.json");
 
 	VLog newLog;
-	newLog.loadFromFile("log.json", log.metaObject());
+	newLog.loadFromFile("log.json");
 	EXPECT_TRUE(newLog.showDateTime == VLog::DateTime);
 }
 
