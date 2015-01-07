@@ -11,6 +11,7 @@ class VObject : public QObject, public VSerializable
 
 public:
 	VObject(VObject* parent = 0) : QObject(parent) {}
+	VObject(const VObject& rhs) : QObject(0) { Q_UNUSED(rhs) }
 	virtual ~VObject() {}
 
 public:
@@ -21,6 +22,11 @@ public:
 	bool loadFromFile(QString fileName);
 	bool saveToFile(QString fileName);
 };
-Q_DECLARE_METATYPE(VObject*)
+Q_DECLARE_METATYPE(VObject)
+
+class VObjectList : public QList<VObject*>
+{
+};
+Q_DECLARE_METATYPE(VObjectList)
 
 #endif // VOBJECT_H

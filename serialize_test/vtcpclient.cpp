@@ -14,6 +14,7 @@ TEST(VTcpClientTest, dumpTest)
 
 TEST(VTcpClientTest, saveTest)
 {
+	qRegisterMetaType<VTcpClient*>("VTcpClient*"); // gilgil temp 2015.01.07
 	VIp::registerConverter();
 	VTcpClient tcpClient1;
 	tcpClient1.ip = 1235;

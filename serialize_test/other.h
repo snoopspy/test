@@ -42,10 +42,10 @@ public:
 class ObjList : public VObject
 {
 	Q_OBJECT
-	Q_PROPERTY(QList<VObject*> objList READ getObjList)
+	Q_PROPERTY(VObjectList objList MEMBER objList)
 public:
-	QList<VObject*> objList;
-	QList<VObject*> getObjList()
+	VObjectList objList;
+	VObjectList getObjList()
 	{
 		return objList;
 	}

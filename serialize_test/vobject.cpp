@@ -17,6 +17,13 @@ void VObject::load(VRep& rep)
 		QVariant      from     = rep[name];
 		int           userType = mpro.userType();
 
+		if (mpro.isEnumType())
+		{
+			QMetaEnum menum = mpro.enumerator();
+			QString   key   = from.toString();
+			QVariant  to    = menum.keyToValue(qPrintable(key));
+			this->setProperty(name, to);
+		} else
 		if (QMetaType::hasRegisteredConverterFunction(QVariant::String, userType))
 		{
 			QVariant to(userType, NULL);
@@ -32,22 +39,43 @@ void VObject::load(VRep& rep)
 			}
 			this->setProperty(name, to);
 		} else
-		if (mpro.isEnumType())
-		{
-			QMetaEnum menum = mpro.enumerator();
-			QString   key   = from.toString();
-			QVariant  to    = menum.keyToValue(qPrintable(key));
-			this->setProperty(name, to);
-		} else
 		if (userType == qMetaTypeId<VObject*>())
 		{
 			VObject* childObj = qvariant_cast<VObject*>(this->property(name));
 			VRep     childRep = rep[name].toMap();
 			childObj->load(childRep);
 		} else
+		if (userType == qMetaTypeId<VObjectList>())
+		{
+			VObjectList childObjList = qvariant_cast<VObjectList>(this->property(name));
+			VRep childRepList = rep[name].toMap();
+			printf("%d\n", childRepList.count()); // gilgil temp 2015.01.07
+			for (VRep::iterator it = childRepList.begin(); it != childRepList.end(); it++)
+			{
+				VRep childRep = it->toMap();
+				QString className = childRep["_class"].toString();
+				int id = QMetaType::type(qPrintable(className)); // gilgil temp 2015.01.07
+				//int id = QMetaType::type("VObject");
+				if (id == QMetaType::UnknownType) {
+					printf("can not resolve type for class %s\n", qPrintable(className));
+					continue;
+				}
+				void* obj = QMetaType::create(id);
+				VObject* vobj = (VObject*)obj;
+				//VObject* vobj = qvariant_cast<VObject*>(QMetaType::create(id));
+				vobj->load(childRep);
+				childObjList.push_back(vobj);
+			}
+			//this->setProperty(name, childObjList);
+		} else
 		{
 			this->setProperty(name, from);
 		}
+	}
+	QString className = rep["_class"].toString();
+	if (className != this->metaObject()->className())
+	{
+		printf("different class name (%s) and (%s)", qPrintable(className), this->metaObject()->className());
 	}
 }
 
@@ -62,6 +90,13 @@ void VObject::save(VRep& rep)
 		QVariant      from     = this->property(name);
 		int           userType = mpro.userType();
 
+		if (mpro.isEnumType())
+		{
+			QMetaEnum menum = mpro.enumerator();
+			int       index = from.toInt();
+			QString   to    = menum.key(index);
+			rep[name] = to;
+		} else
 		if (QMetaType::hasRegisteredConverterFunction(userType, QVariant::String))
 		{
 			QVariant to(QVariant::String, NULL);
@@ -78,13 +113,6 @@ void VObject::save(VRep& rep)
 			}
 			rep[name] = to;
 		} else
-		if (mpro.isEnumType())
-		{
-			QMetaEnum menum = mpro.enumerator();
-			int       index = from.toInt();
-			QString   to    = menum.key(index);
-			rep[name] = to;
-		} else
 		if (userType == qMetaTypeId<VObject*>())
 		{
 			VObject* childObj = qvariant_cast<VObject*>(this->property(name));
@@ -92,10 +120,25 @@ void VObject::save(VRep& rep)
 			childObj->save(childRep);
 			rep[name] = childRep;
 		} else
+		if (userType == qMetaTypeId<VObjectList>())
+		{
+			VObjectList childObjList = qvariant_cast<VObjectList>(this->property(name));
+			VRep childRepList;
+			int i = 0;
+			foreach (VObject* childObj, childObjList)
+			{
+				VRep ChildRep;
+				childObj->save(ChildRep);
+				childRepList[QString::number(i)] = ChildRep;
+				i++;
+			}
+			rep[name] = childRepList;
+		} else
 		{
 			rep[name] = from;
 		}
 	}
+	rep["_class"] = this->metaObject()->className();
 }
 
 bool VObject::loadFromFile(QString fileName)

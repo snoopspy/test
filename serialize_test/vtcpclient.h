@@ -22,5 +22,6 @@ public:
 	VIp ip;
 	int port;
 };
+Q_DECLARE_METATYPE(VTcpClient*)
 
 #endif // VTCPCLIENT_H

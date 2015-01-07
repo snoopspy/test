@@ -34,15 +34,30 @@ TEST(IntListTest, saveLoadTest)
 
 TEST(ObjListTest, saveLoadTest)
 {
+	VIp::registerConverter();
+
 	ObjList ol;
-	ol.objList.push_back(new VTcpClient);
-	ol.objList.push_back(new VTcpClient);
-	ol.objList.push_back(new VTcpClient);
+	VTcpClient* tcpClient;
+	tcpClient = new VTcpClient;
+	tcpClient->ip = 1111;
+	tcpClient->port = 1111;
+	ol.objList.push_back(tcpClient);
+
+	tcpClient = new VTcpClient;
+	tcpClient->ip = 2222;
+	tcpClient->port = 2222;
+	ol.objList.push_back(tcpClient);
+
+	tcpClient = new VTcpClient;
+	tcpClient->ip = 3333;
+	tcpClient->port = 3333;
+	ol.objList.push_back(tcpClient);
+
 	ol.saveToFile("ol.json");
-/*
-	IntList il2;
-	il2.loadFromFile("il.json");
-	EXPECT_TRUE(il2.intList.count() == 3);*/
+
+	ObjList ol2;
+	ol2.loadFromFile("ol.json");
+	EXPECT_TRUE(ol2.objList.count() == 3);
 }
 
 
