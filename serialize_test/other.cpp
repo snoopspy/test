@@ -35,6 +35,7 @@ TEST(IntListTest, saveLoadTest)
 TEST(ObjListTest, saveLoadTest)
 {
 	VIp::registerConverter();
+	qRegisterMetaType<VTcpClient>("VTcpClient"); // gilgil temp 2015.01.07
 
 	ObjList ol;
 	VTcpClient* tcpClient;

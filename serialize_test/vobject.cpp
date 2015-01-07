@@ -66,7 +66,8 @@ void VObject::load(VRep& rep)
 				vobj->load(childRep);
 				childObjList.push_back(vobj);
 			}
-			//this->setProperty(name, childObjList);
+			//QVariant to = childObjList;
+			//this->setProperty(name, to);
 		} else
 		{
 			this->setProperty(name, from);
