@@ -5,6 +5,7 @@
 
 #include "vmetadump.h"
 #include "vobject.h"
+#include "vstrrep.h"
 
 void VObject::load(VRep& rep)
 {
@@ -12,10 +13,20 @@ void VObject::load(VRep& rep)
 	int cnt = mobj->propertyCount();
 	for (int i = 0; i < cnt; i++)
 	{
-		QMetaProperty mpro  = mobj->property(i);
-		const char*   name  = mpro.name();
-		QVariant      value = rep[name];
-		this->setProperty(name, value);
+		QMetaProperty mpro     = mobj->property(i);
+		const char*   name     = mpro.name();
+		int           userType = mpro.userType();
+		if (userType == qMetaTypeId<VObject*>())
+		{
+			VObject* childObj = qvariant_cast<VObject*>(this->property(name));
+			VRep     childStrRep = rep[name].toMap();
+			VRep     childRep = VStrRep::strReptoRep(childStrRep, childObj->metaObject());
+			childObj->load(childRep);
+		} else
+		{
+			QVariant value = rep[name];
+			this->setProperty(name, value);
+		}
 	}
 }
 
@@ -25,10 +36,21 @@ void VObject::save(VRep& rep)
 	int cnt = mobj->propertyCount();
 	for (int i = 0; i < cnt; i++)
 	{
-		QMetaProperty mpro  = mobj->property(i);
-		const char*   name  = mpro.name();
-		QVariant      value = this->property(name);
-		rep[name] = value;
+		QMetaProperty mpro     = mobj->property(i);
+		const char*   name     = mpro.name();
+		int           userType = mpro.userType();
+		if (userType == qMetaTypeId<VObject*>())
+		{
+			VObject* childObj = qvariant_cast<VObject*>(this->property(name));
+			VRep     childRep;
+			childObj->save(childRep);
+			VRep     childStrRep = VStrRep::repToStrRep(childRep, childObj->metaObject());
+			rep[name] = childStrRep;
+		} else
+		{
+			QVariant value = this->property(name);
+			rep[name] = value;
+		}
 	}
 }
 

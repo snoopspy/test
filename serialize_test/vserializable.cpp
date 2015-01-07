@@ -40,18 +40,6 @@ bool VSerializable::saveToFile(QString fileName, const QMetaObject* mobj)
 	return strRep.saveToFile(fileName);
 }
 
-VRep& operator >> (VRep& rep, VSerializable& serializable)
-{
-	serializable.load(rep);
-	return rep;
-}
-
-VRep& operator << (VRep& rep, VSerializable& serializable)
-{
-	serializable.save(rep);
-	return rep;
-}
-
 #ifdef GTEST
 #include <gtest/gtest.h>
 

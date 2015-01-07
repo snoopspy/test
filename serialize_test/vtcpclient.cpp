@@ -26,11 +26,4 @@ TEST(VTcpClientTest, saveTest)
 	EXPECT_TRUE(tcpClient2.port == 80);
 }
 
-TEST(NestedClientTest, commonTest)
-{
-	NestedClient nc;
-	VMetaDump::dump(&nc);
-	nc.saveToFile("nc.json");
-}
-
 #endif // GTEST

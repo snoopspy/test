@@ -14,7 +14,4 @@ public:
 	bool saveToFile(QString fileName, const QMetaObject* mobj);
 };
 
-VRep& operator >> (VRep& rep, VSerializable& serializable);
-VRep& operator << (VRep& rep, VSerializable& serializable);
-
 #endif // VSERIALIZABLE_H

@@ -21,5 +21,6 @@ public:
 	bool loadFromFile(QString fileName);
 	bool saveToFile(QString fileName);
 };
+Q_DECLARE_METATYPE(VObject*)
 
 #endif // VOBJECT_H
