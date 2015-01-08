@@ -8,10 +8,12 @@
 class VMac
 {
 	static const int MAC_SIZE = 6;
+
 public:
 	VMac() {}
 	VMac(const VMac& rhs) { memcpy(this->mac, rhs.mac, MAC_SIZE); }
-	VMac(const QString mac) { memcpy(this->mac, qPrintable(mac), MAC_SIZE); }
+
+	VMac(const QString& mac) { memcpy(this->mac, qPrintable(mac), MAC_SIZE); }
 	operator QString() const { return QString((const char*)mac); }
 
 	bool operator == (const VMac& rhs) { return memcmp(this->mac, rhs.mac, MAC_SIZE) == 0; }

@@ -11,11 +11,9 @@ class VIp
 
 public:
 	VIp() {}
+	VIp(const VIp& ip) { m_ip = ip.m_ip; }
 
-	//VIp(QVariant variant) { *this = qvariant_cast<VIp>(variant); }
-	//operator QVariant() { return QVariant::fromValue<VIp>(*this); }
-
-	VIp(quint32 ip) { m_ip = ip; }
+	VIp(const quint32& ip) { m_ip = ip; }
 	operator quint32() { return m_ip; }
 
 	static QString toString(const VIp& ip) { return QString::number(ip.m_ip);}
