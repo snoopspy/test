@@ -4,8 +4,9 @@
 #
 #-------------------------------------------------
 
-QT       += core
-QT       -= gui
+QT += core
+QT += gui widgets
+#QT -= gui
 
 include (../../gtest/gtest.pri)
 
@@ -28,7 +29,8 @@ SOURCES += main.cpp \
     vstate.cpp \
     vmetadump.cpp \
     other.cpp \
-    vmac.cpp
+    vmac.cpp \
+    vwidget.cpp
 
 HEADERS += \
     vip.h \
@@ -41,7 +43,8 @@ HEADERS += \
     vstate.h \
     vmetadump.h \
     other.h \
-    vmac.h
+    vmac.h \
+    vwidget.h
 
 OTHER_FILES += \
     to_do_list.txt

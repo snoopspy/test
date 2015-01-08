@@ -167,3 +167,53 @@ bool VObject::saveToFile(QString fileName)
 	this->save(rep);
 	return rep.saveToFile(fileName);
 }
+
+#ifdef QT_GUI_LIB
+VWidget* VObject::createWidget()
+{
+	VWidgetObject* wobj = new VWidgetObject;
+	//QObject::connect(wobj, SIGNAL(itemChanged(QTreeWidgetItem*,int)), this, SLOT(itemChanged(QTreeWidgetItem*,int)));
+	QObject::connect(wobj, SIGNAL(itemPressed(QTreeWidgetItem*,int)), this, SLOT(itemChanged(QTreeWidgetItem*,int)));
+
+	wobj->setColumnCount(2);
+
+	const QMetaObject *mobj = this->metaObject();
+	int count = this->metaObject()->propertyCount();
+	for (int i = 0; i < count; i++)
+	{
+		QMetaProperty mpro     = mobj->property(i);
+		const char*   name     = mpro.name();
+		QVariant      from     = this->property(name);
+		int           userType = mpro.userType();
+
+		if (mpro.isEnumType())
+		{
+		} else
+		if (QMetaType::hasRegisteredConverterFunction(userType, QVariant::String))
+		{
+		} else
+		if (userType == qMetaTypeId<VObject*>())
+		{
+		} else
+		if (userType == qMetaTypeId<VObjectList*>())
+		{
+		} else
+		{
+			VWidgetItem* witem = new VWidgetItem(&from, wobj);
+			witem->setText(0, name);
+			witem->setText(1, from.toString());
+			witem->setFlags(witem->flags() | Qt::ItemIsEditable);
+		}
+	}
+	return wobj;
+}
+
+void VObject::itemChanged(QTreeWidgetItem *item, int column)
+{
+	QString s = item->text(0);
+	int i = s.toInt();
+	s = QString::number(i);
+	item->setText(0, s);
+}
+
+#endif // QT_GUI_LIB

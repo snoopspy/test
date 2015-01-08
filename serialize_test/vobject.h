@@ -2,8 +2,8 @@
 #define VOBJECT_H
 
 #include <QObject>
-
 #include "vserializable.h"
+#include "vwidget.h"
 
 class VObject : public QObject, public VSerializable
 {
@@ -21,6 +21,14 @@ public:
 public:
 	bool loadFromFile(QString fileName);
 	bool saveToFile(QString fileName);
+
+#ifdef QT_GUI_LIB
+public:
+	virtual QWidget* createWidget();
+
+public slots:
+	void itemChanged(QTreeWidgetItem *item, int column);
+#endif // QT_GUI_LIB
 };
 //Q_DECLARE_METATYPE(VObject)
 Q_DECLARE_METATYPE(VObject*)
