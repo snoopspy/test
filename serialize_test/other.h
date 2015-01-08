@@ -3,6 +3,7 @@
 
 #include <QList>
 #include "vtcpclient.h"
+#include "vmac.h"
 
 class NestedClient : public VObject
 {
@@ -15,6 +16,18 @@ public:
 		return &tcpClient;
 	}
 	VTcpClient tcpClient;
+};
+
+class VNetInfo : public VObject
+{
+	Q_OBJECT
+	Q_PROPERTY(VIp ip MEMBER ip)
+	Q_PROPERTY(VMac mac MEMBER mac)
+public:
+	VNetInfo() {}
+
+	VIp ip;
+	VMac mac;
 };
 
 class IntList : public VObject

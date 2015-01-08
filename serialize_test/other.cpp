@@ -19,6 +19,17 @@ TEST(NestedClientTest, saveLoadTest)
 	EXPECT_TRUE(nc2.tcpClient.port == 81);
 }
 
+TEST(VNetInfoTest, saveLoadTest)
+{
+	VIp::registerConverter();
+	VMac::registerConverter();
+
+	VNetInfo netInfo;
+	netInfo.ip = 1111;
+	netInfo.mac = QString("123456");
+	netInfo.saveToFile("ni.json");
+}
+
 TEST(IntListTest, saveLoadTest)
 {
 	IntList il;
@@ -60,6 +71,5 @@ TEST(ObjListTest, saveLoadTest)
 	ol2.loadFromFile("ol.json");
 	EXPECT_TRUE(ol2.objList.count() == 3);
 }
-
 
 #endif // GTEST

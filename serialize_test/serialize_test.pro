@@ -27,7 +27,8 @@ SOURCES += main.cpp \
     vcommon.cpp \
     vstate.cpp \
     vmetadump.cpp \
-    other.cpp
+    other.cpp \
+    vmac.cpp
 
 HEADERS += \
     vip.h \
@@ -39,7 +40,8 @@ HEADERS += \
     vcommon.h \
     vstate.h \
     vmetadump.h \
-    other.h
+    other.h \
+    vmac.h
 
 OTHER_FILES += \
     to_do_list.txt

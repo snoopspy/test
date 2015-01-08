@@ -18,8 +18,8 @@ public:
 	VIp(quint32 ip) { m_ip = ip; }
 	operator quint32() { return m_ip; }
 
-	static QString ipToString(const VIp ip)	{ return QString::number(ip.m_ip);}
-	static VIp stringToIp(const QString s) { return VIp(s.toUInt()); }
+	static QString toString(const VIp& ip) { return QString::number(ip.m_ip);}
+	static VIp fromString(const QString& s) { return VIp(s.toUInt()); }
 
 	static void registerConverter()
 	{
@@ -27,12 +27,12 @@ public:
 		if (!registered)
 		{
 			bool res;
-			res = QMetaType::registerConverter<VIp, QString>(VIp::ipToString);
+			res = QMetaType::registerConverter<VIp, QString>(VIp::toString);
 			if (!res)
 			{
 				printf("QMetaType::registerConverter<VIp, QString>(VIp::ipToString) return false\n");
 			}
-			res = QMetaType::registerConverter<QString, VIp>(VIp::stringToIp);
+			res = QMetaType::registerConverter<QString, VIp>(VIp::fromString);
 			if (!res)
 			{
 				printf("QMetaType::registerConverter<QString, VIp>(VIp::stringToIp) return false\n");
