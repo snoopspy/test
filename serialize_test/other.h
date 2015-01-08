@@ -8,35 +8,41 @@
 class NestedClient : public VObject
 {
 	Q_OBJECT
-	Q_PROPERTY(VObject* tcpClient READ getTcpClient)
 
 public:
+	VTcpClient tcpClient;
+
+public:
+	Q_PROPERTY(VObject* tcpClient READ getTcpClient)
 	VObject* getTcpClient()
 	{
 		return &tcpClient;
 	}
-	VTcpClient tcpClient;
 };
 
 class VNetInfo : public VObject
 {
 	Q_OBJECT
-	Q_PROPERTY(VIp ip MEMBER ip)
-	Q_PROPERTY(VMac mac MEMBER mac)
 public:
-	VNetInfo() {}
+	// VNetInfo() {}
 
 	VIp ip;
 	VMac mac;
+
+public:
+	Q_PROPERTY(VIp ip MEMBER ip)
+	Q_PROPERTY(VMac mac MEMBER mac)
 };
 
 class IntList : public VObject
 {
 	Q_OBJECT
-	Q_PROPERTY(QVariantList intList READ getIntList WRITE setIntList)
 
 public:
 	QList<int> intList;
+
+public:
+	Q_PROPERTY(QVariantList intList READ getIntList WRITE setIntList)
 	QVariantList getIntList()
 	{
 		QVariantList varList;
@@ -61,10 +67,12 @@ class VTcpClientList : public VObjectList
 class ObjList : public VObject
 {
 	Q_OBJECT
-	Q_PROPERTY(VObjectList* tcpClientList READ getTcpClientList)
 public:
-	VObjectList* getTcpClientList() { return &tcpClientList; }
 	VTcpClientList tcpClientList;
+
+public:
+	Q_PROPERTY(VObjectList* tcpClientList READ getTcpClientList)
+	VObjectList* getTcpClientList() { return &tcpClientList; }
 };
 
 #endif // OTHER_H

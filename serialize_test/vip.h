@@ -16,6 +16,7 @@ public:
 	VIp(const quint32& ip) { m_ip = ip; }
 	operator quint32() { return m_ip; }
 
+public:
 	static QString toString(const VIp& ip) { return QString::number(ip.m_ip);}
 	static VIp fromString(const QString& s) { return VIp(s.toUInt()); }
 
