@@ -45,14 +45,16 @@ void VObject::load(VRep& rep)
 			VRep     childRep = rep[name].toMap();
 			childObj->load(childRep);
 		} else
-		if (userType == qMetaTypeId<VObjectList>())
+		if (userType == qMetaTypeId<VObjectList*>())
 		{
-			VObjectList childObjList = this->property(name).value<VObjectList>();
+			VObjectList* childObjList = this->property(name).value<VObjectList*>();
 			VRep childRepList = rep[name].toMap();
 			printf("%d\n", childRepList.count()); // gilgil temp 2015.01.07
 			for (VRep::iterator it = childRepList.begin(); it != childRepList.end(); it++)
 			{
 				VRep childRep = it->toMap();
+				// ----- gilgil temp 2015.01.08 -----
+				/*
 				QString className = childRep["_class"].toString();
 				int id = QMetaType::type(qPrintable(className)); // gilgil temp 2015.01.07
 				//int id = QMetaType::type("VObject");
@@ -62,22 +64,29 @@ void VObject::load(VRep& rep)
 				}
 				void* obj = QMetaType::create(id);
 				VObject* vobj = (VObject*)obj;
+				*/
+				// ----------------------------------
+				VObject* vobj = childObjList->createObject();
 				//VObject* vobj = qvariant_cast<VObject*>(QMetaType::create(id));
 				vobj->load(childRep);
-				childObjList.push_back(vobj);
+				childObjList->push_back(vobj);
 			}
-			QVariant to = QVariant::fromValue<VObjectList>(childObjList);
-			this->setProperty(name, to);
+			//QVariant to = QVariant::fromValue<VObjectList>(childObjList);
+			//this->setProperty(name, to);
 		} else
 		{
 			this->setProperty(name, from);
 		}
 	}
+	// ----- gilgil temp 2015.01.08 -----
+	/*
 	QString className = rep["_class"].toString();
 	if (className != this->metaObject()->className())
 	{
 		printf("different class name (%s) and (%s)", qPrintable(className), this->metaObject()->className());
 	}
+	*/
+	// ----------------------------------
 }
 
 void VObject::save(VRep& rep)
@@ -121,16 +130,16 @@ void VObject::save(VRep& rep)
 			childObj->save(childRep);
 			rep[name] = childRep;
 		} else
-		if (userType == qMetaTypeId<VObjectList>())
+		if (userType == qMetaTypeId<VObjectList*>())
 		{
-			VObjectList childObjList = this->property(name).value<VObjectList>();
+			VObjectList* childObjList = this->property(name).value<VObjectList*>();
 			VRep childRepList;
 			int i = 0;
-			foreach (VObject* childObj, childObjList)
+			foreach (VObject* childObj, *childObjList)
 			{
-				VRep ChildRep;
-				childObj->save(ChildRep);
-				childRepList[QString::number(i)] = ChildRep;
+				VRep childRep;
+				childObj->save(childRep);
+				childRepList[QString::number(i)] = childRep;
 				i++;
 			}
 			rep[name] = childRepList;
@@ -140,7 +149,7 @@ void VObject::save(VRep& rep)
 				rep[name] = from;
 		}
 	}
-	rep["_class"] = this->metaObject()->className();
+	// rep["_class"] = this->metaObject()->className(); // gilgil temp 2015.01.08
 }
 
 bool VObject::loadFromFile(QString fileName)

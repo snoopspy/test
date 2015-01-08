@@ -22,11 +22,22 @@ public:
 	bool loadFromFile(QString fileName);
 	bool saveToFile(QString fileName);
 };
-Q_DECLARE_METATYPE(VObject)
+//Q_DECLARE_METATYPE(VObject)
+Q_DECLARE_METATYPE(VObject*)
 
 class VObjectList : public QList<VObject*>
 {
+public:
+	virtual VObject* createObject() { return new VObject; }
+	virtual ~VObjectList() {}
 };
-Q_DECLARE_METATYPE(VObjectList)
+//Q_DECLARE_METATYPE(VObjectList)
+Q_DECLARE_METATYPE(VObjectList*)
+
+template <class T>
+class _VObjectList : public VObjectList
+{
+	virtual VObject* createObject() { return new T; }
+};
 
 #endif // VOBJECT_H

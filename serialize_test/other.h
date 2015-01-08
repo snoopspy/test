@@ -52,12 +52,19 @@ public:
 	}
 };
 
+//typedef _VObjectList<VTcpClient> VTcpClientList;
+class VTcpClientList : public VObjectList
+{
+	virtual VObject* createObject() { return new VTcpClient; }
+};
+
 class ObjList : public VObject
 {
 	Q_OBJECT
-	Q_PROPERTY(VObjectList objList MEMBER objList)
+	Q_PROPERTY(VObjectList* tcpClientList READ getTcpClientList)
 public:
-	VObjectList objList;
+	VObjectList* getTcpClientList() { return &tcpClientList; }
+	VTcpClientList tcpClientList;
 };
 
 #endif // OTHER_H
