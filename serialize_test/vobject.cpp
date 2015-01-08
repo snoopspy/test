@@ -136,7 +136,8 @@ void VObject::save(VRep& rep)
 			rep[name] = childRepList;
 		} else
 		{
-			rep[name] = from;
+			if (!(QString(name) == "objectName" && from == ""))
+				rep[name] = from;
 		}
 	}
 	rep["_class"] = this->metaObject()->className();
