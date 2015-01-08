@@ -15,7 +15,7 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
-QMAKE_CXXFLAGS += -Wc++0x-compat
+#QMAKE_CXXFLAGS += -Wc++0x-compat
 
 SOURCES += main.cpp \
     vip.cpp \

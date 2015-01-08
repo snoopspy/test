@@ -70,6 +70,19 @@ TEST(ObjListTest, saveLoadTest)
 	ObjList ol2;
 	ol2.loadFromFile("ol.json");
 	EXPECT_TRUE(ol2.objList.count() == 3);
+
+	int expect = 0;
+	int count = ol2.objList.count();
+	for (int i = 0; i < count; i++)
+	{
+		VObject* obj = ol2.objList.at(i);
+		EXPECT_TRUE(obj != NULL);
+		VTcpClient* tcpClient = dynamic_cast<VTcpClient*>(obj);
+		EXPECT_TRUE(tcpClient != NULL);
+		expect += 1111;
+		EXPECT_TRUE(tcpClient->ip == (quint32)expect);
+		EXPECT_TRUE(tcpClient->port == expect);
+	}
 }
 
 #endif // GTEST

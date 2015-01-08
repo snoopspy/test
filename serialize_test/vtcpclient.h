@@ -12,7 +12,7 @@ class VTcpClient : public VObject
 	Q_PROPERTY(int port MEMBER port)
 
 public:
-	VTcpClient() {}
+	//VTcpClient() {}
 
 	//V_PROPERTY_FUNC(VIp, ip, setIp, m_ip)
 	//QString getIp() { return ip.toString(); }
