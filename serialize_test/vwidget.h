@@ -40,11 +40,8 @@ public:
 		this->propIndex = propIndex;
 		this->setText(0, getPropName());
 		this->setBackground(1, QBrush(QColor(255, 0, 0)));
-		if (treeWidget != NULL)
-			treeWidget->insertTopLevelItem(999, (QTreeWidgetItem*)this);
-		else
-		if (parent != NULL)
-			parent->addChild(this);
+		//if (parent != NULL)
+		//	parent->addChild(this);
 	}
 	VTreeWidget* treeWidget;
 	VObject* object;

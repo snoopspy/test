@@ -46,8 +46,15 @@ int main(int argc, char* argv[])
 	//VObject* object = createLog();
 	//VObject* object = createNestedClient();
 	VObject* object = createNetInfo();
+	//VObject* object = new ObjList;
 
 	VTreeWidget* treeWidget = new VTreeWidget(NULL, object);
+	QTreeWidgetItem* item = new QTreeWidgetItem(treeWidget);
+	item->setText(1, "1");
+	item = new QTreeWidgetItem(treeWidget);
+	item->setText(1, "2");
+	item = new QTreeWidgetItem(treeWidget);
+	item->setText(1, "3");
 	//QTreeWidgetItem* item = treeWidget->itemAt(0, 0);
 	//QTreeWidgetItem* newItem = new QTreeWidgetItem(item);
 	//QTreeWidgetItem* newItem = new QTreeWidgetItem(treeWidget, item);
