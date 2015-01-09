@@ -171,11 +171,11 @@ bool VObject::saveToFile(QString fileName)
 #ifdef QT_GUI_LIB
 VWidget* VObject::createWidget()
 {
-	VWidgetObject* wobj = new VWidgetObject;
+	VTreeWidget* tw = new VTreeWidget(NULL, this);
 	//QObject::connect(wobj, SIGNAL(itemChanged(QTreeWidgetItem*,int)), this, SLOT(itemChanged(QTreeWidgetItem*,int)));
-	QObject::connect(wobj, SIGNAL(itemPressed(QTreeWidgetItem*,int)), this, SLOT(itemChanged(QTreeWidgetItem*,int)));
+	//QObject::connect(wobj, SIGNAL(itemPressed(QTreeWidgetItem*,int)), this, SLOT(itemChanged(QTreeWidgetItem*,int)));
 
-	wobj->setColumnCount(2);
+	tw->setColumnCount(2);
 
 	const QMetaObject *mobj = this->metaObject();
 	int count = this->metaObject()->propertyCount();
@@ -199,13 +199,13 @@ VWidget* VObject::createWidget()
 		{
 		} else
 		{
-			VWidgetItem* witem = new VWidgetItem(&from, wobj);
-			witem->setText(0, name);
-			witem->setText(1, from.toString());
-			witem->setFlags(witem->flags() | Qt::ItemIsEditable);
+			VTreeWidgetLineEditItem *item = new VTreeWidgetLineEditItem(tw, name);
+			item->setText(0, name);
+			item->setText(1, from.toString());
+			item->setFlags(item->flags() | Qt::ItemIsEditable);
 		}
 	}
-	return wobj;
+	return tw;
 }
 
 void VObject::itemChanged(QTreeWidgetItem *item, int column)
