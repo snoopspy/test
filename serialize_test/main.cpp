@@ -28,14 +28,24 @@ VObject* createLog()
 	return log;
 }
 
+VObject* createNetInfo()
+{
+	VNetInfo* netInfo = new VNetInfo;
+	netInfo->ip = 1111;
+	netInfo->mac = QString("abcdef");
+	return netInfo;
+}
+
 int main(int argc, char* argv[])
 {
 	QApplication a(argc, argv);
 	VIp::registerConverter();
+	VMac::registerConverter();
 
 	//VObject* object = createTcpClient();
 	//VObject* object = createLog();
-	VObject* object = createNestedClient();
+	//VObject* object = createNestedClient();
+	VObject* object = createNetInfo();
 
 	VTreeWidget* treeWidget = new VTreeWidget(NULL, object);
 	//QTreeWidgetItem* item = treeWidget->itemAt(0, 0);
