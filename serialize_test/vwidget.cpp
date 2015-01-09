@@ -11,7 +11,7 @@ void VTreeWidget::editingFinished()
 	qDebug() << lineEdit->text();
 }
 
-void VTreeWidget::textChanged(const QString &s)
+void VTreeWidget::textChanged(const QString& text)
 {
 	qDebug() << s;
 }

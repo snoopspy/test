@@ -23,7 +23,7 @@ public:
 	VObject* object;
 public slots:
 	void editingFinished();
-	void textChanged(const QString &s);
+	void textChanged(const QString& text);
 };
 
 class VTreeWidgetItem : public QTreeWidgetItem
@@ -50,7 +50,7 @@ public:
 		lineEdit->setFrame(false);
 		lineEdit->setUserData(0, (QObjectUserData*)this);
 		QObject::connect(lineEdit, SIGNAL(editingFinished()), treeWidget, SLOT(editingFinished()));
-		//QObject::connect(lineEdit, SIGNAL(textChanged(const QString &)), treeWidget, SLOT(textChanged(const QString &)));
+		//QObject::connect(lineEdit, SIGNAL(textChanged(const QString&)), treeWidget, SLOT(textChanged(const QString&)));
 		treeWidget->setItemWidget(this, 1, lineEdit);
 	}
 	//virtual ~VTreeWidgetLineEditItem() {}
