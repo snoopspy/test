@@ -26,8 +26,6 @@ public:
 public:
 	virtual QWidget* createWidget();
 
-public slots:
-	void itemChanged(QTreeWidgetItem *item, int column);
 #endif // QT_GUI_LIB
 };
 //Q_DECLARE_METATYPE(VObject)

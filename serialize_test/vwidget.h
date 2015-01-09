@@ -3,58 +3,64 @@
 
 #ifdef QT_GUI_LIB
 
-#include <QDebug>
+#include <QComboBox>
+#include <QHeaderView>
 #include <QLineEdit>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QWidget>
 
-typedef QWidget     VWidget;
-
 class VObject;
+
 class VTreeWidget : public QTreeWidget
 {
 	Q_OBJECT
 
 public:
-	VTreeWidget(QWidget *parent, VObject* object);
-	virtual ~VTreeWidget() {}
+	VTreeWidget(QWidget *parent, VObject* object) : QTreeWidget(parent)
+	{
+		this->object = object;
+		this->setColumnCount(2);
+	}
+
 public:
 	VObject* object;
+
 public slots:
-	void editingFinished();
-	void textChanged(const QString& text);
+	void textEditingFinished();
+	void enumCurrentIndexChanged(int index);
 };
 
 class VTreeWidgetItem : public QTreeWidgetItem
 {
 public:
-	VTreeWidgetItem(VTreeWidget *parent, QString propName) : QTreeWidgetItem(parent)
+	VTreeWidgetItem(VTreeWidget *parent, int propIndex) : QTreeWidgetItem(parent)
 	{
 		this->treeWidget = parent;
 		this->object = parent->object;
-		this->propName = propName;
+		this->propIndex = propIndex;
+		this->setText(0, getPropName());
 	}
-	//virtual ~VTreeWidgetItem() {}
 	VTreeWidget* treeWidget;
 	VObject* object;
-	QString propName;
+	int propIndex;
+
+public:
+	const char* getPropName();
 };
 
-class VTreeWidgetLineEditItem : public VTreeWidgetItem
+class VTreeWidgetItemText : public VTreeWidgetItem
 {
 public:
-	VTreeWidgetLineEditItem(VTreeWidget *parent, QString propName) : VTreeWidgetItem(parent, propName)
-	{
-		lineEdit = new QLineEdit(parent);
-		lineEdit->setFrame(false);
-		lineEdit->setUserData(0, (QObjectUserData*)this);
-		QObject::connect(lineEdit, SIGNAL(editingFinished()), treeWidget, SLOT(editingFinished()));
-		//QObject::connect(lineEdit, SIGNAL(textChanged(const QString&)), treeWidget, SLOT(textChanged(const QString&)));
-		treeWidget->setItemWidget(this, 1, lineEdit);
-	}
-	//virtual ~VTreeWidgetLineEditItem() {}
+	VTreeWidgetItemText(VTreeWidget *parent, int propIndex);
 	QLineEdit* lineEdit;
+};
+
+class VTreeWidgetItemEnum : public VTreeWidgetItem
+{
+public:
+	VTreeWidgetItemEnum(VTreeWidget *parent, int propIndex);
+	QComboBox* comboBox;
 };
 
 #endif // QT_GUI_LIB

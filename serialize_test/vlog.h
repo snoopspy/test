@@ -17,7 +17,7 @@ public:
 	} showDateTime;
 
 public:
-	//explicit VLog(VObject *parent = 0) : VObject(parent) {}
+	VLog(VObject *parent = 0) : VObject(parent) { showDateTime = None; }
 
 public:
 	Q_PROPERTY(VShowDateTime showDateTime MEMBER showDateTime)
