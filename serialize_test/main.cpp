@@ -38,12 +38,12 @@ int main(int argc, char* argv[])
 	VObject* object = createNestedClient();
 
 	VTreeWidget* treeWidget = new VTreeWidget(NULL, object);
-	object->createTreeWidgetItems(treeWidget, NULL);
-	QTreeWidgetItem* item = treeWidget->itemAt(0, 0);
+	//QTreeWidgetItem* item = treeWidget->itemAt(0, 0);
 	//QTreeWidgetItem* newItem = new QTreeWidgetItem(item);
 	//QTreeWidgetItem* newItem = new QTreeWidgetItem(treeWidget, item);
 	//QTreeWidgetItem* newItem = new QTreeWidgetItem(item);
 	//newItem->setText(1, "test");
+	treeWidget->expandAll();
 	treeWidget->show();
 	int res = a.exec();
 	delete object;

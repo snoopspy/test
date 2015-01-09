@@ -143,7 +143,7 @@ bool VObject::saveToFile(QString fileName)
 }
 
 #ifdef QT_GUI_LIB
-QList<VTreeWidgetItem*> VObject::createTreeWidgetItems(VTreeWidget* treeWidget, VTreeWidgetItem* parentItem)
+QList<VTreeWidgetItem*> VObject::createTreeWidgetItems(VTreeWidget* treeWidget, VTreeWidgetItem* parent)
 {
 	QList<VTreeWidgetItem*> items;
 	const QMetaObject *mobj = this->metaObject();
@@ -157,12 +157,12 @@ QList<VTreeWidgetItem*> VObject::createTreeWidgetItems(VTreeWidget* treeWidget, 
 
 		if (mpro.isEnumType())
 		{
-			VTreeWidgetItem* item = new VTreeWidgetItemEnum(treeWidget, parentItem, this, i);
+			VTreeWidgetItem* item = new VTreeWidgetItemEnum(treeWidget, parent, this, i);
 			items.append(item);
 		} else
 		if (userType == qMetaTypeId<VObject*>())
 		{
-			VTreeWidgetItem* item = new VTreeWidgetItem(treeWidget, parentItem, this, i);
+			VTreeWidgetItem* item = new VTreeWidgetItem(treeWidget, parent, this, i);
 			VObject* childObj = this->property(propName).value<VObject*>();
 			QList<VTreeWidgetItem*> childItems = childObj->createTreeWidgetItems(NULL, item);
 			//item->append(childItems);
@@ -174,11 +174,11 @@ QList<VTreeWidgetItem*> VObject::createTreeWidgetItems(VTreeWidget* treeWidget, 
 		} else
 		if (QMetaType::hasRegisteredConverterFunction(userType, QVariant::String))
 		{
-			VTreeWidgetItem* item = new VTreeWidgetItemText(treeWidget, parentItem, this, i);
+			VTreeWidgetItem* item = new VTreeWidgetItemText(treeWidget, parent, this, i);
 			items.append(item);
 		} else
 		{
-			VTreeWidgetItem* item = new VTreeWidgetItemText(treeWidget, parentItem, this, i);
+			VTreeWidgetItem* item = new VTreeWidgetItemText(treeWidget, parent, this, i);
 			items.append(item);
 		}
 	}

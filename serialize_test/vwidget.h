@@ -17,12 +17,7 @@ class VTreeWidget : public QTreeWidget
 	Q_OBJECT
 
 public:
-	VTreeWidget(QWidget *parent, VObject* object) : QTreeWidget(parent)
-	{
-		this->object = object;
-		this->setColumnCount(2);
-		//this->header()->hide();
-	}
+	VTreeWidget(QWidget *parent, VObject* object);
 
 public:
 	VObject* object;
@@ -45,6 +40,9 @@ public:
 		this->propIndex = propIndex;
 		this->setText(0, getPropName());
 		this->setBackground(1, QBrush(QColor(255, 0, 0)));
+		if (treeWidget != NULL)
+			treeWidget->insertTopLevelItem(999, (QTreeWidgetItem*)this);
+		else
 		if (parent != NULL)
 			parent->addChild(this);
 	}

@@ -4,6 +4,13 @@
 #include "vobject.h"
 #include "vwidget.h"
 
+VTreeWidget::VTreeWidget(QWidget *parent, VObject* object) : QTreeWidget(parent)
+{
+	this->object = object;
+	this->setColumnCount(2);
+	object->createTreeWidgetItems(this, NULL);
+}
+
 void VTreeWidget::textEditingFinished()
 {
 	QLineEdit* lineEdit = (QLineEdit*)this->sender();

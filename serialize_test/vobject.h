@@ -24,7 +24,7 @@ public:
 
 #ifdef QT_GUI_LIB
 public:
-	virtual QList<VTreeWidgetItem*> createTreeWidgetItems(VTreeWidget* treeWidget, VTreeWidgetItem* parentItem);
+	virtual QList<VTreeWidgetItem*> createTreeWidgetItems(VTreeWidget* treeWidget, VTreeWidgetItem* parent);
 #endif // QT_GUI_LIB
 };
 //Q_DECLARE_METATYPE(VObject)
