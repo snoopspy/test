@@ -21,6 +21,7 @@ public:
 	{
 		this->object = object;
 		this->setColumnCount(2);
+		//this->header()->hide();
 	}
 
 public:
@@ -34,12 +35,18 @@ public slots:
 class VTreeWidgetItem : public QTreeWidgetItem
 {
 public:
-	VTreeWidgetItem(VTreeWidget *parent, int propIndex) : QTreeWidgetItem(parent)
+	VTreeWidgetItem(VTreeWidget* treeWidget, VTreeWidgetItem *parent, VObject* object, int propIndex) : QTreeWidgetItem(treeWidget, parent)
 	{
-		this->treeWidget = parent;
-		this->object = parent->object;
+		if (treeWidget != NULL)
+			this->treeWidget = treeWidget;
+		else if (parent != NULL)
+			this->treeWidget = parent->treeWidget;
+		this->object = object;
 		this->propIndex = propIndex;
 		this->setText(0, getPropName());
+		this->setBackground(1, QBrush(QColor(255, 0, 0)));
+		if (parent != NULL)
+			parent->addChild(this);
 	}
 	VTreeWidget* treeWidget;
 	VObject* object;
@@ -52,14 +59,14 @@ public:
 class VTreeWidgetItemText : public VTreeWidgetItem
 {
 public:
-	VTreeWidgetItemText(VTreeWidget *parent, int propIndex);
+	VTreeWidgetItemText(VTreeWidget* treeWidget, VTreeWidgetItem* parent, VObject* object, int propIndex);
 	QLineEdit* lineEdit;
 };
 
 class VTreeWidgetItemEnum : public VTreeWidgetItem
 {
 public:
-	VTreeWidgetItemEnum(VTreeWidget *parent, int propIndex);
+	VTreeWidgetItemEnum(VTreeWidget* treeWidget, VTreeWidgetItem* parent, VObject* object, int propIndex);
 	QComboBox* comboBox;
 };
 

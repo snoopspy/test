@@ -8,12 +8,11 @@
 class NestedClient : public VObject
 {
 	Q_OBJECT
+	Q_PROPERTY(VObject* tcpClient READ getTcpClient)
 
 public:
 	VTcpClient tcpClient;
-
 public:
-	Q_PROPERTY(VObject* tcpClient READ getTcpClient)
 	VObject* getTcpClient()
 	{
 		return &tcpClient;

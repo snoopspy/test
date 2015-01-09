@@ -9,6 +9,9 @@ class VTcpClient : public VObject
 	Q_OBJECT
 
 public:
+	VTcpClient() { ip = 0; port = 0; }
+
+public:
 	VIp ip;
 	int port;
 

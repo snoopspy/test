@@ -50,27 +50,27 @@ const char* VTreeWidgetItem::getPropName()
 	return propName;
 }
 
-VTreeWidgetItemText::VTreeWidgetItemText(VTreeWidget *parent, int propIndex) : VTreeWidgetItem(parent, propIndex)
+VTreeWidgetItemText::VTreeWidgetItemText(VTreeWidget* treeWidget, VTreeWidgetItem* parent, VObject* object, int propIndex) : VTreeWidgetItem(treeWidget, parent, object, propIndex)
 {
 	const char* propName = getPropName();
 	QVariant variant = object->property(propName);
 
-	lineEdit = new QLineEdit(parent);
+	lineEdit = new QLineEdit(treeWidget);
 	lineEdit->setUserData(0, (QObjectUserData*)this);
 
-	lineEdit->setFrame(false);
+	// lineEdit->setFrame(false); // gilgil temp
 	lineEdit->setText(variant.toString());
-	QObject::connect(lineEdit, SIGNAL(editingFinished()), treeWidget, SLOT(textEditingFinished()));
+	QObject::connect(lineEdit, SIGNAL(editingFinished()), this->treeWidget, SLOT(textEditingFinished()));
 
-	treeWidget->setItemWidget(this, 1, lineEdit);
+	this->treeWidget->setItemWidget(this, 1, lineEdit);
 }
 
-VTreeWidgetItemEnum::VTreeWidgetItemEnum(VTreeWidget *parent, int propIndex) : VTreeWidgetItem(parent, propIndex)
+VTreeWidgetItemEnum::VTreeWidgetItemEnum(VTreeWidget* treeWidget, VTreeWidgetItem* parent, VObject* object, int propIndex) : VTreeWidgetItem(treeWidget, parent, object, propIndex)
 {
 	const char* propName = getPropName();
 	QVariant variant = object->property(propName);
 
-	comboBox = new QComboBox(parent);
+	comboBox = new QComboBox(treeWidget);
 	comboBox->setUserData(0, (QObjectUserData*)this);
 
 	QMetaProperty mpro = object->metaObject()->property(propIndex);
@@ -82,7 +82,8 @@ VTreeWidgetItemEnum::VTreeWidgetItemEnum(VTreeWidget *parent, int propIndex) : V
 		comboBox->insertItem(i, text);
 	}
 	comboBox->setCurrentIndex(variant.toInt());
-	QObject::connect(comboBox, SIGNAL(currentIndexChanged(int)), treeWidget, SLOT(enumCurrentIndexChanged(int)));
+	QObject::connect(comboBox, SIGNAL(currentIndexChanged(int)), this->treeWidget, SLOT(enumCurrentIndexChanged(int)));
 
-	treeWidget->setItemWidget(this, 1, comboBox);
+	this->treeWidget->setItemWidget(this, 1, comboBox);
 }
+
