@@ -16,27 +16,18 @@ void VTreeWidget::textEditingFinished()
 	QLineEdit* lineEdit = (QLineEdit*)this->sender();
 	VTreeWidgetItemText* item = (VTreeWidgetItemText*)lineEdit->userData(0);
 
-	QMetaProperty mpro     = item->object->metaObject()->property(item->propIndex);
-	const char*   propName = mpro.name();
-	QVariant      from     = lineEdit->text();
-	int           userType = mpro.userType();
+	QMetaProperty mpro      = item->object->metaObject()->property(item->propIndex);
+	const char*   propName  = mpro.name();
+	QVariant      propValue = lineEdit->text();
+	int           userType  = mpro.userType();
 
 	if (QMetaType::hasRegisteredConverterFunction(userType, QVariant::String))
 	{
-		QVariant to(userType, NULL);
-		void* fromData     = from.data();
-		int   fromUserType = from.userType(); // QVariant::String
-		void* toData       = to.data();
-		int   toUserType   = to.userType();
-		bool res = QMetaType::convert(fromData, fromUserType, toData, toUserType);
-		if (!res)
-		{
-			printf("VObject::save QMetaType::convert return false name=%s\n", propName); // gilgil temp 2015.01.07
-		}
+		QVariant to = VObject::convert(propValue, userType);
 		this->object->setProperty(propName, to);
 	} else
 	{
-		item->object->setProperty(propName, from);
+		item->object->setProperty(propName, propValue);
 	}
 }
 

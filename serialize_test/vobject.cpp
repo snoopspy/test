@@ -10,17 +10,17 @@ void VObject::load(VRep& rep)
 {
 	const QMetaObject *mobj = this->metaObject();
 	int count = mobj->propertyCount();
-	for (int i = 0; i < count; i++)
+	for (int propIndex = 0; propIndex < count; propIndex++)
 	{
-		QMetaProperty mpro     = mobj->property(i);
-		const char*   propName = mpro.name();
-		QVariant      from     = rep[propName];
-		int           userType = mpro.userType();
+		QMetaProperty mpro      = mobj->property(propIndex);
+		const char*   propName  = mpro.name();
+		QVariant      propValue = rep[propName];
+		int           userType  = mpro.userType();
 
 		if (mpro.isEnumType())
 		{
 			QMetaEnum menum = mpro.enumerator();
-			QString   key   = from.toString();
+			QString   key   = propValue.toString();
 			QVariant  to    = menum.keyToValue(qPrintable(key));
 			this->setProperty(propName, to);
 		} else
@@ -45,21 +45,11 @@ void VObject::load(VRep& rep)
 		} else
 		if (QMetaType::hasRegisteredConverterFunction(QVariant::String, userType))
 		{
-			QVariant to(userType, NULL);
-			void* fromData     = from.data();
-			int   fromUserType = from.userType(); // QVariant::String
-			void* toData       = to.data();
-			int   toUserType   = to.userType();
-			bool res = QMetaType::convert(fromData, fromUserType, toData, toUserType);
-			if (!res)
-			{
-				printf("VObject::save QMetaType::convert return false name=%s\n", propName); // gilgil temp 2015.01.07
-				VMetaDump::dump(&from); // gilgil temp 2015.01.07
-			}
+			QVariant to = convert(propValue, userType);
 			this->setProperty(propName, to);
 		} else
 		{
-			this->setProperty(propName, from);
+			this->setProperty(propName, propValue);
 		}
 	}
 }
@@ -68,17 +58,17 @@ void VObject::save(VRep& rep)
 {
 	const QMetaObject *mobj = this->metaObject();
 	int count = mobj->propertyCount();
-	for (int i = 0; i < count; i++)
+	for (int propIndex = 0; propIndex < count; propIndex++)
 	{
-		QMetaProperty mpro     = mobj->property(i);
-		const char*   propName = mpro.name();
-		QVariant      from     = this->property(propName);
-		int           userType = mpro.userType();
+		QMetaProperty mpro      = mobj->property(propIndex);
+		const char*   propName  = mpro.name();
+		QVariant      propValue = this->property(propName);
+		int           userType  = mpro.userType();
 
 		if (mpro.isEnumType())
 		{
 			QMetaEnum menum = mpro.enumerator();
-			int       index = from.toInt();
+			int       index = propValue.toInt();
 			QString   to    = menum.key(index);
 			rep[propName] = to;
 		} else
@@ -105,23 +95,12 @@ void VObject::save(VRep& rep)
 		} else
 		if (QMetaType::hasRegisteredConverterFunction(userType, QVariant::String))
 		{
-			QVariant to(QVariant::String, NULL);
-			void* fromData     = from.data();
-			int   fromUserType = from.userType();
-			void* toData       = to.data();
-			int   toUserType   = to.userType(); // QVariant::String
-			bool res = QMetaType::convert(fromData, fromUserType, toData, toUserType);
-			if (!res)
-			{
-				printf("VObject::load QMetaType::convert return false name=%s\n", propName); // gilgil temp 2015.01.07
-				VMetaDump::dump(&from); // gilgil temp 2015.01.07
-				VMetaDump::dump(&to); // gilgil temp 2015.01.07
-			}
+			QVariant to = convert(propValue, QVariant::String);
 			rep[propName] = to;
 		} else
 		{
-			if (!(QString(propName) == "objectName" && from == ""))
-				rep[propName] = from;
+			if (!(QString(propName) == "objectName" && propValue == ""))
+				rep[propName] = propValue;
 		}
 	}
 }
@@ -142,6 +121,24 @@ bool VObject::saveToFile(QString fileName)
 	return rep.saveToFile(fileName);
 }
 
+QVariant VObject::convert(QVariant from, int type)
+{
+	QVariant to(type, NULL);
+
+	void* fromData     = from.data();
+	int   fromUserType = from.userType();
+	void* toData       = to.data();
+	int   toUserType   = to.userType();
+	bool res = QMetaType::convert(fromData, fromUserType, toData, toUserType);
+	if (!res)
+	{
+		printf("VObject::load QMetaType::convert return false\n"); // gilgil temp 2015.01.07
+		VMetaDump::dump(&from); // gilgil temp 2015.01.07
+		VMetaDump::dump(&to); // gilgil temp 2015.01.07
+	}
+	return to;
+}
+
 #ifdef QT_GUI_LIB
 void VObject::createTreeWidgetItems(VTreeWidget* treeWidget, VTreeWidgetItem* parent)
 {
@@ -149,20 +146,20 @@ void VObject::createTreeWidgetItems(VTreeWidget* treeWidget, VTreeWidgetItem* pa
 	int count = this->metaObject()->propertyCount();
 
 	//for (int i = count - 1; i >= 0; i--) // gilgil temp
-	for (int i = 0; i < count; i++)
+	for (int propIndex = 0; propIndex < count; propIndex++)
 	{
-		QMetaProperty mpro     = mobj->property(i);
+		QMetaProperty mpro     = mobj->property(propIndex);
 		const char*   propName = mpro.name();
 		// QVariant      from     = this->property(propName); // gilgil temp
 		int           userType = mpro.userType();
 
 		if (mpro.isEnumType())
 		{
-			new VTreeWidgetItemEnum(treeWidget, parent, this, i);
+			new VTreeWidgetItemEnum(treeWidget, parent, this, propIndex);
 		} else
 		if (userType == qMetaTypeId<VObject*>())
 		{
-			VTreeWidgetItem* item = new VTreeWidgetItem(treeWidget, parent, this, i);
+			VTreeWidgetItem* item = new VTreeWidgetItem(treeWidget, parent, this, propIndex);
 			VObject* childObj = this->property(propName).value<VObject*>();
 			childObj->createTreeWidgetItems(NULL, item);
 		} else
@@ -171,10 +168,10 @@ void VObject::createTreeWidgetItems(VTreeWidget* treeWidget, VTreeWidgetItem* pa
 		} else
 		if (QMetaType::hasRegisteredConverterFunction(userType, QVariant::String))
 		{
-			new VTreeWidgetItemText(treeWidget, parent, this, i);
+			new VTreeWidgetItemText(treeWidget, parent, this, propIndex);
 		} else
 		{
-			new VTreeWidgetItemText(treeWidget, parent, this, i);
+			new VTreeWidgetItemText(treeWidget, parent, this, propIndex);
 		}
 	}
 }

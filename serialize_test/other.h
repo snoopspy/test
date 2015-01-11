@@ -66,11 +66,12 @@ class VTcpClientList : public VObjectList
 class ObjList : public VObject
 {
 	Q_OBJECT
+	Q_PROPERTY(VObjectList* tcpClientList READ getTcpClientList)
+
 public:
 	VTcpClientList tcpClientList;
 
 public:
-	Q_PROPERTY(VObjectList* tcpClientList READ getTcpClientList)
 	VObjectList* getTcpClientList() { return &tcpClientList; }
 };
 

@@ -36,6 +36,14 @@ VObject* createNetInfo()
 	return netInfo;
 }
 
+VObject* createObjList()
+{
+	ObjList* objList = new ObjList;
+	objList->tcpClientList.append(new VTcpClient);
+	objList->tcpClientList.append(new VTcpClient);
+	return objList;
+}
+
 int main(int argc, char* argv[])
 {
 	QApplication a(argc, argv);
@@ -45,8 +53,8 @@ int main(int argc, char* argv[])
 	//VObject* object = createTcpClient();
 	//VObject* object = createLog();
 	//VObject* object = createNestedClient();
-	VObject* object = createNetInfo();
-	//VObject* object = new ObjList;
+	//VObject* object = createNetInfo();
+	VObject* object = createObjList();
 
 	VTreeWidget* treeWidget = new VTreeWidget(NULL, object);
 	QTreeWidgetItem* item = new QTreeWidgetItem(treeWidget);

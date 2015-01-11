@@ -9,6 +9,8 @@ class VObject : public QObject, public VSerializable
 {
 	Q_OBJECT
 
+	friend class VTreeWidget;
+
 public:
 	VObject(VObject* parent = 0) : QObject(parent) {}
 	VObject(const VObject& rhs) : QObject(0) { Q_UNUSED(rhs) }
@@ -21,6 +23,9 @@ public:
 public:
 	bool loadFromFile(QString fileName);
 	bool saveToFile(QString fileName);
+
+protected:
+	static QVariant convert(QVariant from, int type);
 
 #ifdef QT_GUI_LIB
 public:
