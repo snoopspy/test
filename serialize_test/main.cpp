@@ -5,7 +5,7 @@ VObject* createTcpClient()
 {
 	VIp::registerConverter();
 	VTcpClient* tcpClient = new VTcpClient;
-	tcpClient->setObjectName("tcpClient");
+	tcpClient->setObjectName("tcpClient1");
 	tcpClient->ip = 1111;
 	tcpClient->port = 222;
 	return tcpClient;
@@ -50,19 +50,22 @@ int main(int argc, char* argv[])
 	VIp::registerConverter();
 	VMac::registerConverter();
 
-	//VObject* object = createTcpClient();
 	//VObject* object = createLog();
+	//VObject* object = createTcpClient();
 	//VObject* object = createNestedClient();
 	//VObject* object = createNetInfo();
 	VObject* object = createObjList();
 
 	VTreeWidget* treeWidget = new VTreeWidget(NULL, object);
+	object->createTreeWidgetItems((VTreeWidgetItem*)treeWidget->topLevelItem(0));
+	/*
 	QTreeWidgetItem* item = new QTreeWidgetItem(treeWidget);
 	item->setText(1, "1");
 	item = new QTreeWidgetItem(treeWidget);
 	item->setText(1, "2");
 	item = new QTreeWidgetItem(treeWidget);
 	item->setText(1, "3");
+	*/
 	//QTreeWidgetItem* item = treeWidget->itemAt(0, 0);
 	//QTreeWidgetItem* newItem = new QTreeWidgetItem(item);
 	//QTreeWidgetItem* newItem = new QTreeWidgetItem(treeWidget, item);

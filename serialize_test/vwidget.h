@@ -30,38 +30,39 @@ public slots:
 class VTreeWidgetItem : public QTreeWidgetItem
 {
 public:
-	VTreeWidgetItem(VTreeWidget* treeWidget, VTreeWidgetItem *parent, VObject* object, int propIndex) : QTreeWidgetItem(treeWidget, parent)
-	{
-		if (treeWidget != NULL)
-			this->treeWidget = treeWidget;
-		else if (parent != NULL)
-			this->treeWidget = parent->treeWidget;
-		this->object = object;
-		this->propIndex = propIndex;
-		this->setText(0, getPropName());
-		this->setBackground(1, QBrush(QColor(255, 0, 0)));
-		//if (parent != NULL)
-		//	parent->addChild(this);
-	}
-	VTreeWidget* treeWidget;
-	VObject* object;
-	int propIndex;
+	VTreeWidgetItem(VTreeWidgetItem *parent, VObject* object, int propIndex);
 
+	VTreeWidget* treeWidget;
+	VObject*     object;
+	int          propIndex;
 public:
-	const char* getPropName();
+	virtual const char* name();
+};
+
+class VTreeWidgetItemObject : public VTreeWidgetItem
+{
+public:
+	VTreeWidgetItemObject(VTreeWidget* treeWidget, VObject* object);
+	VTreeWidgetItemObject(VTreeWidgetItem *parent, VObject* object, int propIndex);
+};
+
+class VTreeWidgetItemObjectList : public VTreeWidgetItem
+{
+public:
+	VTreeWidgetItemObjectList(VTreeWidgetItem *parent, VObject* object, int propIndex);
 };
 
 class VTreeWidgetItemText : public VTreeWidgetItem
 {
 public:
-	VTreeWidgetItemText(VTreeWidget* treeWidget, VTreeWidgetItem* parent, VObject* object, int propIndex);
+	VTreeWidgetItemText(VTreeWidgetItem* parent, VObject* object, int propIndex);
 	QLineEdit* lineEdit;
 };
 
 class VTreeWidgetItemEnum : public VTreeWidgetItem
 {
 public:
-	VTreeWidgetItemEnum(VTreeWidget* treeWidget, VTreeWidgetItem* parent, VObject* object, int propIndex);
+	VTreeWidgetItemEnum(VTreeWidgetItem* parent, VObject* object, int propIndex);
 	QComboBox* comboBox;
 };
 

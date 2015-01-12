@@ -17,19 +17,19 @@ public:
 	virtual ~VObject() {}
 
 public:
-	virtual void load(VRep& rep);
-	virtual void save(VRep& rep);
-
-public:
 	bool loadFromFile(QString fileName);
 	bool saveToFile(QString fileName);
 
 protected:
 	static QVariant convert(QVariant from, int type);
 
+public:
+	virtual void load(VRep& rep);
+	virtual void save(VRep& rep);
+
 #ifdef QT_GUI_LIB
 public:
-	virtual void createTreeWidgetItems(VTreeWidget* treeWidget, VTreeWidgetItem* parent);
+	virtual void createTreeWidgetItems(VTreeWidgetItem* parent);
 #endif // QT_GUI_LIB
 };
 //Q_DECLARE_METATYPE(VObject)

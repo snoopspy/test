@@ -1,4 +1,3 @@
-#include <QDebug>
 #include <QMetaEnum>
 #include <QMetaProperty>
 #include "vobject.h"
@@ -8,7 +7,10 @@ VTreeWidget::VTreeWidget(QWidget *parent, VObject* object) : QTreeWidget(parent)
 {
 	this->object = object;
 	this->setColumnCount(2);
-	object->createTreeWidgetItems(this, NULL);
+	VTreeWidgetItemObject* root = new VTreeWidgetItemObject(this, object);
+	root->setText(0, object->metaObject()->className()); // gilgil temp
+	this->insertTopLevelItem(0, root);
+	//object->createTreeWidgetItems(root);
 }
 
 void VTreeWidget::textEditingFinished()
@@ -36,21 +38,50 @@ void VTreeWidget::enumCurrentIndexChanged(int index)
 	Q_UNUSED(index)
 	QComboBox* comboBox = (QComboBox*)this->sender();
 	VTreeWidgetItemEnum* item = (VTreeWidgetItemEnum*)comboBox->userData(0);
-	const char* propName = item->getPropName();
+	const char* propName = item->name();
 	QVariant propValue = comboBox->currentIndex();
 	item->object->setProperty(propName, propValue);
 }
 
-const char* VTreeWidgetItem::getPropName()
+VTreeWidgetItem::VTreeWidgetItem(VTreeWidgetItem *parent, VObject* object, int propIndex) : QTreeWidgetItem(parent)
 {
+	this->treeWidget = parent ? parent->treeWidget : NULL;
+	this->object     = object;
+	this->propIndex  = propIndex;
+	this->setBackground(1, QBrush(QColor(255, 0, 0))); // gilgil temp
+	this->setText(0, name());
+	if (parent)
+		parent->addChild(this);
+}
+
+const char* VTreeWidgetItem::name()
+{
+	if (propIndex == -1)
+	{
+		const char* name = object->metaObject()->className();
+		return name;
+	}
 	QMetaProperty mpro = object->metaObject()->property(propIndex);
 	const char* propName = mpro.name();
 	return propName;
 }
 
-VTreeWidgetItemText::VTreeWidgetItemText(VTreeWidget* treeWidget, VTreeWidgetItem* parent, VObject* object, int propIndex) : VTreeWidgetItem(treeWidget, parent, object, propIndex)
+VTreeWidgetItemObject::VTreeWidgetItemObject(VTreeWidget* treeWidget, VObject* object) : VTreeWidgetItem(NULL, object, -1)
 {
-	const char* propName = getPropName();
+	this->treeWidget = treeWidget;
+}
+
+VTreeWidgetItemObject::VTreeWidgetItemObject(VTreeWidgetItem *parent, VObject* object, int propIndex) : VTreeWidgetItem(parent, object, propIndex)
+{
+}
+
+VTreeWidgetItemObjectList::VTreeWidgetItemObjectList(VTreeWidgetItem *parent, VObject* object, int propIndex) : VTreeWidgetItem(parent, object, propIndex)
+{
+}
+
+VTreeWidgetItemText::VTreeWidgetItemText(VTreeWidgetItem* parent, VObject* object, int propIndex) : VTreeWidgetItem(parent, object, propIndex)
+{
+	const char* propName = name();
 	QVariant variant = object->property(propName);
 
 	lineEdit = new QLineEdit(treeWidget);
@@ -63,9 +94,9 @@ VTreeWidgetItemText::VTreeWidgetItemText(VTreeWidget* treeWidget, VTreeWidgetIte
 	this->treeWidget->setItemWidget(this, 1, lineEdit);
 }
 
-VTreeWidgetItemEnum::VTreeWidgetItemEnum(VTreeWidget* treeWidget, VTreeWidgetItem* parent, VObject* object, int propIndex) : VTreeWidgetItem(treeWidget, parent, object, propIndex)
+VTreeWidgetItemEnum::VTreeWidgetItemEnum(VTreeWidgetItem* parent, VObject* object, int propIndex) : VTreeWidgetItem(parent, object, propIndex)
 {
-	const char* propName = getPropName();
+	const char* propName = name();
 	QVariant variant = object->property(propName);
 
 	comboBox = new QComboBox(treeWidget);
@@ -84,4 +115,7 @@ VTreeWidgetItemEnum::VTreeWidgetItemEnum(VTreeWidget* treeWidget, VTreeWidgetIte
 
 	this->treeWidget->setItemWidget(this, 1, comboBox);
 }
+
+
+
 
