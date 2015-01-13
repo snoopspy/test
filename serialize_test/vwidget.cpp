@@ -136,6 +136,7 @@ VTreeWidgetItemObjectList::VTreeWidgetItemObjectList(VTreeWidgetItem *parent, VO
 
 	QWidget* container = new QWidget(treeWidget);
 	QHBoxLayout* layout = new QHBoxLayout(container);
+	layout->setMargin(0);
 	container->setLayout(layout);
 	layout->addWidget(pbAdd);
 	layout->addWidget(pbDel);
