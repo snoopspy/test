@@ -32,7 +32,7 @@ void VTreeWidget::textEditingFinished()
 	if (QMetaType::hasRegisteredConverterFunction(userType, QVariant::String))
 	{
 		QVariant to = VObject::convert(propValue, userType);
-		this->object->setProperty(propName, to);
+		item->object->setProperty(propName, to);
 	} else
 	{
 		item->object->setProperty(propName, propValue);
