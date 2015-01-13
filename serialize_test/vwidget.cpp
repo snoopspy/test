@@ -1,5 +1,7 @@
+#include <assert.h>
 #include <QMetaEnum>
 #include <QMetaProperty>
+#include <QHBoxLayout>
 #include "vobject.h"
 #include "vwidget.h"
 
@@ -7,10 +9,14 @@ VTreeWidget::VTreeWidget(QWidget *parent, VObject* object) : QTreeWidget(parent)
 {
 	this->object = object;
 	this->setColumnCount(2);
-	VTreeWidgetItemObject* root = new VTreeWidgetItemObject(this, object);
+	QStringList sList; sList << "property" << "value";
+	this->setHeaderLabels(sList);
+	// this->setStyleSheet("QTreeWidget::item{ height: 50px}"); // gilgil temp
+	// this->setIndentation(6); // gilgil temp
+	VTreeWidgetItemObject* root = new VTreeWidgetItemObject(this, object, true);
 	root->setText(0, object->metaObject()->className()); // gilgil temp
 	this->insertTopLevelItem(0, root);
-	//object->createTreeWidgetItems(root);
+	object->createTreeWidgetItems(root);
 }
 
 void VTreeWidget::textEditingFinished()
@@ -43,12 +49,48 @@ void VTreeWidget::enumCurrentIndexChanged(int index)
 	item->object->setProperty(propName, propValue);
 }
 
+void VTreeWidget::pbAddClicked()
+{
+	QPushButton* pbAdd = dynamic_cast<QPushButton*>(sender());
+	assert(pbAdd != NULL);
+	VTreeWidgetItemObjectList* item = (VTreeWidgetItemObjectList*)(pbAdd->userData(0));
+	assert(item != NULL);
+	VObjectList* childObjectList = item->object->property(item->name()).value<VObjectList*>();
+	assert(childObjectList != NULL);
+
+	VObject* newObject = childObjectList->createObject();
+	VTreeWidgetItem* childItem = new VTreeWidgetItem(item, newObject, -1);
+	newObject->createTreeWidgetItems(childItem);
+	childItem->setExpanded(true);
+}
+
+void VTreeWidget::pbDelClicked()
+{
+	QPushButton* pbDel = dynamic_cast<QPushButton*>(sender());
+	assert(pbDel != NULL);
+	VTreeWidgetItemObjectList* item = (VTreeWidgetItemObjectList*)(pbDel->userData(0));
+	assert(item != NULL);
+	VObjectList* childObjectList = item->object->property(item->name()).value<VObjectList*>();
+	assert(childObjectList != NULL);
+
+	QList<QTreeWidgetItem*> selectedItems = item->treeWidget->selectedItems();
+	foreach (QTreeWidgetItem* selectedItem, selectedItems)
+	{
+		VTreeWidgetItem* _selectedItem = (VTreeWidgetItem*)selectedItem;
+		if (_selectedItem->parent() == item)
+		{
+			childObjectList->removeAll(_selectedItem->object);
+			item->removeChild(selectedItem);
+		}
+	}
+}
+
 VTreeWidgetItem::VTreeWidgetItem(VTreeWidgetItem *parent, VObject* object, int propIndex) : QTreeWidgetItem(parent)
 {
 	this->treeWidget = parent ? parent->treeWidget : NULL;
 	this->object     = object;
 	this->propIndex  = propIndex;
-	this->setBackground(1, QBrush(QColor(255, 0, 0))); // gilgil temp
+	this->setBackground(1, QBrush(QColor(128, 128, 128))); // gilgil temp
 	this->setText(0, name());
 	if (parent)
 		parent->addChild(this);
@@ -66,17 +108,41 @@ const char* VTreeWidgetItem::name()
 	return propName;
 }
 
-VTreeWidgetItemObject::VTreeWidgetItemObject(VTreeWidget* treeWidget, VObject* object) : VTreeWidgetItem(NULL, object, -1)
+VTreeWidgetItemObject::VTreeWidgetItemObject(VTreeWidget* treeWidget, VObject* object, bool showObjectName) : VTreeWidgetItem(NULL, object, -1)
 {
 	this->treeWidget = treeWidget;
+	if (!showObjectName) hideObjectName();
 }
 
-VTreeWidgetItemObject::VTreeWidgetItemObject(VTreeWidgetItem *parent, VObject* object, int propIndex) : VTreeWidgetItem(parent, object, propIndex)
+VTreeWidgetItemObject::VTreeWidgetItemObject(VTreeWidgetItem *parent, VObject* object, int propIndex, bool showObjectName) : VTreeWidgetItem(parent, object, propIndex)
 {
+	if (!showObjectName) hideObjectName();
+}
+
+void VTreeWidgetItemObject::hideObjectName()
+{
+
 }
 
 VTreeWidgetItemObjectList::VTreeWidgetItemObjectList(VTreeWidgetItem *parent, VObject* object, int propIndex) : VTreeWidgetItem(parent, object, propIndex)
 {
+	VTreeWidget* treeWidget = (VTreeWidget*)parent->treeWidget;
+	pbAdd = new QPushButton(treeWidget);
+	pbAdd->setText("+");
+	pbAdd->setUserData(0, (QObjectUserData*)this);
+	pbDel = new QPushButton(treeWidget);
+	pbDel->setText("-");
+	pbDel->setUserData(0, (QObjectUserData*)this);
+
+	QWidget* container = new QWidget(treeWidget);
+	QHBoxLayout* layout = new QHBoxLayout(container);
+	container->setLayout(layout);
+	layout->addWidget(pbAdd);
+	layout->addWidget(pbDel);
+
+	parent->treeWidget->setItemWidget(this, 1, container);
+	QObject::connect(pbAdd, SIGNAL(clicked()), treeWidget, SLOT(pbAddClicked()));
+	QObject::connect(pbDel, SIGNAL(clicked()), treeWidget, SLOT(pbDelClicked()));
 }
 
 VTreeWidgetItemText::VTreeWidgetItemText(VTreeWidgetItem* parent, VObject* object, int propIndex) : VTreeWidgetItem(parent, object, propIndex)
@@ -87,7 +153,7 @@ VTreeWidgetItemText::VTreeWidgetItemText(VTreeWidgetItem* parent, VObject* objec
 	lineEdit = new QLineEdit(treeWidget);
 	lineEdit->setUserData(0, (QObjectUserData*)this);
 
-	// lineEdit->setFrame(false); // gilgil temp
+	//lineEdit->setFrame(false); // gilgil temp
 	lineEdit->setText(variant.toString());
 	QObject::connect(lineEdit, SIGNAL(editingFinished()), this->treeWidget, SLOT(textEditingFinished()));
 
@@ -101,6 +167,7 @@ VTreeWidgetItemEnum::VTreeWidgetItemEnum(VTreeWidgetItem* parent, VObject* objec
 
 	comboBox = new QComboBox(treeWidget);
 	comboBox->setUserData(0, (QObjectUserData*)this);
+	//comboBox->setFrame(false); // gilgil temp
 
 	QMetaProperty mpro = object->metaObject()->property(propIndex);
 	QMetaEnum menum = mpro.enumerator();

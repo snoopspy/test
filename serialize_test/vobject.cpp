@@ -59,15 +59,15 @@ void VObject::load(VRep& rep)
 		} else
 		if (userType == qMetaTypeId<VObjectList*>())
 		{
-			VObjectList* childObjList = this->property(propName).value<VObjectList*>();
+			VObjectList* childObjectList = this->property(propName).value<VObjectList*>();
 			VRep childRepList = rep[propName].toMap();
 			printf("%d\n", childRepList.count()); // gilgil temp 2015.01.07
 			for (VRep::iterator it = childRepList.begin(); it != childRepList.end(); it++)
 			{
 				VRep childRep = it->toMap();
-				VObject* vobj = childObjList->createObject();
+				VObject* vobj = childObjectList->createObject();
 				vobj->load(childRep);
-				childObjList->push_back(vobj);
+				childObjectList->push_back(vobj);
 			}
 		} else
 		if (mpro.isEnumType())
@@ -108,10 +108,10 @@ void VObject::save(VRep& rep)
 		} else
 		if (userType == qMetaTypeId<VObjectList*>())
 		{
-			VObjectList* childObjList = this->property(propName).value<VObjectList*>();
+			VObjectList* childObjectList = this->property(propName).value<VObjectList*>();
 			VRep childRepList;
 			int i = 0;
-			foreach (VObject* childObj, *childObjList)
+			foreach (VObject* childObj, *childObjectList)
 			{
 				VRep childRep;
 				childObj->save(childRep);
@@ -161,9 +161,9 @@ void VObject::createTreeWidgetItems(VTreeWidgetItem* parent)
 		if (userType == qMetaTypeId<VObjectList*>())
 		{
 			VTreeWidgetItemObjectList* item = new VTreeWidgetItemObjectList(parent, this, propIndex);
-			VObjectList* childObjList = this->property(propName).value<VObjectList*>();
+			VObjectList* childObjectList = this->property(propName).value<VObjectList*>();
 			int i = 0;
-			foreach (VObject* childObj, *childObjList)
+			foreach (VObject* childObj, *childObjectList)
 			{
 				VTreeWidgetItem* childItem = new VTreeWidgetItem(item, childObj, -1);
 				childObj->createTreeWidgetItems(childItem);

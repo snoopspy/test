@@ -6,6 +6,7 @@
 #include <QComboBox>
 #include <QHeaderView>
 #include <QLineEdit>
+#include <QPushButton>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QWidget>
@@ -25,6 +26,8 @@ public:
 public slots:
 	void textEditingFinished();
 	void enumCurrentIndexChanged(int index);
+	void pbAddClicked();
+	void pbDelClicked();
 };
 
 class VTreeWidgetItem : public QTreeWidgetItem
@@ -42,14 +45,18 @@ public:
 class VTreeWidgetItemObject : public VTreeWidgetItem
 {
 public:
-	VTreeWidgetItemObject(VTreeWidget* treeWidget, VObject* object);
-	VTreeWidgetItemObject(VTreeWidgetItem *parent, VObject* object, int propIndex);
+	VTreeWidgetItemObject(VTreeWidget* treeWidget, VObject* object, bool showObjectName);
+	VTreeWidgetItemObject(VTreeWidgetItem *parent, VObject* object, int propIndex, bool showObjectName);
+private:
+	void hideObjectName();
 };
 
 class VTreeWidgetItemObjectList : public VTreeWidgetItem
 {
 public:
 	VTreeWidgetItemObjectList(VTreeWidgetItem *parent, VObject* object, int propIndex);
+	QPushButton* pbAdd;
+	QPushButton* pbDel;
 };
 
 class VTreeWidgetItemText : public VTreeWidgetItem
@@ -69,3 +76,4 @@ public:
 #endif // QT_GUI_LIB
 
 #endif // VWIDGET_H
+

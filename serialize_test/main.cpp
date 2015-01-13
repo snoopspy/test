@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
 	VObject* object = createObjList();
 
 	VTreeWidget* treeWidget = new VTreeWidget(NULL, object);
-	object->createTreeWidgetItems((VTreeWidgetItem*)treeWidget->topLevelItem(0));
+	//object->createTreeWidgetItems((VTreeWidgetItem*)treeWidget->topLevelItem(0));
 	/*
 	QTreeWidgetItem* item = new QTreeWidgetItem(treeWidget);
 	item->setText(1, "1");
@@ -74,8 +74,8 @@ int main(int argc, char* argv[])
 	treeWidget->expandAll();
 	treeWidget->show();
 	int res = a.exec();
+	//delete treeWidget;
 	delete object;
-	delete treeWidget;
 	return res;
 }
 
