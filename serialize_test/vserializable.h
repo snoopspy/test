@@ -9,13 +9,6 @@ class VSerializable
 public:
 	virtual void load(VRep& rep) = 0;
 	virtual void save(VRep& rep) = 0;
-	// ----- gilgil temp 2015.01.07 -----
-	/*
-public:
-	bool loadFromFile(QString fileName, const QMetaObject* mobj);
-	bool saveToFile(QString fileName, const QMetaObject* mobj);
-	*/
-	// ----------------------------------
 };
 
 #endif // VSERIALIZABLE_H

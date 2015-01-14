@@ -15,18 +15,33 @@ VTreeWidget::VTreeWidget(QWidget *parent, VObject* object) : QTreeWidget(parent)
 	this->setColumnCount(2);
 	QStringList sList; sList << "property" << "value";
 	this->setHeaderLabels(sList);
-	// this->setStyleSheet("QTreeWidget::item{ height: 50px}"); // gilgil temp
-	// this->setIndentation(6); // gilgil temp
+	// this->setStyleSheet("QTreeWidget::item{ height: 50px}"); // by gilgil
+	// this->setIndentation(6); // by gilgil
 	VTreeWidgetItemObject* root = new VTreeWidgetItemObject(this, object);
 	this->insertTopLevelItem(0, root);
 	root->initialize();
 	object->createTreeWidgetItems(root);
 }
 
+void VTreeWidget::objectNameEditingFinished()
+{
+	QLineEdit* lineEdit = (QLineEdit*)this->sender();
+	assert(lineEdit != NULL);
+
+	VTreeWidgetItemObject* item = (VTreeWidgetItemObject*)(qvariant_cast<void*>(lineEdit->property("_treeWidgetItem")));
+	assert(item != NULL);
+
+	VObject* object = item->object;
+	assert(object != NULL);
+
+	object->setObjectName(lineEdit->text());
+}
+
 void VTreeWidget::textEditingFinished()
 {
 	QLineEdit* lineEdit = (QLineEdit*)this->sender();
 	assert(lineEdit != NULL);
+
 	VTreeWidgetItemText* item = (VTreeWidgetItemText*)(qvariant_cast<void*>(lineEdit->property("_treeWidgetItem")));
 	assert(item != NULL);
 
@@ -61,13 +76,15 @@ void VTreeWidget::pbAddClicked()
 {
 	QPushButton* pbAdd = dynamic_cast<QPushButton*>(sender());
 	assert(pbAdd != NULL);
+
 	VTreeWidgetItemObjectList* item = (VTreeWidgetItemObjectList*)(qvariant_cast<void*>(pbAdd->property("_treeWidgetItem")));
 	assert(item != NULL);
+
 	VObject* object = item->object;
 	assert(object != NULL);
 
 	QMetaProperty mpro = object->metaObject()->property(item->propIndex);
-	QVariant variant = item->object->property(mpro.name());
+	QVariant variant = object->property(mpro.name());
 	VObjectList* objectList = variant.value<VObjectList*>();
 	assert(objectList != NULL);
 
@@ -102,33 +119,6 @@ void VTreeWidget::pbDelClicked()
 
 	objectList->removeOne(delObject);
 	parentItem->removeChild(item);
-
-	/*
-	QMetaProperty mpro = object->metaObject()->property(item->propIndex);
-	QVariant variant = item->object->property(mpro.name());
-	VObjectList* objectList = variant.value<VObjectList*>();
-	assert(objectList != NULL);
-
-	bool res = objectList->removeOne(object);
-	assert(res == true);
-	parentItem->removeChild(item);
-	*/
-
-	/*
-	VObjectList* childObjectList = item->object->property(item->name()).value<VObjectList*>();
-	assert(childObjectList != NULL);
-
-	QList<QTreeWidgetItem*> selectedItems = item->treeWidget->selectedItems();
-	foreach (QTreeWidgetItem* selectedItem, selectedItems)
-	{
-		VTreeWidgetItem* _selectedItem = (VTreeWidgetItem*)selectedItem;
-		if (_selectedItem->parent() == item)
-		{
-			childObjectList->removeAll(_selectedItem->object);
-			item->removeChild(selectedItem);
-		}
-	}
-	*/
 }
 
 VTreeWidgetItem::VTreeWidgetItem(VTreeWidgetItem *parent) : QTreeWidgetItem(parent)
@@ -175,6 +165,7 @@ void VTreeWidgetItemObject::initialize()
 		leObjectName->setProperty("_treeWidgetItem", QVariant::fromValue<void*>((void*)this));
 		leObjectName->setText(object->objectName());
 		leObjectName->setFrame(false);
+		QObject::connect(leObjectName, SIGNAL(editingFinished()), this->treeWidget, SLOT(objectNameEditingFinished()));
 		treeWidget->setItemWidget(this, 1, leObjectName);
 	} else
 	if (type == SHOW_DEL_BUTTON)
@@ -234,7 +225,7 @@ void VTreeWidgetItemText::initialize()
 	QLineEdit* lineEdit = new QLineEdit(treeWidget);
 	lineEdit->setProperty("_treeWidgetItem", QVariant::fromValue<void*>((void*)this));
 	lineEdit->setText(variant.toString());
-	lineEdit->setFrame(false); // gilgil temp
+	lineEdit->setFrame(false);
 	QObject::connect(lineEdit, SIGNAL(editingFinished()), this->treeWidget, SLOT(textEditingFinished()));
 	this->treeWidget->setItemWidget(this, 1, lineEdit);
 }
@@ -252,7 +243,7 @@ void VTreeWidgetItemEnum::initialize()
 
 	QComboBox* comboBox = new QComboBox(treeWidget);
 	comboBox->setProperty("_treeWidgetItem", QVariant::fromValue<void*>((void*)this));
-	comboBox->setFrame(false); // gilgil temp
+	comboBox->setFrame(false);
 
 	QMetaProperty mpro = object->metaObject()->property(propIndex);
 	QMetaEnum menum = mpro.enumerator();

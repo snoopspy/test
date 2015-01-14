@@ -29,16 +29,6 @@ void VMetaDump::dump(QMetaObject* mobj, QObject* obj, int ident)
 		QMetaProperty mpro = mobj->property(i);
 		dump(&mpro, obj, ident + 1);
 	}
-
-	/*
-	int enumeratorCount = mobj->enumeratorCount();
-	qDebug() << "className" << className << "enumeratorCount" << enumeratorCount; // gilgil temp 2015.01.05
-	for (int i = 0; i < enumeratorCount; i++)
-	{
-		QMetaEnum menum = mobj->enumerator(i);
-		dump(&menum, obj, ident + 1);
-	}
-	*/
 }
 
 #include "vip.h"
@@ -49,14 +39,6 @@ void VMetaDump::dump(QMetaProperty *mpro, QObject* obj, int ident)
 	QString value = variant.toString();
 
 	QString typeName = variant.typeName();
-	/*
-	if (mpro->type() == QMetaType::type("VIp"))
-	{
-		VIp ip = var;
-		ip.m_ip = 65;
-		value = ip;
-	}
-	*/
 	if (mpro->isEnumType())
 	{
 		QMetaEnum menum = mpro->enumerator();
@@ -74,20 +56,3 @@ QString VMetaDump::duplicate(char ch, int count)
 		res += ch;
 	return res;
 }
-
-// ----- gilgil temp 2015.01.06 -----
-/*
-void VMetaObject::dump(QMetaEnum *menum, QObject* obj, int ident)
-{
-	Q_UNUSED(obj)
-	const char* name = menum->name();
-	printf("%s enum %s", qPrintable(duplicate(' ', ident)), name);
-	int keyCount = menum->keyCount();
-	for (int i = 0; i < keyCount; i++)
-	{
-		const char* key = menum->key(i);
-		printf("%s%s", qPrintable(duplicate(' ', ident)), key);
-	}
-}
-*/
-// ----------------------------------

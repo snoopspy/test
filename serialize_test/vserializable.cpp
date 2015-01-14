@@ -1,45 +1,6 @@
 #include <QDebug>
 #include "vserializable.h"
 
-// ----- gilgil temp 2015.01.07 -----
-/*
-bool VSerializable::loadFromFile(QString fileName, const QMetaObject* mobj)
-{
-	VRep strRep;
-	if (!strRep.loadFromFile(fileName))
-	{
-		return false;
-	}
-
-	VRep rep;
-	if (mobj == NULL)
-	{
-		rep = strRep;
-	} else
-	{
-		rep = VStrRep::strReptoRep(strRep, mobj);
-	}
-	this->load(rep);
-	return true;
-}
-
-bool VSerializable::saveToFile(QString fileName, const QMetaObject* mobj)
-{
-	VRep rep;
-	this->save(rep);
-	VRep strRep;
-	if (mobj == NULL)
-	{
-		strRep = rep;
-	} else
-	{
-		strRep = VStrRep::repToStrRep(rep, mobj);
-	}
-	return strRep.saveToFile(fileName);
-}
-*/
-// ----------------------------------
-
 #ifdef GTEST
 #include <gtest/gtest.h>
 

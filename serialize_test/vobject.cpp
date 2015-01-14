@@ -33,7 +33,7 @@ QVariant VObject::convert(QVariant from, int type)
 	bool res = QMetaType::convert(fromData, fromUserType, toData, toUserType);
 	if (!res)
 	{
-		printf("VObject::load QMetaType::convert return false\n"); // gilgil temp 2015.01.07
+		printf("VObject::load QMetaType::convert return false\n");
 		VMetaDump::dump(&from); // gilgil temp 2015.01.07
 		VMetaDump::dump(&to); // gilgil temp 2015.01.07
 	}
@@ -61,7 +61,6 @@ void VObject::load(VRep& rep)
 		{
 			VObjectList* childObjectList = this->property(propName).value<VObjectList*>();
 			VRep childRepList = rep[propName].toMap();
-			printf("%d\n", childRepList.count()); // gilgil temp 2015.01.07
 			for (VRep::iterator it = childRepList.begin(); it != childRepList.end(); it++)
 			{
 				VRep childRep = it->toMap();

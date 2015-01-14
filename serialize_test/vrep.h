@@ -14,6 +14,4 @@ public:
 	bool saveToFile(QString fileName);
 };
 
-//typedef QVariantMap VRep; // gilgil temp 2015.01.07
-
 #endif // VREP_H

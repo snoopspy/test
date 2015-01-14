@@ -53,9 +53,9 @@ int main(int argc, char* argv[])
 
 	//VObject* object = createLog();
 	//VObject* object = createTcpClient();
-	//VObject* object = createNestedClient();
+	VObject* object = createNestedClient();
 	//VObject* object = createNetInfo();
-	VObject* object = createObjList();
+	//VObject* object = createObjList();
 //
 	VTreeWidget* treeWidget = new VTreeWidget(NULL, object);
 	//object->createTreeWidgetItems((VTreeWidgetItem*)treeWidget->topLevelItem(0));
