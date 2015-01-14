@@ -60,7 +60,7 @@ void VTreeWidget::pbAddClicked()
 
 	VObject* newObject = childObjectList->createObject();
 	VTreeWidgetItemObject* childItem = new VTreeWidgetItemObject(item, newObject, -1, true);
-	newObject->createTreeWidgetItems(childItem, true);
+	newObject->createTreeWidgetItems(childItem, false);
 	childItem->setExpanded(true);
 }
 
@@ -119,7 +119,7 @@ const char* VTreeWidgetItem::name()
 VTreeWidgetItemObject::VTreeWidgetItemObject(VTreeWidget* treeWidget, VObject* object) : VTreeWidgetItem(NULL, object, -1)
 {
 	this->treeWidget = treeWidget;
-	this->pbDel = NULL;
+	pbDel = NULL;
 }
 
 VTreeWidgetItemObject::VTreeWidgetItemObject(VTreeWidgetItem *parent, VObject* object, int propIndex, bool createDelButton) : VTreeWidgetItem(parent, object, propIndex)
@@ -127,15 +127,13 @@ VTreeWidgetItemObject::VTreeWidgetItemObject(VTreeWidgetItem *parent, VObject* o
 	if (createDelButton)
 	{
 		pbDel = new QPushButton(treeWidget);
-		pbDel->setUserData(0, (QObjectUserData*)this);
-		pbDel = new QPushButton(treeWidget);
 		pbDel->setText("-");
 		pbDel->setUserData(0, (QObjectUserData*)this);
 
 		parent->treeWidget->setItemWidget(this, 1, pbDel);
 		QObject::connect(pbDel, SIGNAL(clicked()), treeWidget, SLOT(pbDelClicked()));
 	} else {
-		this->pbDel = NULL;
+		pbDel = NULL;
 	}
 }
 

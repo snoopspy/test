@@ -166,7 +166,7 @@ void VObject::createTreeWidgetItems(VTreeWidgetItem* parent, bool showObjectName
 			int i = 0;
 			foreach (VObject* childObj, *childObjectList)
 			{
-				VTreeWidgetItemObject* childItem = new VTreeWidgetItemObject(item, childObj, -1, true);
+				VTreeWidgetItemObject* childItem = new VTreeWidgetItemObject(item, childObj, i, true);
 				childObj->createTreeWidgetItems(childItem, false);
 				i++;
 			}

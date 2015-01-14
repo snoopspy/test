@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
 	treeWidget->expandAll();
 	treeWidget->show();
 	int res = a.exec();
-	//delete treeWidget;
+	delete treeWidget;
 	delete object;
 	return res;
 }
