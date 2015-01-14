@@ -155,7 +155,7 @@ void VObject::createTreeWidgetItems(VTreeWidgetItem* parent, bool showObjectName
 
 		if (userType == qMetaTypeId<VObject*>())
 		{
-			VTreeWidgetItemObject* item = new VTreeWidgetItemObject(parent, this, propIndex, false);
+			VTreeWidgetItemObject* item = new VTreeWidgetItemObject(parent, this, false);
 			VObject* childObj = this->property(propName).value<VObject*>();
 			childObj->createTreeWidgetItems(item, false);
 		} else
@@ -166,7 +166,7 @@ void VObject::createTreeWidgetItems(VTreeWidgetItem* parent, bool showObjectName
 			int i = 0;
 			foreach (VObject* childObj, *childObjectList)
 			{
-				VTreeWidgetItemObject* childItem = new VTreeWidgetItemObject(item, childObj, i, true);
+				VTreeWidgetItemObject* childItem = new VTreeWidgetItemObject(item, childObj, true);
 				childObj->createTreeWidgetItems(childItem, false);
 				i++;
 			}

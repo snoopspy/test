@@ -37,6 +37,8 @@ public:
 
 	VTreeWidget* treeWidget;
 	VObject*     object;
+	// if propIndex is -1, object means the object itself.
+	// otherwise(propIndex is not -1), object means it's parent object.
 	int          propIndex;
 public:
 	virtual const char* name();
@@ -46,7 +48,7 @@ class VTreeWidgetItemObject : public VTreeWidgetItem
 {
 public:
 	VTreeWidgetItemObject(VTreeWidget* treeWidget, VObject* object); // for root
-	VTreeWidgetItemObject(VTreeWidgetItem *parent, VObject* object, int propIndex, bool createDelButton);
+	VTreeWidgetItemObject(VTreeWidgetItem *parent, VObject* object, bool createDelButton);
 	QPushButton* pbDel;
 };
 

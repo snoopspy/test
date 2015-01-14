@@ -59,7 +59,7 @@ void VTreeWidget::pbAddClicked()
 	assert(childObjectList != NULL);
 
 	VObject* newObject = childObjectList->createObject();
-	VTreeWidgetItemObject* childItem = new VTreeWidgetItemObject(item, newObject, -1, true);
+	VTreeWidgetItemObject* childItem = new VTreeWidgetItemObject(item, newObject, true);
 	newObject->createTreeWidgetItems(childItem, false);
 	childItem->setExpanded(true);
 }
@@ -74,7 +74,8 @@ void VTreeWidget::pbDelClicked()
 	assert(parentItem != NULL);
 	VObjectList* objectList = parentItem->object->property(parentItem->name()).value<VObjectList*>();
 	assert(objectList != NULL);
-	objectList->removeOne(item->object);
+	bool res = objectList->removeOne(item->object);
+	assert(res == true);
 	//parentItem->removeChild(item);
 	/*
 	VObjectList* childObjectList = item->object->property(item->name()).value<VObjectList*>();
@@ -122,7 +123,7 @@ VTreeWidgetItemObject::VTreeWidgetItemObject(VTreeWidget* treeWidget, VObject* o
 	pbDel = NULL;
 }
 
-VTreeWidgetItemObject::VTreeWidgetItemObject(VTreeWidgetItem *parent, VObject* object, int propIndex, bool createDelButton) : VTreeWidgetItem(parent, object, propIndex)
+VTreeWidgetItemObject::VTreeWidgetItemObject(VTreeWidgetItem *parent, VObject* object, bool createDelButton) : VTreeWidgetItem(parent, object, -1)
 {
 	if (createDelButton)
 	{
