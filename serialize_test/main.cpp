@@ -39,6 +39,7 @@ VObject* createNetInfo()
 VObject* createObjList()
 {
 	ObjList* objList = new ObjList;
+	objList->setObjectName("objList1");
 	objList->tcpClientList.append(new VTcpClient);
 	//objList->tcpClientList.append(new VTcpClient);
 	return objList;
@@ -50,12 +51,12 @@ int main(int argc, char* argv[])
 	VIp::registerConverter();
 	VMac::registerConverter();
 
-	VObject* object = createLog();
+	//VObject* object = createLog();
 	//VObject* object = createTcpClient();
 	//VObject* object = createNestedClient();
 	//VObject* object = createNetInfo();
-	//VObject* object = createObjList();
-
+	VObject* object = createObjList();
+//
 	VTreeWidget* treeWidget = new VTreeWidget(NULL, object);
 	//object->createTreeWidgetItems((VTreeWidgetItem*)treeWidget->topLevelItem(0));
 
@@ -64,7 +65,7 @@ int main(int argc, char* argv[])
 	//QTreeWidgetItem* newItem = new QTreeWidgetItem(treeWidget, item);
 	//QTreeWidgetItem* newItem = new QTreeWidgetItem(item);
 	//newItem->setText(1, "test");
-	treeWidget->expandAll();
+	//treeWidget->expandAll();
 	treeWidget->show();
 	int res = a.exec();
 	delete treeWidget;

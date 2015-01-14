@@ -7,6 +7,7 @@
 #include <QTreeWidgetItem>
 
 class VObject;
+class VObjectList;
 
 class VTreeWidget : public QTreeWidget
 {
@@ -28,12 +29,11 @@ public slots:
 class VTreeWidgetItem : public QTreeWidgetItem
 {
 public:
-	VTreeWidgetItem(VTreeWidgetItem *parent, VObject* object);
+	VTreeWidgetItem(VTreeWidgetItem *parent);
 
 	VTreeWidget* treeWidget;
-	VObject*     object;
 
-	virtual QString caption();
+	virtual QString caption() = 0;
 	virtual void initialize();
 };
 
@@ -48,27 +48,30 @@ public:
 	VTreeWidgetItemObject(VTreeWidget* treeWidget, VObject* object); // for root VObject
 	VTreeWidgetItemObject(VTreeWidgetItem* parent, VObject* object, Type type);
 
+	VObject* object;
 	Type type;
 
-	virtual void initialize();
-};
-
-class VTreeWidgetItemObjectList : public VTreeWidgetItem
-{
-public:
-	VTreeWidgetItemObjectList(VTreeWidgetItem *parent, VObject* object);
-
+	virtual QString caption();
 	virtual void initialize();
 };
 
 class VTreeWidgetItemPropIndex : public VTreeWidgetItem
 {
 public:
-	VTreeWidgetItemPropIndex(VTreeWidgetItem* parent, VObject* object, int propIndex);
+	VTreeWidgetItemPropIndex(VTreeWidgetItem* parent, VObject* parentObject, int propIndex);
 
+	VObject* object;
 	int propIndex;
 
 	virtual QString caption();
+	virtual void initialize();
+};
+
+class VTreeWidgetItemObjectList : public VTreeWidgetItemPropIndex
+{
+public:
+	VTreeWidgetItemObjectList(VTreeWidgetItem *parent, VObject* object, int propIndex);
+
 	virtual void initialize();
 };
 

@@ -163,7 +163,7 @@ void VObject::createTreeWidgetItems(VTreeWidgetItem* parent)
 		if (userType == qMetaTypeId<VObjectList*>())
 		{
 			VObjectList* childObjectList = this->property(propName).value<VObjectList*>();
-			VTreeWidgetItemObjectList* item = new VTreeWidgetItemObjectList(parent, this);
+			VTreeWidgetItemObjectList* item = new VTreeWidgetItemObjectList(parent, this, propIndex);
 			item->initialize();
 
 			foreach (VObject* childObj, *childObjectList)
