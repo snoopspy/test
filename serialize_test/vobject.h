@@ -29,7 +29,7 @@ public:
 
 #ifdef QT_GUI_LIB
 public:
-	virtual void createTreeWidgetItems(VTreeWidgetItem* parent);
+	virtual void createTreeWidgetItems(VTreeWidgetItem* parent, bool showObjectName);
 #endif // QT_GUI_LIB
 };
 //Q_DECLARE_METATYPE(VObject)

@@ -1,6 +1,7 @@
 #ifndef VERR_H
 #define VERR_H
 
+#include <typeinfo>
 #include <QString>
 
 class VError
@@ -13,6 +14,7 @@ public:
 	};
 
 public:
+	std::type_info *ti;
 	QString msg;
 	int code;
 

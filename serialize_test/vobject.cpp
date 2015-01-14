@@ -140,23 +140,24 @@ void VObject::save(VRep& rep)
 }
 
 #ifdef QT_GUI_LIB
-void VObject::createTreeWidgetItems(VTreeWidgetItem* parent)
+void VObject::createTreeWidgetItems(VTreeWidgetItem* parent, bool showObjectName)
 {
 	const QMetaObject *mobj = this->metaObject();
 	int count = this->metaObject()->propertyCount();
 
-	//for (int i = count - 1; i >= 0; i--) // gilgil temp
 	for (int propIndex = 0; propIndex < count; propIndex++)
 	{
 		QMetaProperty mpro     = mobj->property(propIndex);
 		const char*   propName = mpro.name();
 		int           userType = mpro.userType();
 
+		if (!showObjectName && QString(propName) == "objectName") continue;
+
 		if (userType == qMetaTypeId<VObject*>())
 		{
-			VTreeWidgetItem* item = new VTreeWidgetItem(parent, this, propIndex);
+			VTreeWidgetItemObject* item = new VTreeWidgetItemObject(parent, this, propIndex, false);
 			VObject* childObj = this->property(propName).value<VObject*>();
-			childObj->createTreeWidgetItems(item);
+			childObj->createTreeWidgetItems(item, false);
 		} else
 		if (userType == qMetaTypeId<VObjectList*>())
 		{
@@ -165,8 +166,8 @@ void VObject::createTreeWidgetItems(VTreeWidgetItem* parent)
 			int i = 0;
 			foreach (VObject* childObj, *childObjectList)
 			{
-				VTreeWidgetItem* childItem = new VTreeWidgetItem(item, childObj, -1);
-				childObj->createTreeWidgetItems(childItem);
+				VTreeWidgetItemObject* childItem = new VTreeWidgetItemObject(item, childObj, -1, true);
+				childObj->createTreeWidgetItems(childItem, false);
 				i++;
 			}
 		} else

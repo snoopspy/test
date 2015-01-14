@@ -45,10 +45,9 @@ public:
 class VTreeWidgetItemObject : public VTreeWidgetItem
 {
 public:
-	VTreeWidgetItemObject(VTreeWidget* treeWidget, VObject* object, bool showObjectName);
-	VTreeWidgetItemObject(VTreeWidgetItem *parent, VObject* object, int propIndex, bool showObjectName);
-private:
-	void hideObjectName();
+	VTreeWidgetItemObject(VTreeWidget* treeWidget, VObject* object); // for root
+	VTreeWidgetItemObject(VTreeWidgetItem *parent, VObject* object, int propIndex, bool createDelButton);
+	QPushButton* pbDel;
 };
 
 class VTreeWidgetItemObjectList : public VTreeWidgetItem
@@ -56,7 +55,6 @@ class VTreeWidgetItemObjectList : public VTreeWidgetItem
 public:
 	VTreeWidgetItemObjectList(VTreeWidgetItem *parent, VObject* object, int propIndex);
 	QPushButton* pbAdd;
-	QPushButton* pbDel;
 };
 
 class VTreeWidgetItemText : public VTreeWidgetItem

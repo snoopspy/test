@@ -8,6 +8,7 @@ VError::~VError()
 
 VError::VError(const VError& rhs)
 {
+	ti = (std::type_info*)&typeid(*this);
 	msg = rhs.msg;
 	code = rhs.code;
 }
@@ -16,9 +17,7 @@ VError& VError::operator = (const VError& rhs)
 {
 	if (code == OK)
 	{
-		void* _this = (void*)this;
-		void* _rhs = (void*)&rhs;
-		memcpy(_this, _rhs, sizeof(void*)); // virtual method table
+		ti = rhs.ti;
 		msg = rhs.msg;
 		code = rhs.code;
 	}
@@ -38,6 +37,7 @@ VError::VError(const QString msg, const int code)
 
 VError::VError(const QString msg, const int code, const char* file, const int line, const char* func)
 {
+	this->ti
 	this->msg = msg;
 	this->code = code;
 	dump(file, line, func);
