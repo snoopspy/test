@@ -15,9 +15,8 @@ VObject* createTcpClient()
 VObject* createNestedClient()
 {
 	NestedClient* nc = new NestedClient;
-	nc->setObjectName("nc");
-	nc->tcpClient.setObjectName("tc");
-	//nc->tcpClientsetObjectName("tc");
+	nc->setObjectName("nestedClient1");
+	nc->tcpClient.setObjectName("tcpClient1");
 	return nc;
 }
 
@@ -25,6 +24,7 @@ VObject* createNestedClient()
 VObject* createLog()
 {
 	VLog* log = new VLog;
+	log->setObjectName("log1");
 	return log;
 }
 
@@ -40,7 +40,7 @@ VObject* createObjList()
 {
 	ObjList* objList = new ObjList;
 	objList->tcpClientList.append(new VTcpClient);
-	objList->tcpClientList.append(new VTcpClient);
+	//objList->tcpClientList.append(new VTcpClient);
 	return objList;
 }
 
@@ -50,22 +50,15 @@ int main(int argc, char* argv[])
 	VIp::registerConverter();
 	VMac::registerConverter();
 
-	//VObject* object = createLog();
+	VObject* object = createLog();
 	//VObject* object = createTcpClient();
 	//VObject* object = createNestedClient();
 	//VObject* object = createNetInfo();
-	VObject* object = createObjList();
+	//VObject* object = createObjList();
 
 	VTreeWidget* treeWidget = new VTreeWidget(NULL, object);
 	//object->createTreeWidgetItems((VTreeWidgetItem*)treeWidget->topLevelItem(0));
-	/*
-	QTreeWidgetItem* item = new QTreeWidgetItem(treeWidget);
-	item->setText(1, "1");
-	item = new QTreeWidgetItem(treeWidget);
-	item->setText(1, "2");
-	item = new QTreeWidgetItem(treeWidget);
-	item->setText(1, "3");
-	*/
+
 	//QTreeWidgetItem* item = treeWidget->itemAt(0, 0);
 	//QTreeWidgetItem* newItem = new QTreeWidgetItem(item);
 	//QTreeWidgetItem* newItem = new QTreeWidgetItem(treeWidget, item);

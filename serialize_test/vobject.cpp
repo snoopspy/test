@@ -140,7 +140,7 @@ void VObject::save(VRep& rep)
 }
 
 #ifdef QT_GUI_LIB
-void VObject::createTreeWidgetItems(VTreeWidgetItem* parent, bool showObjectName)
+void VObject::createTreeWidgetItems(VTreeWidgetItem* parent)
 {
 	const QMetaObject *mobj = this->metaObject();
 	int count = this->metaObject()->propertyCount();
@@ -151,36 +151,42 @@ void VObject::createTreeWidgetItems(VTreeWidgetItem* parent, bool showObjectName
 		const char*   propName = mpro.name();
 		int           userType = mpro.userType();
 
-		if (!showObjectName && QString(propName) == "objectName") continue;
+		if (QString(propName) == "objectName") continue;
 
 		if (userType == qMetaTypeId<VObject*>())
 		{
-			VTreeWidgetItemObject* item = new VTreeWidgetItemObject(parent, this, false);
 			VObject* childObj = this->property(propName).value<VObject*>();
-			childObj->createTreeWidgetItems(item, false);
+			VTreeWidgetItemObject* item = new VTreeWidgetItemObject(parent, childObj, VTreeWidgetItemObject::SHOW_OBJECT_NAME);
+			item->initialize();
+			childObj->createTreeWidgetItems(item);
 		} else
 		if (userType == qMetaTypeId<VObjectList*>())
 		{
-			VTreeWidgetItemObjectList* item = new VTreeWidgetItemObjectList(parent, this, propIndex);
 			VObjectList* childObjectList = this->property(propName).value<VObjectList*>();
-			int i = 0;
+			VTreeWidgetItemObjectList* item = new VTreeWidgetItemObjectList(parent, this);
+			item->initialize();
+
 			foreach (VObject* childObj, *childObjectList)
 			{
-				VTreeWidgetItemObject* childItem = new VTreeWidgetItemObject(item, childObj, true);
-				childObj->createTreeWidgetItems(childItem, false);
-				i++;
+				VTreeWidgetItemObject* childItem = new VTreeWidgetItemObject(item, childObj, VTreeWidgetItemObject::SHOW_DEL_BUTTON);
+				childItem->initialize();
+				childObj->createTreeWidgetItems(childItem);
 			}
 		} else
 		if (mpro.isEnumType())
 		{
-			new VTreeWidgetItemEnum(parent, this, propIndex);
+			VTreeWidgetItemEnum* item = new VTreeWidgetItemEnum(parent, this, propIndex);
+			item->initialize();
 		} else
 		if (QMetaType::hasRegisteredConverterFunction(userType, QVariant::String))
 		{
-			new VTreeWidgetItemText(parent, this, propIndex);
+			VTreeWidgetItemText* item = new VTreeWidgetItemText(parent, this, propIndex);
+			item->initialize();
 		} else
 		{
-			new VTreeWidgetItemText(parent, this, propIndex);
+			VTreeWidgetItemText* item = new VTreeWidgetItemText(parent, this, propIndex);
+			item->initialize();
+
 		}
 	}
 }

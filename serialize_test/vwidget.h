@@ -3,13 +3,8 @@
 
 #ifdef QT_GUI_LIB
 
-#include <QComboBox>
-#include <QHeaderView>
-#include <QLineEdit>
-#include <QPushButton>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
-#include <QWidget>
 
 class VObject;
 
@@ -33,44 +28,64 @@ public slots:
 class VTreeWidgetItem : public QTreeWidgetItem
 {
 public:
-	VTreeWidgetItem(VTreeWidgetItem *parent, VObject* object, int propIndex);
+	VTreeWidgetItem(VTreeWidgetItem *parent, VObject* object);
 
 	VTreeWidget* treeWidget;
 	VObject*     object;
-	// if propIndex is -1, object means the object itself.
-	// otherwise(propIndex is not -1), object means it's parent object.
-	int          propIndex;
-public:
-	virtual const char* name();
+
+	virtual QString caption();
+	virtual void initialize();
 };
 
 class VTreeWidgetItemObject : public VTreeWidgetItem
 {
 public:
-	VTreeWidgetItemObject(VTreeWidget* treeWidget, VObject* object); // for root
-	VTreeWidgetItemObject(VTreeWidgetItem *parent, VObject* object, bool createDelButton);
-	QPushButton* pbDel;
+	typedef enum {
+		SHOW_OBJECT_NAME,
+		SHOW_DEL_BUTTON
+	} Type;
+public:
+	VTreeWidgetItemObject(VTreeWidget* treeWidget, VObject* object); // for root VObject
+	VTreeWidgetItemObject(VTreeWidgetItem* parent, VObject* object, Type type);
+
+	Type type;
+
+	virtual void initialize();
 };
 
 class VTreeWidgetItemObjectList : public VTreeWidgetItem
 {
 public:
-	VTreeWidgetItemObjectList(VTreeWidgetItem *parent, VObject* object, int propIndex);
-	QPushButton* pbAdd;
+	VTreeWidgetItemObjectList(VTreeWidgetItem *parent, VObject* object);
+
+	virtual void initialize();
 };
 
-class VTreeWidgetItemText : public VTreeWidgetItem
+class VTreeWidgetItemPropIndex : public VTreeWidgetItem
+{
+public:
+	VTreeWidgetItemPropIndex(VTreeWidgetItem* parent, VObject* object, int propIndex);
+
+	int propIndex;
+
+	virtual QString caption();
+	virtual void initialize();
+};
+
+class VTreeWidgetItemText : public VTreeWidgetItemPropIndex
 {
 public:
 	VTreeWidgetItemText(VTreeWidgetItem* parent, VObject* object, int propIndex);
-	QLineEdit* lineEdit;
+
+	virtual void initialize();
 };
 
-class VTreeWidgetItemEnum : public VTreeWidgetItem
+class VTreeWidgetItemEnum : public VTreeWidgetItemPropIndex
 {
 public:
 	VTreeWidgetItemEnum(VTreeWidgetItem* parent, VObject* object, int propIndex);
-	QComboBox* comboBox;
+
+	virtual void initialize();
 };
 
 #endif // QT_GUI_LIB
