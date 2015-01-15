@@ -19,13 +19,24 @@ public:
 	int code;
 
 public:
-	virtual ~VError();
+	virtual ~VError() {}
 	VError(const VError& rhs);
 	VError& operator = (const VError& rhs);
 
 public:
-	VError();
-	VError(const QString msg, const int code);
+	VError()
+	{
+		ti = (std::type_info*)&typeid(*this);
+		msg = "";
+		code = OK;
+	}
+
+	VError(const QString msg, const int code)
+	{
+		ti = (std::type_info*)&typeid(*this);
+		this->msg = msg;
+		this->code = code;
+	}
 
 public:
 	const char* className();
@@ -35,8 +46,14 @@ public:
 };
 
 #define V_ERROR_CTOR(ERROR_CLASS_NAME) \
-	ERROR_CLASS_NAME() : VError() {} \
-	ERROR_CLASS_NAME(const QString msg, const int code) : VError(msg, code) {} \
+	ERROR_CLASS_NAME() : VError() \
+	{ \
+		ti = (std::type_info*)&typeid(*this); \
+	} \
+	ERROR_CLASS_NAME(const QString msg, const int code) : VError(msg, code) \
+	{ \
+		ti = (std::type_info*)&typeid(*this); \
+	}
 
 #define V_ERROR(ERROR_CLASS_NAME, MSG, CODE) \
 	ERROR_CLASS_NAME(MSG, CODE)

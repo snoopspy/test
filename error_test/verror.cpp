@@ -2,10 +2,6 @@
 #include <QDebug>
 #include "verror.h"
 
-VError::~VError()
-{
-}
-
 VError::VError(const VError& rhs)
 {
 	ti = (std::type_info*)&typeid(rhs);
@@ -22,18 +18,6 @@ VError& VError::operator = (const VError& rhs)
 		code = rhs.code;
 	}
 	return *this;
-}
-
-VError::VError()
-{
-	clear();
-}
-
-VError::VError(const QString msg, const int code)
-{
-	ti = (std::type_info*)&typeid(*this);
-	this->msg = msg;
-	this->code = code;
 }
 
 const char* VError::className()
@@ -53,7 +37,15 @@ void VError::clear()
 
 void VError::dump()
 {
-	qDebug() << "className() return" << className() << msg << code;
+	qDebug() << className() << msg << code;
+}
+
+void VError::dump(const char* file, const int line, const char* func)
+{
+	Q_UNUSED(file)
+	Q_UNUSED(line)
+	Q_UNUSED(func)
+	qDebug() << className() << msg << code;
 }
 
 #ifdef GTEST
@@ -78,34 +70,53 @@ TEST_F(VErrTest, commonTest)
 {
 	VError error;
 	error.dump();
-}
-
-TEST_F(VErrTest, objTest)
-{
-	ObjError objError("OBJ_ERR", ObjError::OBJ_ERR);
-	objError.dump();
-}
-
-TEST_F(VErrTest, typeInfoTest)
-{
-	VError error;
-	error.dump();
-	EXPECT_TRUE(error.ti == &typeid(VError));
+	EXPECT_EQ(error.ti, &typeid(VError));
 
 	ObjError objError;
 	objError.dump();
-	EXPECT_TRUE(objError.ti == &typeid(ObjError));
+	EXPECT_EQ(objError.ti, &typeid(ObjError));
 }
 
-TEST_F(VErrTest, assignTypeInfoTest)
+TEST_F(VErrTest, clearTest)
 {
 	VError error;
+	error.clear();
 	error.dump();
-	EXPECT_TRUE(error.ti == &typeid(VError));
+	EXPECT_EQ(error.ti, &typeid(VError));
 
-	error = ObjError();
-	error.dump();
-	EXPECT_TRUE(error.ti == &typeid(ObjError));
+	ObjError objError;
+	objError.clear();
+	objError.dump();
+	EXPECT_EQ(objError.ti, &typeid(ObjError));
 }
 
+TEST_F(VErrTest, copyConTest)
+{
+	{
+		VError error = ObjError();
+		error.dump();
+		EXPECT_TRUE(error.ti == &typeid(ObjError));
+	}
+	{
+		VError error = ObjError("OBJ_ERR", ObjError::OBJ_ERR);
+		error.dump();
+		EXPECT_TRUE(error.ti == &typeid(ObjError));
+	}
+}
+
+TEST_F(VErrTest, assignTest)
+{
+	{
+		VError error;
+		error = ObjError();
+		error.dump();
+		EXPECT_TRUE(error.ti == &typeid(ObjError));
+	}
+	{
+		VError error;
+		error = ObjError("OBJ_ERR", ObjError::OBJ_ERR);
+		error.dump();
+		EXPECT_TRUE(error.ti == &typeid(ObjError));
+	}
+}
 #endif // GTEST
