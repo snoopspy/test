@@ -26,7 +26,6 @@ public:
 public:
 	VError();
 	VError(const QString msg, const int code);
-	VError(const QString msg, const int code, const char* file, const int line, const char* func);
 
 public:
 	const char* className();
@@ -38,9 +37,8 @@ public:
 #define V_ERROR_CTOR(ERROR_CLASS_NAME) \
 	ERROR_CLASS_NAME() : VError() {} \
 	ERROR_CLASS_NAME(const QString msg, const int code) : VError(msg, code) {} \
-	ERROR_CLASS_NAME(const QString msg, const int code, const char* file, const int line, const char* func) : VError(msg, code, file, line, func) {}
 
 #define V_ERROR(ERROR_CLASS_NAME, MSG, CODE) \
-	ERROR_CLASS_NAME(MSG, CODE, __FILE__, __LINE__, __FUNCTION__)
+	ERROR_CLASS_NAME(MSG, CODE)
 
 #endif // VERR_H

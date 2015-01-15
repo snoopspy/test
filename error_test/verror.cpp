@@ -8,7 +8,7 @@ VError::~VError()
 
 VError::VError(const VError& rhs)
 {
-	ti = (std::type_info*)&typeid(*this);
+	ti = (std::type_info*)&typeid(rhs);
 	msg = rhs.msg;
 	code = rhs.code;
 }
@@ -17,7 +17,7 @@ VError& VError::operator = (const VError& rhs)
 {
 	if (code == OK)
 	{
-		ti = rhs.ti;
+		ti = (std::type_info*)&typeid(rhs);
 		msg = rhs.msg;
 		code = rhs.code;
 	}
@@ -31,22 +31,15 @@ VError::VError()
 
 VError::VError(const QString msg, const int code)
 {
+	ti = (std::type_info*)&typeid(*this);
 	this->msg = msg;
 	this->code = code;
-}
-
-VError::VError(const QString msg, const int code, const char* file, const int line, const char* func)
-{
-	this->ti
-	this->msg = msg;
-	this->code = code;
-	dump(file, line, func);
 }
 
 const char* VError::className()
 {
-	//char *res = abi::__cxa_demangle(ti->name(), 0, 0, NULL);
-	char *res = abi::__cxa_demangle(typeid(*this).name(), 0, 0, NULL);
+	char *res = abi::__cxa_demangle(ti->name(), 0, 0, NULL);
+	//char *res = abi::__cxa_demangle(typeid(*this).name(), 0, 0, NULL);
 	return res;
 }
 
@@ -58,12 +51,7 @@ void VError::clear()
 
 void VError::dump()
 {
-	qDebug() << className() << msg << code;
-}
-
-void VError::dump(const char* file, const int line, const char* func)
-{
-	qDebug() << file << line << func << className() << msg << code;
+	qDebug() << "className() return" << className() << msg << code;
 }
 
 #ifdef GTEST
@@ -77,8 +65,7 @@ class ObjError : public VError
 {
 public:
 	enum {
-		OBJ_ERROR_1 = 1,
-		OBJ_ERROR_2 = 2
+		OBJ_ERR = 999
 	};
 
 public:
@@ -91,33 +78,29 @@ TEST_F(VErrTest, commonTest)
 	error.dump();
 }
 
-TEST_F(VErrTest, ObjTest)
+TEST_F(VErrTest, objTest)
 {
-	ObjError objErr("OBJ_ERROR_1", ObjError::OBJ_ERROR_1);
-	//dump(&objError);
+	ObjError objError("OBJ_ERR", ObjError::OBJ_ERR);
+	objError.dump();
 }
 
-TEST_F(VErrTest, AssignTest)
+TEST_F(VErrTest, typeInfoTest)
 {
 	VError error;
-
-	error = VError("2 argument", ObjError::OBJ_ERROR_2);
 	error.dump();
-	error.clear();
+	EXPECT_TRUE(error.ti == &typeid(VError));
 
-	error = ObjError("2 argument", ObjError::OBJ_ERROR_2);
+	ObjError objError;
+	objError.dump();
+	EXPECT_TRUE(objError.ti == &typeid(ObjError));
+}
+
+TEST_F(VErrTest, assignTypeInfoTest)
+{
+	ObjError objError;
+	VError error(objError);
 	error.dump();
-	error.clear();
-
-	error = ObjError("5 argument", ObjError::OBJ_ERROR_2, __FILE__, __LINE__, __func__);
-	error.dump();
-	error.clear();
-
-	{
-		VError error = V_ERROR(ObjError, "V_ERROR", ObjError::OBJ_ERROR_2);
-		error.dump();
-		error.clear();
-	}
+	EXPECT_TRUE(error.ti == &typeid(ObjError));
 }
 
 #endif // GTEST
