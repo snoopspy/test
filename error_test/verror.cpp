@@ -38,13 +38,15 @@ VError::VError(const QString msg, const int code)
 
 const char* VError::className()
 {
-	char *res = abi::__cxa_demangle(ti->name(), 0, 0, NULL);
+	const char* name = ti->name();
+	char *res = abi::__cxa_demangle(name, 0, 0, NULL);
 	//char *res = abi::__cxa_demangle(typeid(*this).name(), 0, 0, NULL);
 	return res;
 }
 
 void VError::clear()
 {
+	ti = (std::type_info*)&typeid(*this);
 	msg = "";
 	code = OK;
 }
@@ -97,8 +99,11 @@ TEST_F(VErrTest, typeInfoTest)
 
 TEST_F(VErrTest, assignTypeInfoTest)
 {
-	ObjError objError;
-	VError error(objError);
+	VError error;
+	error.dump();
+	EXPECT_TRUE(error.ti == &typeid(VError));
+
+	error = ObjError();
 	error.dump();
 	EXPECT_TRUE(error.ti == &typeid(ObjError));
 }
