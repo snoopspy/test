@@ -124,6 +124,14 @@ TEST_F(VErrTest, macroTest)
 {
 	VError error;
 	SET_ERROR(VError, "not closed state", VError::NOT_CLOSED_STATE);
+	EXPECT_TRUE(error.ti == &typeid(VError));
+
+	SET_ERROR(ObjError, "OBJ_ERROR", ObjError::OBJ_ERR);
+	EXPECT_TRUE(error.ti == &typeid(VError));
+
+	error.clear();
+	SET_ERROR(ObjError, "OBJ_ERROR", ObjError::OBJ_ERR);
+	EXPECT_TRUE(error.ti == &typeid(ObjError));
 }
 
 #endif // GTEST
