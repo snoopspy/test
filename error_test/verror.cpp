@@ -45,7 +45,8 @@ void VError::dump(const char* file, const int line, const char* func)
 	Q_UNUSED(file)
 	Q_UNUSED(line)
 	Q_UNUSED(func)
-	qDebug() << className() << msg << code;
+	QString s = QString("[%1:%2] %3() %4 %5:%6").arg(file).arg(line).arg(func).arg(className()).arg(msg).arg(code);
+	qDebug() << s;
 }
 
 #ifdef GTEST
@@ -54,7 +55,6 @@ void VError::dump(const char* file, const int line, const char* func)
 
 class VErrTest : public ::testing::Test {};
 
-class Obj {};
 class ObjError : public VError
 {
 public:
@@ -63,7 +63,7 @@ public:
 	};
 
 public:
-	V_ERROR_CTOR(ObjError)
+	VERROR_CTOR(ObjError)
 };
 
 TEST_F(VErrTest, commonTest)
@@ -119,4 +119,11 @@ TEST_F(VErrTest, assignTest)
 		EXPECT_TRUE(error.ti == &typeid(ObjError));
 	}
 }
+
+TEST_F(VErrTest, macroTest)
+{
+	VError error;
+	SET_ERROR(VError, "not closed state", VError::NOT_CLOSED_STATE);
+}
+
 #endif // GTEST

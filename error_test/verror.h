@@ -10,7 +10,8 @@ public:
 	enum {
 		OK = 0,
 		FAIL = -1,
-		UNKNOWN = 1
+		UNKNOWN = 1,
+		NOT_CLOSED_STATE
 	};
 
 public:
@@ -45,7 +46,7 @@ public:
 	void dump(const char* file, const int line, const char* func);
 };
 
-#define V_ERROR_CTOR(ERROR_CLASS_NAME) \
+#define VERROR_CTOR(ERROR_CLASS_NAME) \
 	ERROR_CLASS_NAME() : VError() \
 	{ \
 		ti = (std::type_info*)&typeid(*this); \
@@ -55,7 +56,10 @@ public:
 		ti = (std::type_info*)&typeid(*this); \
 	}
 
-#define V_ERROR(ERROR_CLASS_NAME, MSG, CODE) \
-	ERROR_CLASS_NAME(MSG, CODE)
+#define SET_ERROR(ERROR_CLASS_NAME, MSG, CODE) \
+	{ \
+		error = ERROR_CLASS_NAME(MSG, CODE); \
+		error.dump(__FILE__, __LINE__, __func__); \
+	}
 
 #endif // VERR_H
