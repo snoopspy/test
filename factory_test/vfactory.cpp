@@ -2,12 +2,11 @@
 
 VFactory::VFactory()
 {
-
 }
 
 VFactory::~VFactory()
 {
-  classMap.clear();
+  createMap.clear();
   hierachyMap.clear();
   categoryMap.clear();
 }
@@ -17,64 +16,63 @@ void VFactory::registerObject(const QMetaObject* mobj)
   while (mobj != NULL)
   {
     QString className = mobj->className();
-    classMap[className] = mobj;
+    createMap[className] = mobj;
     mobj = mobj->superClass();
   }
 }
 
 void VFactory::registerCategory(QString categoryName, const QMetaObject* mobj)
 {
-  categoryMap[categoryName] = mobj;
+  VMetaObjectList& mobjList = categoryMap[categoryName];
+  if (mobjList.indexOf(mobj) == -1)
+    mobjList.push_back(mobj);
 }
 
 QObject* VFactory::createObject(QString className)
 {
-  VFactoryMap::iterator it = classMap.find(className);
-  if (it == classMap.end())
+  VFactoryCreateMap::iterator it = createMap.find(className);
+  if (it == createMap.end())
     return NULL;
   const QMetaObject* mobj = it.value();
   QObject* obj = mobj->newInstance();
   return obj;
 }
 
-VFactoryList VFactory::findChildsByParentName(QString parentClassName)
+VMetaObjectList VFactory::findChildsByParentName(QString parentClassName)
 {
-  VFactoryList res;
+  VMetaObjectList res;
   for (VFactoryMap::iterator it = hierachyMap.begin(); it != hierachyMap.end(); it++)
   {
-    QString className = it.key();
-    if (className == parentClassName)
+    const QMetaObject* mobj = it.key();
+    if (QString(mobj->className()) == parentClassName)
     {
-      const QMetaObject* mobj = it.value();
-      res.push_back(mobj);
+      return it.value();
     }
   }
   return res;
 }
 
-VFactoryList VFactory::findChildsByAncestorName(QString ancestorClassName)
+VMetaObjectList VFactory::findChildsByAncestorName(QString ancestorClassName)
 {
-  VFactoryList res;
+  VMetaObjectList res;
   for (VFactoryMap::iterator it = hierachyMap.begin(); it != hierachyMap.end(); it++)
   {
-    QString className = it.key();
-    const QMetaObject* mobj = it.value();
+    const QMetaObject* mobj = it.key();
     if (isAncestor(mobj, ancestorClassName))
-      res.push_back(mobj);
+      res += it.value();
   }
   return res;
 }
 
-VFactoryList VFactory::findChildsByCategoryName(QString categoryName)
+VMetaObjectList VFactory::findChildsByCategoryName(QString categoryName)
 {
-  VFactoryList res;
+  VMetaObjectList res;
   for (VFactoryMap::iterator it = categoryMap.begin(); it != categoryMap.end(); it++)
   {
-    QString className = it.key();
-    if (className == categoryName)
+    const QMetaObject* mobj = it.key();
+    if (QString(mobj->className()) == categoryName)
     {
-      const QMetaObject* mobj = it.value();
-      res.push_back(mobj);
+      return it.value();
     }
   }
   return res;
@@ -89,4 +87,10 @@ bool VFactory::isAncestor(const QMetaObject* mobj, QString className)
     mobj = mobj->superClass();
   }
   return false;
+}
+
+VFactory& VFactory::instance()
+{
+  static VFactory factory;
+  return factory;
 }

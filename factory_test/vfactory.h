@@ -6,30 +6,39 @@
 #include <QMetaObject>
 #include <QString>
 
-typedef QMap<QString, const QMetaObject*> VFactoryMap;
-typedef QList<const QMetaObject*> VFactoryList;
+typedef QMap<QString, const QMetaObject*> VFactoryCreateMap;
+typedef QList<const QMetaObject*> VMetaObjectList;
+typedef QMap<const QMetaObject*, VMetaObjectList> VFactoryMap;
 
 class VFactory
 {
-  VFactoryMap classMap;    /* by className */
-  VFactoryMap hierachyMap; /* by parentClassName */
-  VFactoryMap categoryMap; /* by categoryName */
+protected:
+  VFactoryCreateMap createMap;   /* by class name */
+  VFactoryMap       hierachyMap; /* by parent class */
+  VFactoryMap       categoryMap; /* by category class */
 
 public:
   VFactory();
   virtual ~VFactory();
 
+public:
   void registerObject(const QMetaObject* mobj);
   void registerCategory(QString categoryName, const QMetaObject* mobj);
 
   QObject* createObject(QString className);
 
-  VFactoryList findChildsByParentName(QString parentClassName);
-  VFactoryList findChildsByAncestorName(QString ancestorClassName);
-  VFactoryList findChildsByCategoryName(QString categoryName);
+  VMetaObjectList findChildsByParentName(QString parentClassName);
+  VMetaObjectList findChildsByAncestorName(QString ancestorClassName);
+  VMetaObjectList findChildsByCategoryName(QString categoryName);
 
 protected:
   static bool isAncestor(const QMetaObject* mobj, QString className);
+
+public:
+  static VFactory& instance();
+
+private:
+  Q_DISABLE_COPY(VFactory)
 };
 
 #endif // VFACTORY_H

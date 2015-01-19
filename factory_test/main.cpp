@@ -7,7 +7,7 @@ void test()
 {
   Obj111 _obj111;
 
-  VFactory f;
+  VFactory& f = VFactory::instance();
   f.registerObject(_obj111.metaObject());
 
   QObject* obj = dynamic_cast<QObject*>(f.createObject("Obj11"));
