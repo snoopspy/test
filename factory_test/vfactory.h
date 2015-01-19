@@ -9,10 +9,10 @@
 class VFactory
 {
 public:
-  typedef QList<const QMetaObject*>                    VMetaObjectList;
-  typedef QMap<QString,            const QMetaObject*> VCreateMap;
-  typedef QMap<const QMetaObject*, VMetaObjectList>    VHierachyMap;
-  typedef QMap<QString,            VMetaObjectList>    VCategoryMap;
+  typedef QList<const QMetaObject* /*mobj*/>                             VMetaObjectList;
+  typedef QMap<QString             /*className*/,    const QMetaObject*> VCreateMap;
+  typedef QMap<const QMetaObject*  /*parent mobj*/,  VMetaObjectList>    VHierachyMap;
+  typedef QMap<QString,            /*category name*/ VMetaObjectList>    VCategoryMap;
 
   VCreateMap   createMap;
   VHierachyMap hierachyMap;

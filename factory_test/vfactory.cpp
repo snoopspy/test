@@ -218,7 +218,7 @@ TEST_F(VFactoryTest, ancestorClassNameTest)
       printf("%s ", mobj->className());
     }
     printf("\n");
-    EXPECT_EQ(mobjList.size(), 8); // Obj, Obj1, Obj2, Obj3, Obj31, Obj32, Obj33, Obj34
+    EXPECT_EQ(mobjList.size(), 7); // Obj1, Obj2, Obj3, Obj31, Obj32, Obj33, Obj34
   }
   {
     VFactory::VMetaObjectList mobjList = factory.getChildsByParentClassName("Obj3");

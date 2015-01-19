@@ -5,6 +5,18 @@
 #include <gtest/gtest.h>
 #include <QObject>
 
+/*
+QObject
+  +-Obj
+    +-Obj1
+    +-Obj2
+    +-Obj3
+      +-Obj31
+      +-Obj32
+      +-Obj33
+      +-Obj34
+*/
+
 class Obj : public QObject
 {
   Q_OBJECT
