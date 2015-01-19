@@ -5,8 +5,9 @@
 #-------------------------------------------------
 
 QT       += core
-
 QT       -= gui
+
+include(../../gtest/gtest.pri)
 
 TARGET = factory_test
 CONFIG   += console
@@ -15,10 +16,9 @@ CONFIG   -= app_bundle
 TEMPLATE = app
 
 
-SOURCES += main.cpp \
-    obj1.cpp \
+SOURCES += \
     vfactory.cpp
 
 HEADERS += \
-    obj1.h \
-    vfactory.h
+    vfactory.h \
+    vfactorytest.h
