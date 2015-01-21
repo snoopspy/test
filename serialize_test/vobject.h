@@ -28,6 +28,13 @@ public:
 	virtual void save(VRep& rep);
 
 #ifdef QT_GUI_LIB
+public slots:
+  void objectNameEditingFinished();
+  void textEditingFinished();
+  void enumCurrentIndexChanged(int index);
+  void pbAddClicked();
+  void pbDelClicked();
+
 public:
   virtual QWidget* createWidget(QWidget* parent);
 	virtual void createTreeWidgetItems(VTreeWidgetItem* parent);

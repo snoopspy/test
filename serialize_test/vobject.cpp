@@ -1,10 +1,18 @@
+#include <assert.h>
 #include <QDebug>
 #include <QMetaEnum>
 #include <QMetaObject>
 #include <QMetaProperty>
 
+#ifdef QT_GUI_LIB
+#include <QComboBox>
+#include <QLineEdit>
+#include <QPushButton>
+#endif // QT_GUI_LIB
+
 #include "vmetadump.h"
 #include "vobject.h"
+#include "vwidget.h"
 
 bool VObject::loadFromFile(QString fileName)
 {
@@ -139,6 +147,104 @@ void VObject::save(VRep& rep)
 }
 
 #ifdef QT_GUI_LIB
+void VObject::objectNameEditingFinished()
+{
+  QLineEdit* lineEdit = (QLineEdit*)this->sender();
+  assert(lineEdit != NULL);
+
+  VTreeWidgetItemObject* item = (VTreeWidgetItemObject*)(qvariant_cast<void*>(lineEdit->property("_treeWidgetItem")));
+  assert(item != NULL);
+
+  VObject* object = item->object;
+  assert(object != NULL);
+
+  object->setObjectName(lineEdit->text());
+}
+
+void VObject::textEditingFinished()
+{
+  QLineEdit* lineEdit = (QLineEdit*)this->sender();
+  assert(lineEdit != NULL);
+
+  VTreeWidgetItemText* item = (VTreeWidgetItemText*)(qvariant_cast<void*>(lineEdit->property("_treeWidgetItem")));
+  assert(item != NULL);
+
+  QMetaProperty mpro      = item->object->metaObject()->property(item->propIndex);
+  const char*   propName  = mpro.name();
+  QVariant      propValue = lineEdit->text();
+  int           userType  = mpro.userType();
+
+  if (QMetaType::hasRegisteredConverterFunction(userType, QVariant::String))
+  {
+    QVariant to = VObject::convert(propValue, userType);
+    item->object->setProperty(propName, to);
+  } else
+  {
+    item->object->setProperty(propName, propValue);
+  }
+}
+
+void VObject::enumCurrentIndexChanged(int index)
+{
+  QComboBox* comboBox = (QComboBox*)this->sender();
+  assert(comboBox != NULL);
+  VTreeWidgetItemEnum* item = (VTreeWidgetItemEnum*)(qvariant_cast<void*>(comboBox->property("_treeWidgetItem")));
+  assert(item != NULL);
+
+  QString propName = item->caption();
+  QVariant propValue = index;
+  item->object->setProperty(qPrintable(propName), propValue);
+}
+
+void VObject::pbAddClicked()
+{
+  QPushButton* pbAdd = dynamic_cast<QPushButton*>(sender());
+  assert(pbAdd != NULL);
+
+  VTreeWidgetItemObjectList* item = (VTreeWidgetItemObjectList*)(qvariant_cast<void*>(pbAdd->property("_treeWidgetItem")));
+  assert(item != NULL);
+
+  VObject* object = item->object;
+  assert(object != NULL);
+
+  QMetaProperty mpro = object->metaObject()->property(item->propIndex);
+  QVariant variant = object->property(mpro.name());
+  VObjectList* objectList = variant.value<VObjectList*>();
+  assert(objectList != NULL);
+
+  VObject* newObject = objectList->createObject();
+  VTreeWidgetItemObject* childItem = new VTreeWidgetItemObject(item, newObject, VTreeWidgetItemObject::SHOW_DEL_BUTTON);
+  childItem->initialize();
+  newObject->createTreeWidgetItems(childItem);
+}
+
+void VObject::pbDelClicked()
+{
+  QPushButton* pbDel = dynamic_cast<QPushButton*>(sender());
+  assert(pbDel != NULL);
+
+  VTreeWidgetItemObject* item = (VTreeWidgetItemObject*)qvariant_cast<void*>(pbDel->property("_treeWidgetItem"));
+  assert(item != NULL);
+
+  VObject* delObject = item->object;
+  assert(delObject != NULL);
+
+  VTreeWidgetItemObjectList* parentItem = dynamic_cast<VTreeWidgetItemObjectList*>(item->parent());
+  assert(parentItem != NULL);
+
+  VObject* object = parentItem->object;
+  assert(object != NULL);
+
+  QMetaProperty mpro = object->metaObject()->property(parentItem->propIndex);
+
+  QVariant variant = object->property(mpro.name());
+  VObjectList* objectList = variant.value<VObjectList*>();
+  assert(objectList != NULL);
+
+  objectList->removeOne(delObject);
+  parentItem->removeChild(item);
+}
+
 QWidget* VObject::createWidget(QWidget* parent)
 {
   VTreeWidget* treeWidget = new VTreeWidget(parent, this);

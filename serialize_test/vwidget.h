@@ -18,13 +18,6 @@ public:
 
 public:
 	VObject* object;
-
-public slots:
-	void objectNameEditingFinished();
-	void textEditingFinished();
-	void enumCurrentIndexChanged(int index);
-	void pbAddClicked();
-	void pbDelClicked();
 };
 
 class VTreeWidgetItem : public QTreeWidgetItem
