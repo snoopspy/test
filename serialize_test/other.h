@@ -22,15 +22,13 @@ public:
 class VNetInfo : public VObject
 {
 	Q_OBJECT
+  Q_PROPERTY(VIp ip MEMBER ip)
+  Q_PROPERTY(VMac mac MEMBER mac)
 public:
 	// VNetInfo() {}
 
 	VIp ip;
 	VMac mac;
-
-public:
-	Q_PROPERTY(VIp ip MEMBER ip)
-	Q_PROPERTY(VMac mac MEMBER mac)
 };
 
 class IntList : public VObject
@@ -57,21 +55,19 @@ public:
 	}
 };
 
-//typedef _VObjectList<VTcpClient> VTcpClientList;
-class VTcpClientList : public VObjectList
-{
-	virtual VObject* createObject() { return new VTcpClient; }
-};
-
+typedef _VObjectList<VTcpClient> VTcpClientList;
 class ObjList : public VObject
 {
 	Q_OBJECT
+  Q_PROPERTY(bool enabled MEMBER enabled)
 	Q_PROPERTY(VObjectList* tcpClientList READ getTcpClientList)
 
 public:
+  bool enabled;
 	VTcpClientList tcpClientList;
 
 public:
+  ObjList() : VObject(NULL) { enabled = true; }
 	VObjectList* getTcpClientList() { return &tcpClientList; }
 };
 

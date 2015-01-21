@@ -28,19 +28,18 @@ public:
 	virtual void save(VRep& rep);
 
 #ifdef QT_GUI_LIB
+public:
+  virtual QWidget* createWidget(QWidget* parent);
+  virtual void createTreeWidgetItems(VTreeWidgetItem* parent);
+
 public slots:
   void objectNameEditingFinished();
   void textEditingFinished();
   void enumCurrentIndexChanged(int index);
   void pbAddClicked();
   void pbDelClicked();
-
-public:
-  virtual QWidget* createWidget(QWidget* parent);
-	virtual void createTreeWidgetItems(VTreeWidgetItem* parent);
 #endif // QT_GUI_LIB
 };
-//Q_DECLARE_METATYPE(VObject)
 Q_DECLARE_METATYPE(VObject*)
 
 class VObjectList : public QList<VObject*>
@@ -49,7 +48,6 @@ public:
 	virtual VObject* createObject() { return new VObject; }
 	virtual ~VObjectList() {}
 };
-//Q_DECLARE_METATYPE(VObjectList)
 Q_DECLARE_METATYPE(VObjectList*)
 
 template <class T>

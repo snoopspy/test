@@ -147,6 +147,62 @@ void VObject::save(VRep& rep)
 }
 
 #ifdef QT_GUI_LIB
+QWidget* VObject::createWidget(QWidget* parent)
+{
+  VTreeWidget* treeWidget = new VTreeWidget(parent, this);
+  return treeWidget;
+}
+
+void VObject::createTreeWidgetItems(VTreeWidgetItem* parent)
+{
+  const QMetaObject *mobj = this->metaObject();
+  int count = this->metaObject()->propertyCount();
+
+  for (int propIndex = 0; propIndex < count; propIndex++)
+  {
+    QMetaProperty mpro     = mobj->property(propIndex);
+    const char*   propName = mpro.name();
+    int           userType = mpro.userType();
+
+    if (QString(propName) == "objectName") continue;
+
+    if (userType == qMetaTypeId<VObject*>())
+    {
+      VObject* childObj = this->property(propName).value<VObject*>();
+      VTreeWidgetItemObject* item = new VTreeWidgetItemObject(parent, childObj, VTreeWidgetItemObject::SHOW_OBJECT_NAME);
+      item->initialize();
+      childObj->createTreeWidgetItems(item);
+    } else
+    if (userType == qMetaTypeId<VObjectList*>())
+    {
+      VObjectList* childObjectList = this->property(propName).value<VObjectList*>();
+      VTreeWidgetItemObjectList* item = new VTreeWidgetItemObjectList(parent, this, propIndex);
+      item->initialize();
+
+      foreach (VObject* childObj, *childObjectList)
+      {
+        VTreeWidgetItemObject* childItem = new VTreeWidgetItemObject(item, childObj, VTreeWidgetItemObject::SHOW_DEL_BUTTON);
+        childItem->initialize();
+        childObj->createTreeWidgetItems(childItem);
+      }
+    } else
+    if (mpro.isEnumType())
+    {
+      VTreeWidgetItemEnum* item = new VTreeWidgetItemEnum(parent, this, propIndex);
+      item->initialize();
+    } else
+    if (QMetaType::hasRegisteredConverterFunction(userType, QVariant::String))
+    {
+      VTreeWidgetItemText* item = new VTreeWidgetItemText(parent, this, propIndex);
+      item->initialize();
+    } else
+    {
+      VTreeWidgetItemText* item = new VTreeWidgetItemText(parent, this, propIndex);
+      item->initialize();
+    }
+  }
+}
+
 void VObject::objectNameEditingFinished()
 {
   QLineEdit* lineEdit = (QLineEdit*)this->sender();
@@ -243,62 +299,6 @@ void VObject::pbDelClicked()
 
   objectList->removeOne(delObject);
   parentItem->removeChild(item);
-}
-
-QWidget* VObject::createWidget(QWidget* parent)
-{
-  VTreeWidget* treeWidget = new VTreeWidget(parent, this);
-  return treeWidget;
-}
-
-void VObject::createTreeWidgetItems(VTreeWidgetItem* parent)
-{
-	const QMetaObject *mobj = this->metaObject();
-	int count = this->metaObject()->propertyCount();
-
-	for (int propIndex = 0; propIndex < count; propIndex++)
-	{
-		QMetaProperty mpro     = mobj->property(propIndex);
-		const char*   propName = mpro.name();
-		int           userType = mpro.userType();
-
-		if (QString(propName) == "objectName") continue;
-
-		if (userType == qMetaTypeId<VObject*>())
-		{
-			VObject* childObj = this->property(propName).value<VObject*>();
-			VTreeWidgetItemObject* item = new VTreeWidgetItemObject(parent, childObj, VTreeWidgetItemObject::SHOW_OBJECT_NAME);
-			item->initialize();
-			childObj->createTreeWidgetItems(item);
-		} else
-		if (userType == qMetaTypeId<VObjectList*>())
-		{
-			VObjectList* childObjectList = this->property(propName).value<VObjectList*>();
-			VTreeWidgetItemObjectList* item = new VTreeWidgetItemObjectList(parent, this, propIndex);
-			item->initialize();
-
-			foreach (VObject* childObj, *childObjectList)
-			{
-				VTreeWidgetItemObject* childItem = new VTreeWidgetItemObject(item, childObj, VTreeWidgetItemObject::SHOW_DEL_BUTTON);
-				childItem->initialize();
-				childObj->createTreeWidgetItems(childItem);
-			}
-		} else
-		if (mpro.isEnumType())
-		{
-			VTreeWidgetItemEnum* item = new VTreeWidgetItemEnum(parent, this, propIndex);
-			item->initialize();
-		} else
-		if (QMetaType::hasRegisteredConverterFunction(userType, QVariant::String))
-		{
-			VTreeWidgetItemText* item = new VTreeWidgetItemText(parent, this, propIndex);
-			item->initialize();
-		} else
-		{
-			VTreeWidgetItemText* item = new VTreeWidgetItemText(parent, this, propIndex);
-			item->initialize();
-		}
-	}
 }
 
 #endif // QT_GUI_LIB

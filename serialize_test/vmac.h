@@ -38,11 +38,6 @@ public:
 			{
 				printf("QMetaType::registerConverter<QString, VIp>(VIp::stringToIp) return false\n");
 			}
-			/*
-			VIp ip1(1234);
-			QVariant variant = QVariant::fromValue<VIp>(ip1);
-			VIp ip2 = qvariant_cast<VIp>(variant);
-			*/
       initialized = true;
 		}
 	}

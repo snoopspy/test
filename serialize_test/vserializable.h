@@ -1,7 +1,6 @@
 #ifndef VSERIALIZABLE_H
 #define VSERIALIZABLE_H
 
-#include <QString>
 #include "vrep.h"
 
 class VSerializable

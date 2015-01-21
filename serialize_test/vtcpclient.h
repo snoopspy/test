@@ -7,6 +7,8 @@
 class VTcpClient : public VObject
 {
 	Q_OBJECT
+  Q_PROPERTY(VIp ip MEMBER ip)
+  Q_PROPERTY(int port MEMBER port)
 
 public:
 	VTcpClient() { ip = 0; port = 0; }
@@ -14,11 +16,6 @@ public:
 public:
 	VIp ip;
 	int port;
-
-public:
-	Q_PROPERTY(VIp ip MEMBER ip)
-	Q_PROPERTY(int port MEMBER port)
-
 };
 //Q_DECLARE_METATYPE(VTcpClient)
 

@@ -31,6 +31,7 @@ VObject* createLog()
 VObject* createNetInfo()
 {
 	VNetInfo* netInfo = new VNetInfo;
+  netInfo->setObjectName("newInfo1");
 	netInfo->ip = 1111;
 	netInfo->mac = QString("abcdef");
 	return netInfo;
@@ -41,7 +42,7 @@ VObject* createObjList()
 	ObjList* objList = new ObjList;
 	objList->setObjectName("objList1");
 	objList->tcpClientList.append(new VTcpClient);
-	//objList->tcpClientList.append(new VTcpClient);
+  objList->tcpClientList.append(new VTcpClient);
 	return objList;
 }
 
@@ -54,11 +55,9 @@ int main(int argc, char* argv[])
 	//VObject* object = createLog();
 	//VObject* object = createTcpClient();
   //VObject* object = createNestedClient();
-	//VObject* object = createNetInfo();
+  //VObject* object = createNetInfo();
   VObject* object = createObjList();
-//
 
-	//object->createTreeWidgetItems((VTreeWidgetItem*)treeWidget->topLevelItem(0));
   QWidget* widget = object->createWidget(NULL);
   widget->show();
 	int res = a.exec();
@@ -66,4 +65,3 @@ int main(int argc, char* argv[])
 	delete object;
 	return res;
 }
-
