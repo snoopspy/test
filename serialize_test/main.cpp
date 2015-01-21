@@ -3,7 +3,7 @@
 #include "vtcpclient.h"
 VObject* createTcpClient()
 {
-	VIp::registerConverter();
+	VIp::_initialize();
 	VTcpClient* tcpClient = new VTcpClient;
 	tcpClient->setObjectName("tcpClient1");
 	tcpClient->ip = 1111;
@@ -48,27 +48,21 @@ VObject* createObjList()
 int main(int argc, char* argv[])
 {
 	QApplication a(argc, argv);
-	VIp::registerConverter();
-	VMac::registerConverter();
+	VIp::_initialize();
+	VMac::_initialize();
 
 	//VObject* object = createLog();
 	//VObject* object = createTcpClient();
-	VObject* object = createNestedClient();
+  //VObject* object = createNestedClient();
 	//VObject* object = createNetInfo();
-	//VObject* object = createObjList();
+  VObject* object = createObjList();
 //
-	VTreeWidget* treeWidget = new VTreeWidget(NULL, object);
-	//object->createTreeWidgetItems((VTreeWidgetItem*)treeWidget->topLevelItem(0));
 
-	//QTreeWidgetItem* item = treeWidget->itemAt(0, 0);
-	//QTreeWidgetItem* newItem = new QTreeWidgetItem(item);
-	//QTreeWidgetItem* newItem = new QTreeWidgetItem(treeWidget, item);
-	//QTreeWidgetItem* newItem = new QTreeWidgetItem(item);
-	//newItem->setText(1, "test");
-	//treeWidget->expandAll();
-	treeWidget->show();
+	//object->createTreeWidgetItems((VTreeWidgetItem*)treeWidget->topLevelItem(0));
+  QWidget* widget = object->createWidget(NULL);
+  widget->show();
 	int res = a.exec();
-	delete treeWidget;
+  delete widget;
 	delete object;
 	return res;
 }

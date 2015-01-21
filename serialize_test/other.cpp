@@ -5,7 +5,7 @@
 
 TEST(NestedClientTest, saveLoadTest)
 {
-	VIp::registerConverter();
+	VIp::_initialize();
 
 	NestedClient nc;
 	nc.tcpClient.ip = 1111;
@@ -21,8 +21,8 @@ TEST(NestedClientTest, saveLoadTest)
 
 TEST(VNetInfoTest, saveLoadTest)
 {
-	VIp::registerConverter();
-	VMac::registerConverter();
+	VIp::_initialize();
+	VMac::_initialize();
 
 	VNetInfo netInfo;
 	netInfo.ip = 1111;
@@ -45,7 +45,7 @@ TEST(IntListTest, saveLoadTest)
 
 TEST(ObjListTest, saveLoadTest)
 {
-	VIp::registerConverter();
+	VIp::_initialize();
 
 	ObjList ol;
 	VTcpClient* tcpClient;

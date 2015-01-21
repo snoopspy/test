@@ -5,7 +5,7 @@
 
 TEST(VTcpClientTest, dumpTest)
 {
-	VIp::registerConverter();
+	VIp::_initialize();
 	VTcpClient tcpClient;
 	tcpClient.ip = 1234;
 	tcpClient.port = 80;
@@ -14,7 +14,7 @@ TEST(VTcpClientTest, dumpTest)
 
 TEST(VTcpClientTest, saveLoadTest)
 {
-	VIp::registerConverter();
+	VIp::_initialize();
 	VTcpClient tcpClient1;
 	tcpClient1.ip = 1235;
 	tcpClient1.port = 80;

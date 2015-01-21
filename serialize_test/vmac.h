@@ -22,10 +22,10 @@ public:
 	static QString toString(const VMac& mac) { return QString(mac); }
 	static VMac fromString(const QString& s) { return VMac(s); }
 
-	static void registerConverter()
+  static void _initialize()
 	{
-		static bool registered = false;
-		if (!registered)
+    static bool initialized = false;
+    if (!initialized)
 		{
 			bool res;
 			res = QMetaType::registerConverter<VMac, QString>(VMac::toString);
@@ -43,7 +43,7 @@ public:
 			QVariant variant = QVariant::fromValue<VIp>(ip1);
 			VIp ip2 = qvariant_cast<VIp>(variant);
 			*/
-			registered = true;
+      initialized = true;
 		}
 	}
 

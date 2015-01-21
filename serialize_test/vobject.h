@@ -29,6 +29,7 @@ public:
 
 #ifdef QT_GUI_LIB
 public:
+  virtual QWidget* createWidget(QWidget* parent);
 	virtual void createTreeWidgetItems(VTreeWidgetItem* parent);
 #endif // QT_GUI_LIB
 };

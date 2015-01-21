@@ -20,10 +20,10 @@ public:
 	static QString toString(const VIp& ip) { return QString::number(ip.m_ip);}
 	static VIp fromString(const QString& s) { return VIp(s.toUInt()); }
 
-	static void registerConverter()
+  static void _initialize()
 	{
-		static bool registered = false;
-		if (!registered)
+    static bool initialized = false;
+    if (!initialized)
 		{
 			bool res;
 			res = QMetaType::registerConverter<VIp, QString>(VIp::toString);
@@ -41,7 +41,7 @@ public:
 			QVariant variant = QVariant::fromValue<VIp>(ip1);
 			VIp ip2 = qvariant_cast<VIp>(variant);
 			*/
-			registered = true;
+      initialized = true;
 		}
 	}
 public:

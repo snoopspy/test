@@ -7,7 +7,7 @@
 QT       += core
 QT       -= gui
 
-include(../../gtest/gtest.pri)
+include(../../../google/gtest/gtest.pri)
 
 TARGET = factory_test
 CONFIG   += console

@@ -139,6 +139,12 @@ void VObject::save(VRep& rep)
 }
 
 #ifdef QT_GUI_LIB
+QWidget* VObject::createWidget(QWidget* parent)
+{
+  VTreeWidget* treeWidget = new VTreeWidget(parent, this);
+  return treeWidget;
+}
+
 void VObject::createTreeWidgetItems(VTreeWidgetItem* parent)
 {
 	const QMetaObject *mobj = this->metaObject();
@@ -185,7 +191,6 @@ void VObject::createTreeWidgetItems(VTreeWidgetItem* parent)
 		{
 			VTreeWidgetItemText* item = new VTreeWidgetItemText(parent, this, propIndex);
 			item->initialize();
-
 		}
 	}
 }
