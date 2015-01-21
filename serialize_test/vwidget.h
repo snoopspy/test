@@ -3,6 +3,7 @@
 
 #ifdef QT_GUI_LIB
 
+#include <QMetaProperty>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 
@@ -49,38 +50,38 @@ public:
 	virtual void initialize();
 };
 
-class VTreeWidgetItemPropIndex : public VTreeWidgetItem
+class VTreeWidgetItemProperty : public VTreeWidgetItem
 {
 public:
-	VTreeWidgetItemPropIndex(VTreeWidgetItem* parent, VObject* parentObject, int propIndex);
+  VTreeWidgetItemProperty(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro);
 
 	VObject* object;
-	int propIndex;
+  QMetaProperty mpro;
 
 	virtual QString caption();
 	virtual void initialize();
 };
 
-class VTreeWidgetItemObjectList : public VTreeWidgetItemPropIndex
+class VTreeWidgetItemObjectList : public VTreeWidgetItemProperty
 {
 public:
-	VTreeWidgetItemObjectList(VTreeWidgetItem *parent, VObject* object, int propIndex);
+  VTreeWidgetItemObjectList(VTreeWidgetItem *parent, VObject* object, QMetaProperty mpro);
 
 	virtual void initialize();
 };
 
-class VTreeWidgetItemText : public VTreeWidgetItemPropIndex
+class VTreeWidgetItemText : public VTreeWidgetItemProperty
 {
 public:
-	VTreeWidgetItemText(VTreeWidgetItem* parent, VObject* object, int propIndex);
+  VTreeWidgetItemText(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro);
 
 	virtual void initialize();
 };
 
-class VTreeWidgetItemEnum : public VTreeWidgetItemPropIndex
+class VTreeWidgetItemEnum : public VTreeWidgetItemProperty
 {
 public:
-	VTreeWidgetItemEnum(VTreeWidgetItem* parent, VObject* object, int propIndex);
+  VTreeWidgetItemEnum(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro);
 
 	virtual void initialize();
 };

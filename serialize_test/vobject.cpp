@@ -176,7 +176,7 @@ void VObject::createTreeWidgetItems(VTreeWidgetItem* parent)
     if (userType == qMetaTypeId<VObjectList*>())
     {
       VObjectList* childObjectList = this->property(propName).value<VObjectList*>();
-      VTreeWidgetItemObjectList* item = new VTreeWidgetItemObjectList(parent, this, propIndex);
+      VTreeWidgetItemObjectList* item = new VTreeWidgetItemObjectList(parent, this, mpro);
       item->initialize();
 
       foreach (VObject* childObj, *childObjectList)
@@ -188,16 +188,16 @@ void VObject::createTreeWidgetItems(VTreeWidgetItem* parent)
     } else
     if (mpro.isEnumType())
     {
-      VTreeWidgetItemEnum* item = new VTreeWidgetItemEnum(parent, this, propIndex);
+      VTreeWidgetItemEnum* item = new VTreeWidgetItemEnum(parent, this, mpro);
       item->initialize();
     } else
     if (QMetaType::hasRegisteredConverterFunction(userType, QVariant::String))
     {
-      VTreeWidgetItemText* item = new VTreeWidgetItemText(parent, this, propIndex);
+      VTreeWidgetItemText* item = new VTreeWidgetItemText(parent, this, mpro);
       item->initialize();
     } else
     {
-      VTreeWidgetItemText* item = new VTreeWidgetItemText(parent, this, propIndex);
+      VTreeWidgetItemText* item = new VTreeWidgetItemText(parent, this, mpro);
       item->initialize();
     }
   }
@@ -225,7 +225,7 @@ void VObject::textEditingFinished()
   VTreeWidgetItemText* item = (VTreeWidgetItemText*)(qvariant_cast<void*>(lineEdit->property("_treeWidgetItem")));
   assert(item != NULL);
 
-  QMetaProperty mpro      = item->object->metaObject()->property(item->propIndex);
+  QMetaProperty mpro      = item->mpro;
   const char*   propName  = mpro.name();
   QVariant      propValue = lineEdit->text();
   int           userType  = mpro.userType();
@@ -263,7 +263,7 @@ void VObject::pbAddClicked()
   VObject* object = item->object;
   assert(object != NULL);
 
-  QMetaProperty mpro = object->metaObject()->property(item->propIndex);
+  QMetaProperty mpro = item->mpro;
   QVariant variant = object->property(mpro.name());
   VObjectList* objectList = variant.value<VObjectList*>();
   assert(objectList != NULL);
@@ -291,7 +291,7 @@ void VObject::pbDelClicked()
   VObject* object = parentItem->object;
   assert(object != NULL);
 
-  QMetaProperty mpro = object->metaObject()->property(parentItem->propIndex);
+  QMetaProperty mpro = parentItem->mpro;
 
   QVariant variant = object->property(mpro.name());
   VObjectList* objectList = variant.value<VObjectList*>();

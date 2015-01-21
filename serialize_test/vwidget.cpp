@@ -3,7 +3,6 @@
 #include <QComboBox>
 #include <QLineEdit>
 #include <QMetaEnum>
-#include <QMetaProperty>
 #include <QPushButton>
 
 #include "vobject.h"
@@ -80,13 +79,13 @@ void VTreeWidgetItemObject::initialize()
 	}
 }
 
-VTreeWidgetItemObjectList::VTreeWidgetItemObjectList(VTreeWidgetItem *parent, VObject* object, int propIndex) : VTreeWidgetItemPropIndex(parent, object, propIndex)
+VTreeWidgetItemObjectList::VTreeWidgetItemObjectList(VTreeWidgetItem *parent, VObject* object, QMetaProperty mpro) : VTreeWidgetItemProperty(parent, object, mpro)
 {
 }
 
 void VTreeWidgetItemObjectList::initialize()
 {
-	VTreeWidgetItemPropIndex::initialize();
+  VTreeWidgetItemProperty::initialize();
 
 	QPushButton* pbAdd = new QPushButton(treeWidget);
 	pbAdd->setProperty("_treeWidgetItem", QVariant::fromValue<void*>((void*)this));
@@ -95,31 +94,30 @@ void VTreeWidgetItemObjectList::initialize()
 	treeWidget->setItemWidget(this, 1, pbAdd);
 }
 
-VTreeWidgetItemPropIndex::VTreeWidgetItemPropIndex(VTreeWidgetItem* parent, VObject* object, int propIndex) : VTreeWidgetItem(parent)
+VTreeWidgetItemProperty::VTreeWidgetItemProperty(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro) : VTreeWidgetItem(parent)
 {
 	this->object = object;
-	this->propIndex = propIndex;
+  this->mpro = mpro;
 }
 
-QString VTreeWidgetItemPropIndex::caption()
+QString VTreeWidgetItemProperty::caption()
 {
-	QMetaProperty mpro = object->metaObject()->property(propIndex);
 	const char* propName = mpro.name();
 	return QString(propName);
 }
 
-void VTreeWidgetItemPropIndex::initialize()
+void VTreeWidgetItemProperty::initialize()
 {
 	VTreeWidgetItem::initialize();
 }
 
-VTreeWidgetItemText::VTreeWidgetItemText(VTreeWidgetItem* parent, VObject* object, int propIndex) : VTreeWidgetItemPropIndex(parent, object, propIndex)
+VTreeWidgetItemText::VTreeWidgetItemText(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro) : VTreeWidgetItemProperty(parent, object, mpro)
 {
 }
 
 void VTreeWidgetItemText::initialize()
 {
-	VTreeWidgetItemPropIndex::initialize();
+  VTreeWidgetItemProperty::initialize();
 
 	QString propName = caption();
 	QVariant variant = object->property(qPrintable(propName));
@@ -132,13 +130,13 @@ void VTreeWidgetItemText::initialize()
 	this->treeWidget->setItemWidget(this, 1, lineEdit);
 }
 
-VTreeWidgetItemEnum::VTreeWidgetItemEnum(VTreeWidgetItem* parent, VObject* object, int propIndex) : VTreeWidgetItemPropIndex(parent, object, propIndex)
+VTreeWidgetItemEnum::VTreeWidgetItemEnum(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro) : VTreeWidgetItemProperty(parent, object, mpro)
 {
 }
 
 void VTreeWidgetItemEnum::initialize()
 {
-	VTreeWidgetItemPropIndex::initialize();
+  VTreeWidgetItemProperty::initialize();
 
 	QString propName = caption();
 	QVariant variant = object->property(qPrintable(propName));
@@ -147,7 +145,6 @@ void VTreeWidgetItemEnum::initialize()
 	comboBox->setProperty("_treeWidgetItem", QVariant::fromValue<void*>((void*)this));
 	comboBox->setFrame(false);
 
-	QMetaProperty mpro = object->metaObject()->property(propIndex);
 	QMetaEnum menum = mpro.enumerator();
 	int count = menum.keyCount();
 	for (int i =  0; i < count; i++)
