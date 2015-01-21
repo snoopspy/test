@@ -28,6 +28,37 @@ bool VBaseSerializer::createTreeWidgetItems(VTreeWidgetItem* parent, VObject* ob
 }
 #endif // QT_GUI_LIB
 
+bool VBoolSerializer::load(VObject* object, QMetaProperty mpro, VRep& rep)
+{
+  int userType = mpro.userType();
+  if (userType != QVariant::Bool) return false;
+  const char* propName = mpro.name();
+  bool value = rep[propName].toBool();
+  object->setProperty(propName, value);
+  return true;
+}
+
+bool VBoolSerializer::save(VObject* object, QMetaProperty mpro, VRep& rep)
+{
+  int userType = mpro.userType();
+  if (userType != QVariant::Bool) return false;
+  const char* propName = mpro.name();
+  bool value = object->property(propName).toBool();
+  rep[propName] = value;
+  return true;
+}
+
+#ifdef QT_GUI_LIB
+bool VBoolSerializer::createTreeWidgetItems(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro)
+{
+  int userType = mpro.userType();
+  if (userType != QVariant::Bool) return false;
+  VTreeWidgetItemBool* item = new VTreeWidgetItemBool(parent, object, mpro);
+  item->initialize();
+  return true;
+}
+#endif // QT_GUI_LIB
+
 bool VEnumSerializer::load(VObject* object, QMetaProperty mpro, VRep& rep)
 {
   if (!mpro.isEnumType()) return false;
@@ -251,6 +282,7 @@ bool VSerializerMgr::createTreeWidgetItems(VTreeWidgetItem* parent, VObject* obj
 void VSerializerMgr::_initialize()
 {
   static VBaseSerializer       baseSerializer;
+  static VBoolSerializer       boolSerializer;
   static VEnumSerializer       enumSerializer;
   static VConvertSerializer    convertSerializer;
   static VObjectSerializer     objectSerializer;
@@ -258,6 +290,7 @@ void VSerializerMgr::_initialize()
 
   VSerializerMgr& mgr = VSerializerMgr::instance();
   mgr.serializerList.push_back(&baseSerializer);
+  mgr.serializerList.push_back(&boolSerializer);
   mgr.serializerList.push_back(&enumSerializer);
   mgr.serializerList.push_back(&convertSerializer);
   mgr.serializerList.push_back(&objectSerializer);

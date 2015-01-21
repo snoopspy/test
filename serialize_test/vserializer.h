@@ -26,6 +26,16 @@ public:
 #endif // QT_GUI_LIB
 };
 
+class VBoolSerializer : public VSerializer
+{
+public:
+  virtual bool load(VObject* object, QMetaProperty mpro, VRep& rep);
+  virtual bool save(VObject* object, QMetaProperty mpro, VRep& rep);
+#ifdef QT_GUI_LIB
+  virtual bool createTreeWidgetItems(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro);
+#endif // QT_GUI_LIB
+};
+
 class VEnumSerializer : public VSerializer
 {
 public:

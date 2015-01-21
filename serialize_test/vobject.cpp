@@ -5,6 +5,7 @@
 #include <QMetaProperty>
 
 #ifdef QT_GUI_LIB
+#include <QCheckBox>
 #include <QComboBox>
 #include <QLineEdit>
 #include <QPushButton>
@@ -126,6 +127,18 @@ void VObject::textEditingFinished()
   {
     item->object->setProperty(propName, propValue);
   }
+}
+
+void VObject::boolStateChanged(int state)
+{
+  QCheckBox* checkBox = (QCheckBox*)this->sender();
+  assert(checkBox != NULL);
+  VTreeWidgetItemBool* item = (VTreeWidgetItemBool*)(qvariant_cast<void*>(checkBox->property("_treeWidgetItem")));
+  assert(item != NULL);
+
+  QString propName = item->caption();
+  bool propValue = state == Qt::Checked;
+  item->object->setProperty(qPrintable(propName), propValue);
 }
 
 void VObject::enumCurrentIndexChanged(int index)

@@ -1,5 +1,6 @@
 #include <assert.h>
 
+#include <QCheckBox>
 #include <QComboBox>
 #include <QLineEdit>
 #include <QMetaEnum>
@@ -156,4 +157,24 @@ void VTreeWidgetItemEnum::initialize()
   QObject::connect(comboBox, SIGNAL(currentIndexChanged(int)), object, SLOT(enumCurrentIndexChanged(int)));
 
 	this->treeWidget->setItemWidget(this, 1, comboBox);
+}
+
+VTreeWidgetItemBool::VTreeWidgetItemBool(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro) : VTreeWidgetItemProperty(parent, object, mpro)
+{
+}
+
+void VTreeWidgetItemBool::initialize()
+{
+  VTreeWidgetItemProperty::initialize();
+
+  QString propName = caption();
+  QVariant variant = object->property(qPrintable(propName));
+
+  QCheckBox* checkBox = new QCheckBox(treeWidget);
+  checkBox->setProperty("_treeWidgetItem", QVariant::fromValue<void*>((void*)this));
+
+  checkBox->setChecked(variant.toBool());
+  QObject::connect(checkBox, SIGNAL(stateChanged(int)), object, SLOT(boolStateChanged(int)));
+
+  this->treeWidget->setItemWidget(this, 1, checkBox);
 }

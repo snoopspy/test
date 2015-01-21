@@ -86,6 +86,14 @@ public:
 	virtual void initialize();
 };
 
+class VTreeWidgetItemBool : public VTreeWidgetItemProperty
+{
+public:
+  VTreeWidgetItemBool(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro);
+
+  virtual void initialize();
+};
+
 #endif // QT_GUI_LIB
 
 #endif // VWIDGET_H

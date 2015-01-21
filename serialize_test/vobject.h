@@ -32,6 +32,7 @@ public:
 public slots:
   void objectNameEditingFinished();
   void textEditingFinished();
+  void boolStateChanged(int state);
   void enumCurrentIndexChanged(int index);
   void pbAddClicked();
   void pbDelClicked();
