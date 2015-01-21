@@ -1,20 +1,29 @@
 #include "vtcpclient.h"
+#include "vserializer.h"
 
 #ifdef GTEST
 #include <gtest/gtest.h>
 
-TEST(VTcpClientTest, dumpTest)
+class TcpClientTest : public testing::Test
 {
-	VIp::_initialize();
+protected:
+  virtual void SetUp()
+  {
+    VIp::_initialize();
+    VSerializerMgr::_initialize();
+  }
+};
+
+TEST_F(TcpClientTest, dumpTest)
+{
 	VTcpClient tcpClient;
 	tcpClient.ip = 1234;
 	tcpClient.port = 80;
 	VMetaDump::dump(&tcpClient);
 }
 
-TEST(VTcpClientTest, saveLoadTest)
+TEST_F(TcpClientTest, saveLoadTest)
 {
-	VIp::_initialize();
 	VTcpClient tcpClient1;
 	tcpClient1.ip = 1235;
 	tcpClient1.port = 80;

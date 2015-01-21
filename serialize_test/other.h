@@ -34,12 +34,12 @@ public:
 class IntList : public VObject
 {
 	Q_OBJECT
+  Q_PROPERTY(QVariantList intList READ getIntList WRITE setIntList)
 
 public:
 	QList<int> intList;
 
 public:
-	Q_PROPERTY(QVariantList intList READ getIntList WRITE setIntList)
 	QVariantList getIntList()
 	{
 		QVariantList varList;

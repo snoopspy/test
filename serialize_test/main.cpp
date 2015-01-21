@@ -46,14 +46,16 @@ VObject* createObjList()
 	return objList;
 }
 
+#include "vserializer.h"
 int main(int argc, char* argv[])
 {
 	QApplication a(argc, argv);
 	VIp::_initialize();
 	VMac::_initialize();
+  VSerializerMgr::_initialize();
 
-	//VObject* object = createLog();
-	//VObject* object = createTcpClient();
+  //VObject* object = createLog();
+  //VObject* object = createTcpClient();
   //VObject* object = createNestedClient();
   //VObject* object = createNetInfo();
   VObject* object = createObjList();

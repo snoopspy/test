@@ -20,9 +20,6 @@ public:
 	bool loadFromFile(QString fileName);
 	bool saveToFile(QString fileName);
 
-protected:
-	static QVariant convert(QVariant from, int type);
-
 public:
 	virtual void load(VRep& rep);
 	virtual void save(VRep& rep);

@@ -1,9 +1,22 @@
 #include "other.h"
+#include "vserializer.h"
 
 #ifdef GTEST
 #include <gtest/gtest.h>
 
-TEST(NestedClientTest, saveLoadTest)
+class OtherTest : public testing::Test
+{
+protected:
+  virtual void SetUp()
+  {
+    VIp::_initialize();
+    VMac::_initialize();
+    VSerializerMgr::_initialize();
+  }
+};
+
+class NestedClientTest : public OtherTest {};
+TEST_F(NestedClientTest, saveLoadTest)
 {
 	VIp::_initialize();
 
@@ -19,7 +32,8 @@ TEST(NestedClientTest, saveLoadTest)
 	EXPECT_TRUE(nc2.tcpClient.port == 81);
 }
 
-TEST(VNetInfoTest, saveLoadTest)
+class NetInfoTest : public OtherTest {};
+TEST_F(NetInfoTest, saveLoadTest)
 {
 	VIp::_initialize();
 	VMac::_initialize();
@@ -30,7 +44,8 @@ TEST(VNetInfoTest, saveLoadTest)
 	netInfo.saveToFile("ni.json");
 }
 
-TEST(IntListTest, saveLoadTest)
+class IntListTest : public OtherTest {};
+TEST_F(IntListTest, saveLoadTest)
 {
 	IntList il;
 	il.intList.push_back(1);
@@ -43,7 +58,8 @@ TEST(IntListTest, saveLoadTest)
 	EXPECT_TRUE(il2.intList.count() == 3);
 }
 
-TEST(ObjListTest, saveLoadTest)
+class ObjListTest : public OtherTest {};
+TEST_F(ObjListTest, saveLoadTest)
 {
 	VIp::_initialize();
 

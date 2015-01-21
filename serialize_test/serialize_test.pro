@@ -30,7 +30,8 @@ SOURCES += main.cpp \
     vmetadump.cpp \
     other.cpp \
     vmac.cpp \
-    vwidget.cpp
+    vwidget.cpp \
+    vserializer.cpp
 
 HEADERS += \
     vip.h \
@@ -44,7 +45,8 @@ HEADERS += \
     vmetadump.h \
     other.h \
     vmac.h \
-    vwidget.h
+    vwidget.h \
+    vserializer.h
 
 OTHER_FILES += \
     to_do_list.txt

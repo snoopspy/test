@@ -12,6 +12,7 @@
 
 #include "vmetadump.h"
 #include "vobject.h"
+#include "vserializer.h"
 #include "vwidget.h"
 
 bool VObject::loadFromFile(QString fileName)
@@ -30,120 +31,38 @@ bool VObject::saveToFile(QString fileName)
 	return rep.saveToFile(fileName);
 }
 
-QVariant VObject::convert(QVariant from, int type)
-{
-	QVariant to(type, NULL);
-
-	void* fromData     = from.data();
-	int   fromUserType = from.userType();
-	void* toData       = to.data();
-	int   toUserType   = to.userType();
-	bool res = QMetaType::convert(fromData, fromUserType, toData, toUserType);
-	if (!res)
-	{
-		printf("VObject::load QMetaType::convert return false\n");
-		VMetaDump::dump(&from); // gilgil temp 2015.01.07
-		VMetaDump::dump(&to); // gilgil temp 2015.01.07
-	}
-	return to;
-}
-
 void VObject::load(VRep& rep)
 {
 	const QMetaObject *mobj = this->metaObject();
 	int count = mobj->propertyCount();
+  VSerializerMgr& mgr = VSerializerMgr::instance();
+
 	for (int propIndex = 0; propIndex < count; propIndex++)
 	{
-		QMetaProperty mpro      = mobj->property(propIndex);
-		const char*   propName  = mpro.name();
-		QVariant      propValue = rep[propName];
-		int           userType  = mpro.userType();
-
-		if (userType == qMetaTypeId<VObject*>())
-		{
-			VObject* childObj = this->property(propName).value<VObject*>();
-			VRep     childRep = rep[propName].toMap();
-			childObj->load(childRep);
-		} else
-		if (userType == qMetaTypeId<VObjectList*>())
-		{
-			VObjectList* childObjectList = this->property(propName).value<VObjectList*>();
-			VRep childRepList = rep[propName].toMap();
-			for (VRep::iterator it = childRepList.begin(); it != childRepList.end(); it++)
-			{
-				VRep childRep = it->toMap();
-				VObject* vobj = childObjectList->createObject();
-				vobj->load(childRep);
-				childObjectList->push_back(vobj);
-			}
-		} else
-		if (mpro.isEnumType())
-		{
-			QMetaEnum menum = mpro.enumerator();
-			QString   key   = propValue.toString();
-			QVariant  to    = menum.keyToValue(qPrintable(key));
-			this->setProperty(propName, to);
-		} else
-		if (QMetaType::hasRegisteredConverterFunction(QVariant::String, userType))
-		{
-			QVariant to = convert(propValue, userType);
-			this->setProperty(propName, to);
-		} else
-		{
-			this->setProperty(propName, propValue);
-		}
-	}
+    QMetaProperty mpro = mobj->property(propIndex);
+    if (!mgr.load(this, mpro, rep))
+    {
+      printf("mgr.load return false\n");
+      break;
+    }
+  }
 }
 
 void VObject::save(VRep& rep)
 {
 	const QMetaObject *mobj = this->metaObject();
 	int count = mobj->propertyCount();
+  VSerializerMgr& mgr = VSerializerMgr::instance();
+
 	for (int propIndex = 0; propIndex < count; propIndex++)
 	{
-		QMetaProperty mpro      = mobj->property(propIndex);
-		const char*   propName  = mpro.name();
-		QVariant      propValue = this->property(propName);
-		int           userType  = mpro.userType();
-
-		if (userType == qMetaTypeId<VObject*>())
-		{
-			VObject* childObj = this->property(propName).value<VObject*>();
-			VRep     childRep;
-			childObj->save(childRep);
-			rep[propName] = childRep;
-		} else
-		if (userType == qMetaTypeId<VObjectList*>())
-		{
-			VObjectList* childObjectList = this->property(propName).value<VObjectList*>();
-			VRep childRepList;
-			int i = 0;
-			foreach (VObject* childObj, *childObjectList)
-			{
-				VRep childRep;
-				childObj->save(childRep);
-				childRepList[QString::number(i)] = childRep;
-				i++;
-			}
-			rep[propName] = childRepList;
-		} else
-		if (mpro.isEnumType())
-		{
-			QMetaEnum menum = mpro.enumerator();
-			int       index = propValue.toInt();
-			QString   to    = menum.key(index);
-			rep[propName] = to;
-		} else
-		if (QMetaType::hasRegisteredConverterFunction(userType, QVariant::String))
-		{
-			QVariant to = convert(propValue, QVariant::String);
-			rep[propName] = to;
-		} else
-		{
-			if (!(QString(propName) == "objectName" && propValue == ""))
-				rep[propName] = propValue;
-		}
-	}
+    QMetaProperty mpro = mobj->property(propIndex);
+    if (!mgr.save(this, mpro, rep))
+    {
+      printf("mgr.save return false\n");
+      break;
+    }
+  }
 }
 
 #ifdef QT_GUI_LIB
@@ -157,48 +76,17 @@ void VObject::createTreeWidgetItems(VTreeWidgetItem* parent)
 {
   const QMetaObject *mobj = this->metaObject();
   int count = this->metaObject()->propertyCount();
+  VSerializerMgr& mgr = VSerializerMgr::instance();
 
   for (int propIndex = 0; propIndex < count; propIndex++)
   {
-    QMetaProperty mpro     = mobj->property(propIndex);
-    const char*   propName = mpro.name();
-    int           userType = mpro.userType();
-
+    QMetaProperty mpro = mobj->property(propIndex);
+    const char* propName = mpro.name();
     if (QString(propName) == "objectName") continue;
-
-    if (userType == qMetaTypeId<VObject*>())
+    if (!mgr.createTreeWidgetItems(parent, this, mpro))
     {
-      VObject* childObj = this->property(propName).value<VObject*>();
-      VTreeWidgetItemObject* item = new VTreeWidgetItemObject(parent, childObj, VTreeWidgetItemObject::SHOW_OBJECT_NAME);
-      item->initialize();
-      childObj->createTreeWidgetItems(item);
-    } else
-    if (userType == qMetaTypeId<VObjectList*>())
-    {
-      VObjectList* childObjectList = this->property(propName).value<VObjectList*>();
-      VTreeWidgetItemObjectList* item = new VTreeWidgetItemObjectList(parent, this, mpro);
-      item->initialize();
-
-      foreach (VObject* childObj, *childObjectList)
-      {
-        VTreeWidgetItemObject* childItem = new VTreeWidgetItemObject(item, childObj, VTreeWidgetItemObject::SHOW_DEL_BUTTON);
-        childItem->initialize();
-        childObj->createTreeWidgetItems(childItem);
-      }
-    } else
-    if (mpro.isEnumType())
-    {
-      VTreeWidgetItemEnum* item = new VTreeWidgetItemEnum(parent, this, mpro);
-      item->initialize();
-    } else
-    if (QMetaType::hasRegisteredConverterFunction(userType, QVariant::String))
-    {
-      VTreeWidgetItemText* item = new VTreeWidgetItemText(parent, this, mpro);
-      item->initialize();
-    } else
-    {
-      VTreeWidgetItemText* item = new VTreeWidgetItemText(parent, this, mpro);
-      item->initialize();
+      printf("mgr.save return false\n");
+      break;
     }
   }
 }
@@ -232,7 +120,7 @@ void VObject::textEditingFinished()
 
   if (QMetaType::hasRegisteredConverterFunction(userType, QVariant::String))
   {
-    QVariant to = VObject::convert(propValue, userType);
+    QVariant to = VConvertSerializer::convert(propValue, userType);
     item->object->setProperty(propName, to);
   } else
   {
