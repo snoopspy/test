@@ -16,7 +16,7 @@ public:
 #endif // QT_GUI_LIB
 };
 
-class VBaseSerializer : public VSerializer
+class VStrSerializer : public VSerializer
 {
 public:
   virtual bool load(VObject* object, QMetaProperty mpro, VRep& rep);

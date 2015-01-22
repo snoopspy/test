@@ -111,7 +111,7 @@ void VObject::textEditingFinished()
   QLineEdit* lineEdit = (QLineEdit*)this->sender();
   assert(lineEdit != NULL);
 
-  VTreeWidgetItemText* item = (VTreeWidgetItemText*)(qvariant_cast<void*>(lineEdit->property("_treeWidgetItem")));
+  VTreeWidgetItemStr* item = (VTreeWidgetItemStr*)(qvariant_cast<void*>(lineEdit->property("_treeWidgetItem")));
   assert(item != NULL);
 
   QMetaProperty mpro      = item->mpro;

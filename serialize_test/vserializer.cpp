@@ -2,7 +2,7 @@
 #include <stdio.h> // for printf
 #include "vserializer.h"
 
-bool VBaseSerializer::load(VObject* object, QMetaProperty mpro, VRep& rep)
+bool VStrSerializer::load(VObject* object, QMetaProperty mpro, VRep& rep)
 {
   const char* propName = mpro.name();
   QVariant value = rep[propName];
@@ -10,7 +10,7 @@ bool VBaseSerializer::load(VObject* object, QMetaProperty mpro, VRep& rep)
   return true;
 }
 
-bool VBaseSerializer::save(VObject* object, QMetaProperty mpro, VRep& rep)
+bool VStrSerializer::save(VObject* object, QMetaProperty mpro, VRep& rep)
 {
   const char* propName = mpro.name();
   QVariant value = object->property(propName);
@@ -20,9 +20,9 @@ bool VBaseSerializer::save(VObject* object, QMetaProperty mpro, VRep& rep)
 }
 
 #ifdef QT_GUI_LIB
-bool VBaseSerializer::createTreeWidgetItems(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro)
+bool VStrSerializer::createTreeWidgetItems(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro)
 {
-  VTreeWidgetItemText* item = new VTreeWidgetItemText(parent, object, mpro);
+  VTreeWidgetItemStr* item = new VTreeWidgetItemStr(parent, object, mpro);
   item->initialize();
   return true;
 }
@@ -135,7 +135,7 @@ bool VConvertSerializer::createTreeWidgetItems(VTreeWidgetItem* parent, VObject*
 {
   int userType = mpro.userType();
   if (!QMetaType::hasRegisteredConverterFunction(userType, QVariant::String)) return false;
-  VTreeWidgetItemText* item = new VTreeWidgetItemText(parent, object, mpro);
+  VTreeWidgetItemStr* item = new VTreeWidgetItemStr(parent, object, mpro);
   item->initialize();
   return true;
 }
@@ -281,7 +281,7 @@ bool VSerializerMgr::createTreeWidgetItems(VTreeWidgetItem* parent, VObject* obj
 
 void VSerializerMgr::_initialize()
 {
-  static VBaseSerializer       baseSerializer;
+  static VStrSerializer        strSerializer;
   static VBoolSerializer       boolSerializer;
   static VEnumSerializer       enumSerializer;
   static VConvertSerializer    convertSerializer;
@@ -289,7 +289,7 @@ void VSerializerMgr::_initialize()
   static VObjectListSerializer objectListSerializer;
 
   VSerializerMgr& mgr = VSerializerMgr::instance();
-  mgr.serializerList.push_back(&baseSerializer);
+  mgr.serializerList.push_back(&strSerializer);
   mgr.serializerList.push_back(&boolSerializer);
   mgr.serializerList.push_back(&enumSerializer);
   mgr.serializerList.push_back(&convertSerializer);

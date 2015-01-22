@@ -10,6 +10,9 @@
 class VObject;
 class VObjectList;
 
+// ----------------------------------------------------------------------------
+// VTreeWidget
+// ----------------------------------------------------------------------------
 class VTreeWidget : public QTreeWidget
 {
 	Q_OBJECT
@@ -21,6 +24,9 @@ public:
 	VObject* object;
 };
 
+// ----------------------------------------------------------------------------
+// VTreeWidgetItem
+// ----------------------------------------------------------------------------
 class VTreeWidgetItem : public QTreeWidgetItem
 {
 public:
@@ -32,24 +38,9 @@ public:
 	virtual void initialize();
 };
 
-class VTreeWidgetItemObject : public VTreeWidgetItem
-{
-public:
-	typedef enum {
-		SHOW_OBJECT_NAME,
-		SHOW_DEL_BUTTON
-	} Type;
-public:
-	VTreeWidgetItemObject(VTreeWidget* treeWidget, VObject* object); // for root VObject
-	VTreeWidgetItemObject(VTreeWidgetItem* parent, VObject* object, Type type);
-
-	VObject* object;
-	Type type;
-
-	virtual QString caption();
-	virtual void initialize();
-};
-
+// ----------------------------------------------------------------------------
+// VTreeWidgetItemProperty
+// ----------------------------------------------------------------------------
 class VTreeWidgetItemProperty : public VTreeWidgetItem
 {
 public:
@@ -62,22 +53,31 @@ public:
 	virtual void initialize();
 };
 
-class VTreeWidgetItemObjectList : public VTreeWidgetItemProperty
+// ----------------------------------------------------------------------------
+// VTreeWidgetItemStr
+// ----------------------------------------------------------------------------
+class VTreeWidgetItemStr : public VTreeWidgetItemProperty
 {
 public:
-  VTreeWidgetItemObjectList(VTreeWidgetItem *parent, VObject* object, QMetaProperty mpro);
+  VTreeWidgetItemStr(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro);
 
 	virtual void initialize();
 };
 
-class VTreeWidgetItemText : public VTreeWidgetItemProperty
+// ----------------------------------------------------------------------------
+// VTreeWidgetItemBool
+// ----------------------------------------------------------------------------
+class VTreeWidgetItemBool : public VTreeWidgetItemProperty
 {
 public:
-  VTreeWidgetItemText(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro);
+  VTreeWidgetItemBool(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro);
 
-	virtual void initialize();
+  virtual void initialize();
 };
 
+// ----------------------------------------------------------------------------
+// VTreeWidgetItemEnum
+// ----------------------------------------------------------------------------
 class VTreeWidgetItemEnum : public VTreeWidgetItemProperty
 {
 public:
@@ -86,10 +86,34 @@ public:
 	virtual void initialize();
 };
 
-class VTreeWidgetItemBool : public VTreeWidgetItemProperty
+// ----------------------------------------------------------------------------
+// VTreeWidgetItemObject
+// ----------------------------------------------------------------------------
+class VTreeWidgetItemObject : public VTreeWidgetItem
 {
 public:
-  VTreeWidgetItemBool(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro);
+  typedef enum {
+    SHOW_OBJECT_NAME,
+    SHOW_DEL_BUTTON
+  } Type;
+public:
+  VTreeWidgetItemObject(VTreeWidget* treeWidget, VObject* object); // for root VObject
+  VTreeWidgetItemObject(VTreeWidgetItem* parent, VObject* object, Type type);
+
+  VObject* object;
+  Type type;
+
+  virtual QString caption();
+  virtual void initialize();
+};
+
+// ----------------------------------------------------------------------------
+// VTreeWidgetItemObjectList
+// ----------------------------------------------------------------------------
+class VTreeWidgetItemObjectList : public VTreeWidgetItemProperty
+{
+public:
+  VTreeWidgetItemObjectList(VTreeWidgetItem *parent, VObject* object, QMetaProperty mpro);
 
   virtual void initialize();
 };

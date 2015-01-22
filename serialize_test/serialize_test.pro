@@ -8,7 +8,8 @@ QT += core
 QT += gui widgets
 #QT -= gui
 
-include (../../../google/gtest/gtest.pri)
+include(../../../vdream/vdream91/lib/vdream.pri)
+include(../../../google/gtest/gtest.pri)
 
 TARGET = serialize_test
 CONFIG   += console
