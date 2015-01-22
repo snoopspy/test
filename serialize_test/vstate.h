@@ -9,7 +9,7 @@ typedef enum {
 	Opening,
 	Opened,
 	Closing
-} VState;
-Q_DECLARE_METATYPE(VState)
+} _VState;
+Q_DECLARE_METATYPE(_VState)
 
 #endif // VSTATE_H

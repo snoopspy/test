@@ -5,33 +5,33 @@
 #include "vtcpclient.h"
 #include "vmac.h"
 
-class NestedClient : public VObject
+class NestedClient : public _VObject
 {
 	Q_OBJECT
-	Q_PROPERTY(VObject* tcpClient READ getTcpClient)
+	Q_PROPERTY(_VObject* tcpClient READ getTcpClient)
 
 public:
-	VTcpClient tcpClient;
+	_VTcpClient tcpClient;
 public:
-	VObject* getTcpClient()
+	_VObject* getTcpClient()
 	{
 		return &tcpClient;
 	}
 };
 
-class VNetInfo : public VObject
+class VNetInfo : public _VObject
 {
 	Q_OBJECT
-  Q_PROPERTY(VIp ip MEMBER ip)
-  Q_PROPERTY(VMac mac MEMBER mac)
+  Q_PROPERTY(_VIp ip MEMBER ip)
+  Q_PROPERTY(_VMac mac MEMBER mac)
 public:
 	// VNetInfo() {}
 
-	VIp ip;
-	VMac mac;
+	_VIp ip;
+	_VMac mac;
 };
 
-class IntList : public VObject
+class IntList : public _VObject
 {
 	Q_OBJECT
   Q_PROPERTY(QVariantList intList READ getIntList WRITE setIntList)
@@ -55,8 +55,8 @@ public:
 	}
 };
 
-typedef _VObjectList<VTcpClient> VTcpClientList;
-class ObjList : public VObject
+typedef _VObjectList<_VTcpClient> VTcpClientList;
+class ObjList : public _VObject
 {
 	Q_OBJECT
   Q_PROPERTY(bool enabled MEMBER enabled)
@@ -67,7 +67,7 @@ public:
 	VTcpClientList tcpClientList;
 
 public:
-  ObjList() : VObject(NULL) { enabled = true; }
+  ObjList() : _VObject(NULL) { enabled = true; }
 	VObjectList* getTcpClientList() { return &tcpClientList; }
 };
 

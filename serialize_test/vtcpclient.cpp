@@ -9,14 +9,14 @@ class TcpClientTest : public testing::Test
 protected:
   virtual void SetUp()
   {
-    VIp::_initialize();
+    _VIp::_initialize();
     VSerializerMgr::_initialize();
   }
 };
 
 TEST_F(TcpClientTest, dumpTest)
 {
-	VTcpClient tcpClient;
+	_VTcpClient tcpClient;
 	tcpClient.ip = 1234;
 	tcpClient.port = 80;
 	VMetaDump::dump(&tcpClient);
@@ -24,12 +24,12 @@ TEST_F(TcpClientTest, dumpTest)
 
 TEST_F(TcpClientTest, saveLoadTest)
 {
-	VTcpClient tcpClient1;
+	_VTcpClient tcpClient1;
 	tcpClient1.ip = 1235;
 	tcpClient1.port = 80;
 	tcpClient1.saveToFile("tcpClient.json");
 
-	VTcpClient tcpClient2;
+	_VTcpClient tcpClient2;
 	tcpClient2.loadFromFile("tcpClient.json");
 	EXPECT_TRUE(tcpClient2.ip == 1235);
 	EXPECT_TRUE(tcpClient2.port == 80);

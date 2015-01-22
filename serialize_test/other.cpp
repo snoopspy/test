@@ -9,8 +9,8 @@ class OtherTest : public testing::Test
 protected:
   virtual void SetUp()
   {
-    VIp::_initialize();
-    VMac::_initialize();
+    _VIp::_initialize();
+    _VMac::_initialize();
     VSerializerMgr::_initialize();
   }
 };
@@ -18,7 +18,7 @@ protected:
 class NestedClientTest : public OtherTest {};
 TEST_F(NestedClientTest, saveLoadTest)
 {
-	VIp::_initialize();
+	_VIp::_initialize();
 
 	NestedClient nc;
 	nc.tcpClient.ip = 1111;
@@ -35,8 +35,8 @@ TEST_F(NestedClientTest, saveLoadTest)
 class NetInfoTest : public OtherTest {};
 TEST_F(NetInfoTest, saveLoadTest)
 {
-	VIp::_initialize();
-	VMac::_initialize();
+	_VIp::_initialize();
+	_VMac::_initialize();
 
 	VNetInfo netInfo;
 	netInfo.ip = 1111;
@@ -61,21 +61,21 @@ TEST_F(IntListTest, saveLoadTest)
 class ObjListTest : public OtherTest {};
 TEST_F(ObjListTest, saveLoadTest)
 {
-	VIp::_initialize();
+	_VIp::_initialize();
 
 	ObjList ol;
-	VTcpClient* tcpClient;
-	tcpClient = new VTcpClient;
+	_VTcpClient* tcpClient;
+	tcpClient = new _VTcpClient;
 	tcpClient->ip = 1111;
 	tcpClient->port = 1111;
 	ol.tcpClientList.push_back(tcpClient);
 
-	tcpClient = new VTcpClient;
+	tcpClient = new _VTcpClient;
 	tcpClient->ip = 2222;
 	tcpClient->port = 2222;
 	ol.tcpClientList.push_back(tcpClient);
 
-	tcpClient = new VTcpClient;
+	tcpClient = new _VTcpClient;
 	tcpClient->ip = 3333;
 	tcpClient->port = 3333;
 	ol.tcpClientList.push_back(tcpClient);
@@ -90,9 +90,9 @@ TEST_F(ObjListTest, saveLoadTest)
 	int count = ol2.tcpClientList.count();
 	for (int i = 0; i < count; i++)
 	{
-		VObject* obj = ol2.tcpClientList.at(i);
+		_VObject* obj = ol2.tcpClientList.at(i);
 		EXPECT_TRUE(obj != NULL);
-		VTcpClient* tcpClient = dynamic_cast<VTcpClient*>(obj);
+		_VTcpClient* tcpClient = dynamic_cast<_VTcpClient*>(obj);
 		EXPECT_TRUE(tcpClient != NULL);
 		expect += 1111;
 		EXPECT_TRUE(tcpClient->ip == (quint32)expect);

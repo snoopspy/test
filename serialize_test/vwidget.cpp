@@ -12,7 +12,7 @@
 // ----------------------------------------------------------------------------
 // VTreeWidget
 // ----------------------------------------------------------------------------
-VTreeWidget::VTreeWidget(QWidget *parent, VObject* object) : QTreeWidget(parent)
+VTreeWidget::VTreeWidget(QWidget *parent, _VObject* object) : QTreeWidget(parent)
 {
 	this->object = object;
 	this->setColumnCount(2);
@@ -49,7 +49,7 @@ void VTreeWidgetItem::initialize()
 // ----------------------------------------------------------------------------
 // VTreeWidgetItemProperty
 // ----------------------------------------------------------------------------
-VTreeWidgetItemProperty::VTreeWidgetItemProperty(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro) : VTreeWidgetItem(parent)
+VTreeWidgetItemProperty::VTreeWidgetItemProperty(VTreeWidgetItem* parent, _VObject* object, QMetaProperty mpro) : VTreeWidgetItem(parent)
 {
 	this->object = object;
   this->mpro = mpro;
@@ -69,7 +69,7 @@ void VTreeWidgetItemProperty::initialize()
 // ----------------------------------------------------------------------------
 // VTreeWidgetItemStr
 // ----------------------------------------------------------------------------
-VTreeWidgetItemStr::VTreeWidgetItemStr(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro) : VTreeWidgetItemProperty(parent, object, mpro)
+VTreeWidgetItemStr::VTreeWidgetItemStr(VTreeWidgetItem* parent, _VObject* object, QMetaProperty mpro) : VTreeWidgetItemProperty(parent, object, mpro)
 {
 }
 
@@ -91,7 +91,7 @@ void VTreeWidgetItemStr::initialize()
 // ----------------------------------------------------------------------------
 // VTreeWidgetItemBool
 // ----------------------------------------------------------------------------
-VTreeWidgetItemBool::VTreeWidgetItemBool(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro) : VTreeWidgetItemProperty(parent, object, mpro)
+VTreeWidgetItemBool::VTreeWidgetItemBool(VTreeWidgetItem* parent, _VObject* object, QMetaProperty mpro) : VTreeWidgetItemProperty(parent, object, mpro)
 {
 }
 
@@ -114,7 +114,7 @@ void VTreeWidgetItemBool::initialize()
 // ----------------------------------------------------------------------------
 // VTreeWidgetItemEnum
 // ----------------------------------------------------------------------------
-VTreeWidgetItemEnum::VTreeWidgetItemEnum(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro) : VTreeWidgetItemProperty(parent, object, mpro)
+VTreeWidgetItemEnum::VTreeWidgetItemEnum(VTreeWidgetItem* parent, _VObject* object, QMetaProperty mpro) : VTreeWidgetItemProperty(parent, object, mpro)
 {
 }
 
@@ -145,14 +145,14 @@ void VTreeWidgetItemEnum::initialize()
 // ----------------------------------------------------------------------------
 // VTreeWidgetItemObject
 // ----------------------------------------------------------------------------
-VTreeWidgetItemObject::VTreeWidgetItemObject(VTreeWidget* treeWidget, VObject* object) : VTreeWidgetItem(NULL)
+VTreeWidgetItemObject::VTreeWidgetItemObject(VTreeWidget* treeWidget, _VObject* object) : VTreeWidgetItem(NULL)
 {
   this->treeWidget = treeWidget;
   this->object = object;
   this->type = SHOW_OBJECT_NAME;
 }
 
-VTreeWidgetItemObject::VTreeWidgetItemObject(VTreeWidgetItem *parent, VObject* object, Type type) : VTreeWidgetItem(parent)
+VTreeWidgetItemObject::VTreeWidgetItemObject(VTreeWidgetItem *parent, _VObject* object, Type type) : VTreeWidgetItem(parent)
 {
   this->object = object;
   this->type = type;
@@ -188,7 +188,7 @@ void VTreeWidgetItemObject::initialize()
 // ----------------------------------------------------------------------------
 // VTreeWidgetItemObjectList
 // ----------------------------------------------------------------------------
-VTreeWidgetItemObjectList::VTreeWidgetItemObjectList(VTreeWidgetItem *parent, VObject* object, QMetaProperty mpro) : VTreeWidgetItemProperty(parent, object, mpro)
+VTreeWidgetItemObjectList::VTreeWidgetItemObjectList(VTreeWidgetItem *parent, _VObject* object, QMetaProperty mpro) : VTreeWidgetItemProperty(parent, object, mpro)
 {
 }
 

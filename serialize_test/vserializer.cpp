@@ -2,7 +2,7 @@
 #include <stdio.h> // for printf
 #include "vserializer.h"
 
-bool VStrSerializer::load(VObject* object, QMetaProperty mpro, VRep& rep)
+bool VStrSerializer::load(_VObject* object, QMetaProperty mpro, VRep& rep)
 {
   const char* propName = mpro.name();
   QVariant value = rep[propName];
@@ -10,7 +10,7 @@ bool VStrSerializer::load(VObject* object, QMetaProperty mpro, VRep& rep)
   return true;
 }
 
-bool VStrSerializer::save(VObject* object, QMetaProperty mpro, VRep& rep)
+bool VStrSerializer::save(_VObject* object, QMetaProperty mpro, VRep& rep)
 {
   const char* propName = mpro.name();
   QVariant value = object->property(propName);
@@ -20,7 +20,7 @@ bool VStrSerializer::save(VObject* object, QMetaProperty mpro, VRep& rep)
 }
 
 #ifdef QT_GUI_LIB
-bool VStrSerializer::createTreeWidgetItems(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro)
+bool VStrSerializer::createTreeWidgetItems(VTreeWidgetItem* parent, _VObject* object, QMetaProperty mpro)
 {
   VTreeWidgetItemStr* item = new VTreeWidgetItemStr(parent, object, mpro);
   item->initialize();
@@ -28,7 +28,7 @@ bool VStrSerializer::createTreeWidgetItems(VTreeWidgetItem* parent, VObject* obj
 }
 #endif // QT_GUI_LIB
 
-bool VBoolSerializer::load(VObject* object, QMetaProperty mpro, VRep& rep)
+bool VBoolSerializer::load(_VObject* object, QMetaProperty mpro, VRep& rep)
 {
   int userType = mpro.userType();
   if (userType != QVariant::Bool) return false;
@@ -38,7 +38,7 @@ bool VBoolSerializer::load(VObject* object, QMetaProperty mpro, VRep& rep)
   return true;
 }
 
-bool VBoolSerializer::save(VObject* object, QMetaProperty mpro, VRep& rep)
+bool VBoolSerializer::save(_VObject* object, QMetaProperty mpro, VRep& rep)
 {
   int userType = mpro.userType();
   if (userType != QVariant::Bool) return false;
@@ -49,7 +49,7 @@ bool VBoolSerializer::save(VObject* object, QMetaProperty mpro, VRep& rep)
 }
 
 #ifdef QT_GUI_LIB
-bool VBoolSerializer::createTreeWidgetItems(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro)
+bool VBoolSerializer::createTreeWidgetItems(VTreeWidgetItem* parent, _VObject* object, QMetaProperty mpro)
 {
   int userType = mpro.userType();
   if (userType != QVariant::Bool) return false;
@@ -59,7 +59,7 @@ bool VBoolSerializer::createTreeWidgetItems(VTreeWidgetItem* parent, VObject* ob
 }
 #endif // QT_GUI_LIB
 
-bool VEnumSerializer::load(VObject* object, QMetaProperty mpro, VRep& rep)
+bool VEnumSerializer::load(_VObject* object, QMetaProperty mpro, VRep& rep)
 {
   if (!mpro.isEnumType()) return false;
   QMetaEnum menum = mpro.enumerator();
@@ -70,7 +70,7 @@ bool VEnumSerializer::load(VObject* object, QMetaProperty mpro, VRep& rep)
   return true;
 }
 
-bool VEnumSerializer::save(VObject* object, QMetaProperty mpro, VRep& rep)
+bool VEnumSerializer::save(_VObject* object, QMetaProperty mpro, VRep& rep)
 {
   if (!mpro.isEnumType()) return false;
   QMetaEnum menum = mpro.enumerator();
@@ -83,7 +83,7 @@ bool VEnumSerializer::save(VObject* object, QMetaProperty mpro, VRep& rep)
 }
 
 #ifdef QT_GUI_LIB
-bool VEnumSerializer::createTreeWidgetItems(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro)
+bool VEnumSerializer::createTreeWidgetItems(VTreeWidgetItem* parent, _VObject* object, QMetaProperty mpro)
 {
   if (!mpro.isEnumType()) return false;
   VTreeWidgetItemEnum* item = new VTreeWidgetItemEnum(parent, object, mpro);
@@ -103,12 +103,12 @@ QVariant VConvertSerializer::convert(QVariant from, int type)
   bool res = QMetaType::convert(fromData, fromUserType, toData, toUserType);
   if (!res)
   {
-    printf("VObject::load QMetaType::convert return false\n");
+    printf("_VObject::load QMetaType::convert return false\n");
   }
   return to;
 }
 
-bool VConvertSerializer::load(VObject* object, QMetaProperty mpro, VRep& rep)
+bool VConvertSerializer::load(_VObject* object, QMetaProperty mpro, VRep& rep)
 {
   int userType = mpro.userType();
   if (!QMetaType::hasRegisteredConverterFunction(QVariant::String, userType)) return false;
@@ -119,7 +119,7 @@ bool VConvertSerializer::load(VObject* object, QMetaProperty mpro, VRep& rep)
   return true;
 }
 
-bool VConvertSerializer::save(VObject* object, QMetaProperty mpro, VRep& rep)
+bool VConvertSerializer::save(_VObject* object, QMetaProperty mpro, VRep& rep)
 {
   int userType = mpro.userType();
   if (!QMetaType::hasRegisteredConverterFunction(userType, QVariant::String)) return false;
@@ -131,7 +131,7 @@ bool VConvertSerializer::save(VObject* object, QMetaProperty mpro, VRep& rep)
 }
 
 #ifdef QT_GUI_LIB
-bool VConvertSerializer::createTreeWidgetItems(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro)
+bool VConvertSerializer::createTreeWidgetItems(VTreeWidgetItem* parent, _VObject* object, QMetaProperty mpro)
 {
   int userType = mpro.userType();
   if (!QMetaType::hasRegisteredConverterFunction(userType, QVariant::String)) return false;
@@ -141,24 +141,24 @@ bool VConvertSerializer::createTreeWidgetItems(VTreeWidgetItem* parent, VObject*
 }
 #endif // QT_GUI_LIB
 
-bool VObjectSerializer::load(VObject* object, QMetaProperty mpro, VRep& rep)
+bool VObjectSerializer::load(_VObject* object, QMetaProperty mpro, VRep& rep)
 {
   int userType = mpro.userType();
-  if (userType != qMetaTypeId<VObject*>()) return false;
+  if (userType != qMetaTypeId<_VObject*>()) return false;
   const char* propName = mpro.name();
-  VObject* childObj = object->property(propName).value<VObject*>();
+  _VObject* childObj = object->property(propName).value<_VObject*>();
   assert(childObj != NULL);
   VRep childRep = rep[propName].toMap();
   childObj->load(childRep);
   return true;
 }
 
-bool VObjectSerializer::save(VObject* object, QMetaProperty mpro, VRep& rep)
+bool VObjectSerializer::save(_VObject* object, QMetaProperty mpro, VRep& rep)
 {
   int userType = mpro.userType();
-  if (userType != qMetaTypeId<VObject*>()) return false;
+  if (userType != qMetaTypeId<_VObject*>()) return false;
   const char* propName = mpro.name();
-  VObject* childObj = object->property(propName).value<VObject*>();
+  _VObject* childObj = object->property(propName).value<_VObject*>();
   VRep childRep;
   childObj->save(childRep);
   rep[propName] = childRep;
@@ -166,12 +166,12 @@ bool VObjectSerializer::save(VObject* object, QMetaProperty mpro, VRep& rep)
 }
 
 #ifdef QT_GUI_LIB
-bool VObjectSerializer::createTreeWidgetItems(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro)
+bool VObjectSerializer::createTreeWidgetItems(VTreeWidgetItem* parent, _VObject* object, QMetaProperty mpro)
 {
   int userType = mpro.userType();
-  if (userType != qMetaTypeId<VObject*>()) return false;
+  if (userType != qMetaTypeId<_VObject*>()) return false;
   const char* propName = mpro.name();
-  VObject* childObj = object->property(propName).value<VObject*>();
+  _VObject* childObj = object->property(propName).value<_VObject*>();
   assert(childObj != NULL);
   VTreeWidgetItemObject* item = new VTreeWidgetItemObject(parent, childObj, VTreeWidgetItemObject::SHOW_OBJECT_NAME);
   item->initialize();
@@ -180,7 +180,7 @@ bool VObjectSerializer::createTreeWidgetItems(VTreeWidgetItem* parent, VObject* 
 }
 #endif // QT_GUI_LIB
 
-bool VObjectListSerializer::load(VObject* object, QMetaProperty mpro, VRep& rep)
+bool VObjectListSerializer::load(_VObject* object, QMetaProperty mpro, VRep& rep)
 {
   int userType = mpro.userType();
   if (userType != qMetaTypeId<VObjectList*>()) return false;
@@ -191,14 +191,14 @@ bool VObjectListSerializer::load(VObject* object, QMetaProperty mpro, VRep& rep)
   for (VRep::iterator it = childRepList.begin(); it != childRepList.end(); it++)
   {
     VRep childRep = it->toMap();
-    VObject* vobj = childObjList->createObject();
+    _VObject* vobj = childObjList->createObject();
     vobj->load(childRep);
     childObjList->push_back(vobj);
   }
   return true;
 }
 
-bool VObjectListSerializer::save(VObject* object, QMetaProperty mpro, VRep& rep)
+bool VObjectListSerializer::save(_VObject* object, QMetaProperty mpro, VRep& rep)
 {
   int userType = mpro.userType();
   if (userType != qMetaTypeId<VObjectList*>()) return false;
@@ -207,7 +207,7 @@ bool VObjectListSerializer::save(VObject* object, QMetaProperty mpro, VRep& rep)
   assert(childObjtList != NULL);
   VRep childRepList;
   int i = 0;
-  foreach (VObject* childObj, *childObjtList)
+  foreach (_VObject* childObj, *childObjtList)
   {
     VRep childRep;
     childObj->save(childRep);
@@ -219,7 +219,7 @@ bool VObjectListSerializer::save(VObject* object, QMetaProperty mpro, VRep& rep)
 }
 
 #ifdef QT_GUI_LIB
-bool VObjectListSerializer::createTreeWidgetItems(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro)
+bool VObjectListSerializer::createTreeWidgetItems(VTreeWidgetItem* parent, _VObject* object, QMetaProperty mpro)
 {
   int userType = mpro.userType();
   if (userType != qMetaTypeId<VObjectList*>()) return false;
@@ -228,7 +228,7 @@ bool VObjectListSerializer::createTreeWidgetItems(VTreeWidgetItem* parent, VObje
   assert(childObjectList != NULL);
   VTreeWidgetItemObjectList* item = new VTreeWidgetItemObjectList(parent, object, mpro);
   item->initialize();
-  foreach (VObject* childObj, *childObjectList)
+  foreach (_VObject* childObj, *childObjectList)
   {
     VTreeWidgetItemObject* childItem = new VTreeWidgetItemObject(item, childObj, VTreeWidgetItemObject::SHOW_DEL_BUTTON);
     childItem->initialize();
@@ -238,7 +238,7 @@ bool VObjectListSerializer::createTreeWidgetItems(VTreeWidgetItem* parent, VObje
 }
 #endif // QT_GUI_LIB
 
-bool VSerializerMgr::load(VObject* object, QMetaProperty mpro, VRep& rep)
+bool VSerializerMgr::load(_VObject* object, QMetaProperty mpro, VRep& rep)
 {
   int count = serializerList.count();
   for (int i = count - 1; i >= 0; i--)
@@ -251,7 +251,7 @@ bool VSerializerMgr::load(VObject* object, QMetaProperty mpro, VRep& rep)
   return false;
 }
 
-bool VSerializerMgr::save(VObject* object, QMetaProperty mpro, VRep& rep)
+bool VSerializerMgr::save(_VObject* object, QMetaProperty mpro, VRep& rep)
 {
   int count = serializerList.count();
   for (int i = count - 1; i >= 0; i--)
@@ -265,7 +265,7 @@ bool VSerializerMgr::save(VObject* object, QMetaProperty mpro, VRep& rep)
 }
 
 #ifdef QT_GUI_LIB
-bool VSerializerMgr::createTreeWidgetItems(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro)
+bool VSerializerMgr::createTreeWidgetItems(VTreeWidgetItem* parent, _VObject* object, QMetaProperty mpro)
 {
   int count = serializerList.count();
   for (int i = count - 1; i >= 0; i--)

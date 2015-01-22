@@ -16,7 +16,7 @@
 #include "vserializer.h"
 #include "vwidget.h"
 
-bool VObject::loadFromFile(QString fileName)
+bool _VObject::loadFromFile(QString fileName)
 {
 	VRep rep;
 	if (!rep.loadFromFile(fileName))
@@ -25,14 +25,14 @@ bool VObject::loadFromFile(QString fileName)
 	return true;
 }
 
-bool VObject::saveToFile(QString fileName)
+bool _VObject::saveToFile(QString fileName)
 {
 	VRep rep;
 	this->save(rep);
 	return rep.saveToFile(fileName);
 }
 
-void VObject::load(VRep& rep)
+void _VObject::load(VRep& rep)
 {
 	const QMetaObject *mobj = this->metaObject();
 	int count = mobj->propertyCount();
@@ -49,7 +49,7 @@ void VObject::load(VRep& rep)
   }
 }
 
-void VObject::save(VRep& rep)
+void _VObject::save(VRep& rep)
 {
 	const QMetaObject *mobj = this->metaObject();
 	int count = mobj->propertyCount();
@@ -67,13 +67,13 @@ void VObject::save(VRep& rep)
 }
 
 #ifdef QT_GUI_LIB
-QWidget* VObject::createWidget(QWidget* parent)
+QWidget* _VObject::createWidget(QWidget* parent)
 {
   VTreeWidget* treeWidget = new VTreeWidget(parent, this);
   return treeWidget;
 }
 
-void VObject::createTreeWidgetItems(VTreeWidgetItem* parent)
+void _VObject::createTreeWidgetItems(VTreeWidgetItem* parent)
 {
   const QMetaObject *mobj = this->metaObject();
   int count = this->metaObject()->propertyCount();
@@ -92,7 +92,7 @@ void VObject::createTreeWidgetItems(VTreeWidgetItem* parent)
   }
 }
 
-void VObject::objectNameEditingFinished()
+void _VObject::objectNameEditingFinished()
 {
   QLineEdit* lineEdit = (QLineEdit*)this->sender();
   assert(lineEdit != NULL);
@@ -100,13 +100,13 @@ void VObject::objectNameEditingFinished()
   VTreeWidgetItemObject* item = (VTreeWidgetItemObject*)(qvariant_cast<void*>(lineEdit->property("_treeWidgetItem")));
   assert(item != NULL);
 
-  VObject* object = item->object;
+  _VObject* object = item->object;
   assert(object != NULL);
 
   object->setObjectName(lineEdit->text());
 }
 
-void VObject::textEditingFinished()
+void _VObject::textEditingFinished()
 {
   QLineEdit* lineEdit = (QLineEdit*)this->sender();
   assert(lineEdit != NULL);
@@ -129,7 +129,7 @@ void VObject::textEditingFinished()
   }
 }
 
-void VObject::boolStateChanged(int state)
+void _VObject::boolStateChanged(int state)
 {
   QCheckBox* checkBox = (QCheckBox*)this->sender();
   assert(checkBox != NULL);
@@ -141,7 +141,7 @@ void VObject::boolStateChanged(int state)
   item->object->setProperty(qPrintable(propName), propValue);
 }
 
-void VObject::enumCurrentIndexChanged(int index)
+void _VObject::enumCurrentIndexChanged(int index)
 {
   QComboBox* comboBox = (QComboBox*)this->sender();
   assert(comboBox != NULL);
@@ -153,7 +153,7 @@ void VObject::enumCurrentIndexChanged(int index)
   item->object->setProperty(qPrintable(propName), propValue);
 }
 
-void VObject::pbAddClicked()
+void _VObject::pbAddClicked()
 {
   QPushButton* pbAdd = dynamic_cast<QPushButton*>(sender());
   assert(pbAdd != NULL);
@@ -161,7 +161,7 @@ void VObject::pbAddClicked()
   VTreeWidgetItemObjectList* item = (VTreeWidgetItemObjectList*)(qvariant_cast<void*>(pbAdd->property("_treeWidgetItem")));
   assert(item != NULL);
 
-  VObject* object = item->object;
+  _VObject* object = item->object;
   assert(object != NULL);
 
   QMetaProperty mpro = item->mpro;
@@ -169,13 +169,13 @@ void VObject::pbAddClicked()
   VObjectList* objectList = variant.value<VObjectList*>();
   assert(objectList != NULL);
 
-  VObject* newObject = objectList->createObject();
+  _VObject* newObject = objectList->createObject();
   VTreeWidgetItemObject* childItem = new VTreeWidgetItemObject(item, newObject, VTreeWidgetItemObject::SHOW_DEL_BUTTON);
   childItem->initialize();
   newObject->createTreeWidgetItems(childItem);
 }
 
-void VObject::pbDelClicked()
+void _VObject::pbDelClicked()
 {
   QPushButton* pbDel = dynamic_cast<QPushButton*>(sender());
   assert(pbDel != NULL);
@@ -183,13 +183,13 @@ void VObject::pbDelClicked()
   VTreeWidgetItemObject* item = (VTreeWidgetItemObject*)qvariant_cast<void*>(pbDel->property("_treeWidgetItem"));
   assert(item != NULL);
 
-  VObject* delObject = item->object;
+  _VObject* delObject = item->object;
   assert(delObject != NULL);
 
   VTreeWidgetItemObjectList* parentItem = dynamic_cast<VTreeWidgetItemObjectList*>(item->parent());
   assert(parentItem != NULL);
 
-  VObject* object = parentItem->object;
+  _VObject* object = parentItem->object;
   assert(object != NULL);
 
   QMetaProperty mpro = parentItem->mpro;

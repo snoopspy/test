@@ -1,10 +1,10 @@
 #include <QApplication>
 
 #include "vtcpclient.h"
-VObject* createTcpClient()
+_VObject* createTcpClient()
 {
-	VIp::_initialize();
-	VTcpClient* tcpClient = new VTcpClient;
+	_VIp::_initialize();
+  _VTcpClient* tcpClient = new _VTcpClient;
 	tcpClient->setObjectName("tcpClient1");
 	tcpClient->ip = 1111;
 	tcpClient->port = 222;
@@ -12,7 +12,7 @@ VObject* createTcpClient()
 }
 
 #include "other.h"
-VObject* createNestedClient()
+_VObject* createNestedClient()
 {
 	NestedClient* nc = new NestedClient;
 	nc->setObjectName("nestedClient1");
@@ -21,14 +21,14 @@ VObject* createNestedClient()
 }
 
 #include "vlog.h"
-VObject* createLog()
+_VObject* createLog()
 {
-	VLog* log = new VLog;
+	_VLog* log = new _VLog;
 	log->setObjectName("log1");
 	return log;
 }
 
-VObject* createNetInfo()
+_VObject* createNetInfo()
 {
 	VNetInfo* netInfo = new VNetInfo;
   netInfo->setObjectName("newInfo1");
@@ -37,12 +37,12 @@ VObject* createNetInfo()
 	return netInfo;
 }
 
-VObject* createObjList()
+_VObject* createObjList()
 {
 	ObjList* objList = new ObjList;
 	objList->setObjectName("objList1");
-	objList->tcpClientList.append(new VTcpClient);
-  objList->tcpClientList.append(new VTcpClient);
+  objList->tcpClientList.append(new _VTcpClient);
+  objList->tcpClientList.append(new _VTcpClient);
 	return objList;
 }
 
@@ -50,15 +50,15 @@ VObject* createObjList()
 int main(int argc, char* argv[])
 {
 	QApplication a(argc, argv);
-	VIp::_initialize();
-	VMac::_initialize();
+	_VIp::_initialize();
+	_VMac::_initialize();
   VSerializerMgr::_initialize();
 
-  //VObject* object = createLog();
-  //VObject* object = createTcpClient();
-  //VObject* object = createNestedClient();
-  //VObject* object = createNetInfo();
-  VObject* object = createObjList();
+  //_VObject* object = createLog();
+  //_VObject* object = createTcpClient();
+  //_VObject* object = createNestedClient();
+  //_VObject* object = createNetInfo();
+  _VObject* object = createObjList();
 
   QWidget* widget = object->createWidget(NULL);
   widget->show();

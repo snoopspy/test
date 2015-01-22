@@ -4,7 +4,7 @@
 #include "vmetadump.h"
 #include "vobject.h"
 
-class VLog : public VObject
+class _VLog : public _VObject
 {
 	Q_OBJECT
 
@@ -17,12 +17,12 @@ public:
 	} showDateTime;
 
 public:
-	VLog(VObject *parent = 0) : VObject(parent) { showDateTime = None; }
+  _VLog(_VObject *parent = 0) : _VObject(parent) { showDateTime = None; }
 
 public:
 	Q_PROPERTY(VShowDateTime showDateTime MEMBER showDateTime)
 	Q_ENUMS(VShowDateTime)
 };
-//Q_DECLARE_METATYPE(VLog::VShowDateTime)
+//Q_DECLARE_METATYPE(_VLog::VShowDateTime)
 
 #endif // VLOG_H
