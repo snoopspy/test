@@ -6,12 +6,12 @@
 class VRep : public QVariantMap
 {
 public:
-	VRep() {}
-	VRep(const QVariantMap& rhs) { *((QVariantMap*)this) = rhs; }
+  VRep() {}
+  VRep(const QVariantMap& rhs) { *((QVariantMap*)this) = rhs; }
 
 public:
-	bool loadFromFile(QString fileName);
-	bool saveToFile(QString fileName);
+  bool loadFromFile(QString fileName);
+  bool saveToFile(QString fileName);
 };
 
 #endif // VREP_H

@@ -15,13 +15,13 @@ class VObjectList;
 // ----------------------------------------------------------------------------
 class VTreeWidget : public QTreeWidget
 {
-	Q_OBJECT
+  Q_OBJECT
 
 public:
-	VTreeWidget(QWidget *parent, _VObject* object);
+  VTreeWidget(QWidget *parent, _VObject* object);
 
 public:
-	_VObject* object;
+  _VObject* object;
 };
 
 // ----------------------------------------------------------------------------
@@ -30,12 +30,12 @@ public:
 class VTreeWidgetItem : public QTreeWidgetItem
 {
 public:
-	VTreeWidgetItem(VTreeWidgetItem *parent);
+  VTreeWidgetItem(VTreeWidgetItem *parent);
 
-	VTreeWidget* treeWidget;
+  VTreeWidget* treeWidget;
 
-	virtual QString caption() = 0;
-	virtual void initialize();
+  virtual QString caption() = 0;
+  virtual void initialize();
 };
 
 // ----------------------------------------------------------------------------
@@ -46,11 +46,11 @@ class VTreeWidgetItemProperty : public VTreeWidgetItem
 public:
   VTreeWidgetItemProperty(VTreeWidgetItem* parent, _VObject* object, QMetaProperty mpro);
 
-	_VObject* object;
+  _VObject* object;
   QMetaProperty mpro;
 
-	virtual QString caption();
-	virtual void initialize();
+  virtual QString caption();
+  virtual void initialize();
 };
 
 // ----------------------------------------------------------------------------
@@ -61,7 +61,7 @@ class VTreeWidgetItemStr : public VTreeWidgetItemProperty
 public:
   VTreeWidgetItemStr(VTreeWidgetItem* parent, _VObject* object, QMetaProperty mpro);
 
-	virtual void initialize();
+  virtual void initialize();
 };
 
 // ----------------------------------------------------------------------------
@@ -83,7 +83,7 @@ class VTreeWidgetItemEnum : public VTreeWidgetItemProperty
 public:
   VTreeWidgetItemEnum(VTreeWidgetItem* parent, _VObject* object, QMetaProperty mpro);
 
-	virtual void initialize();
+  virtual void initialize();
 };
 
 // ----------------------------------------------------------------------------

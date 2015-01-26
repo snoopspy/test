@@ -18,28 +18,28 @@
 
 bool _VObject::loadFromFile(QString fileName)
 {
-	VRep rep;
-	if (!rep.loadFromFile(fileName))
-		return false;
-	this->load(rep);
-	return true;
+  VRep rep;
+  if (!rep.loadFromFile(fileName))
+    return false;
+  this->load(rep);
+  return true;
 }
 
 bool _VObject::saveToFile(QString fileName)
 {
-	VRep rep;
-	this->save(rep);
-	return rep.saveToFile(fileName);
+  VRep rep;
+  this->save(rep);
+  return rep.saveToFile(fileName);
 }
 
 void _VObject::load(VRep& rep)
 {
-	const QMetaObject *mobj = this->metaObject();
-	int count = mobj->propertyCount();
+  const QMetaObject *mobj = this->metaObject();
+  int count = mobj->propertyCount();
   VSerializerMgr& mgr = VSerializerMgr::instance();
 
-	for (int propIndex = 0; propIndex < count; propIndex++)
-	{
+  for (int propIndex = 0; propIndex < count; propIndex++)
+  {
     QMetaProperty mpro = mobj->property(propIndex);
     if (!mgr.load(this, mpro, rep))
     {
@@ -51,12 +51,12 @@ void _VObject::load(VRep& rep)
 
 void _VObject::save(VRep& rep)
 {
-	const QMetaObject *mobj = this->metaObject();
-	int count = mobj->propertyCount();
+  const QMetaObject *mobj = this->metaObject();
+  int count = mobj->propertyCount();
   VSerializerMgr& mgr = VSerializerMgr::instance();
 
-	for (int propIndex = 0; propIndex < count; propIndex++)
-	{
+  for (int propIndex = 0; propIndex < count; propIndex++)
+  {
     QMetaProperty mpro = mobj->property(propIndex);
     if (!mgr.save(this, mpro, rep))
     {

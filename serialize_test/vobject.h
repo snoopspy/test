@@ -7,9 +7,9 @@
 
 class _VObject : public QObject, public VSerializable
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	friend class VTreeWidget;
+  friend class VTreeWidget;
 
 public:
   _VObject(_VObject* parent = 0) : QObject(parent) {}
@@ -17,12 +17,12 @@ public:
   virtual ~_VObject() {}
 
 public:
-	bool loadFromFile(QString fileName);
-	bool saveToFile(QString fileName);
+  bool loadFromFile(QString fileName);
+  bool saveToFile(QString fileName);
 
 public:
-	virtual void load(VRep& rep);
-	virtual void save(VRep& rep);
+  virtual void load(VRep& rep);
+  virtual void save(VRep& rep);
 
 #ifdef QT_GUI_LIB
 public:
@@ -44,7 +44,7 @@ class VObjectList : public QList<_VObject*>
 {
 public:
   virtual _VObject* createObject() { return new _VObject; }
-	virtual ~VObjectList() {}
+  virtual ~VObjectList() {}
 };
 Q_DECLARE_METATYPE(VObjectList*)
 

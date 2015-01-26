@@ -5,9 +5,9 @@
 
 TEST(VMacTest, commonTest)
 {
-	_VMac mac = QString("123456");
-	QString s = mac;
-	printf("%s\n", qPrintable(s));
+  _VMac mac = QString("123456");
+  QString s = mac;
+  printf("%s\n", qPrintable(s));
 }
 
 #endif // GTEST

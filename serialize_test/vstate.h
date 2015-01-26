@@ -4,11 +4,11 @@
 #include <QMetaType>
 
 typedef enum {
-	None,
-	Closed,
-	Opening,
-	Opened,
-	Closing
+  None,
+  Closed,
+  Opening,
+  Opened,
+  Closing
 } _VState;
 Q_DECLARE_METATYPE(_VState)
 

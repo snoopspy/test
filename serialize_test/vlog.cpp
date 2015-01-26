@@ -11,20 +11,20 @@ TEST(VLogTest, sizeTest)
 
 TEST(VLogTest, dumpTest)
 {
-	_VLog log;
-	log.showDateTime = _VLog::DateTime;
-	VMetaDump::dump(&log);
+  _VLog log;
+  log.showDateTime = _VLog::DateTime;
+  VMetaDump::dump(&log);
 }
 
 TEST(VLogTest, saveLoadTest)
 {
-	_VLog log;
-	log.showDateTime = _VLog::DateTime;
-	log.saveToFile("log.json");
+  _VLog log;
+  log.showDateTime = _VLog::DateTime;
+  log.saveToFile("log.json");
 
-	_VLog newLog;
-	newLog.loadFromFile("log.json");
-	EXPECT_TRUE(newLog.showDateTime == _VLog::DateTime);
+  _VLog newLog;
+  newLog.loadFromFile("log.json");
+  EXPECT_TRUE(newLog.showDateTime == _VLog::DateTime);
 }
 
 #endif // GTEST

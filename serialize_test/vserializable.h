@@ -6,8 +6,8 @@
 class VSerializable
 {
 public:
-	virtual void load(VRep& rep) = 0;
-	virtual void save(VRep& rep) = 0;
+  virtual void load(VRep& rep) = 0;
+  virtual void save(VRep& rep) = 0;
 };
 
 #endif // VSERIALIZABLE_H
