@@ -9,40 +9,40 @@
 class VSerializer
 {
 public:
-  virtual bool load(_VObject* object, QMetaProperty mpro, VRep& rep) = 0;
-  virtual bool save(_VObject* object, QMetaProperty mpro, VRep& rep) = 0;
+  virtual bool load(VObject* object, QMetaProperty mpro, VRep& rep) = 0;
+  virtual bool save(VObject* object, QMetaProperty mpro, VRep& rep) = 0;
 #ifdef QT_GUI_LIB
-  virtual bool createTreeWidgetItems(VTreeWidgetItem* parent, _VObject* object, QMetaProperty mpro) = 0;
+  virtual bool createTreeWidgetItems(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro) = 0;
 #endif // QT_GUI_LIB
 };
 
 class VStrSerializer : public VSerializer
 {
 public:
-  virtual bool load(_VObject* object, QMetaProperty mpro, VRep& rep);
-  virtual bool save(_VObject* object, QMetaProperty mpro, VRep& rep);
+  virtual bool load(VObject* object, QMetaProperty mpro, VRep& rep);
+  virtual bool save(VObject* object, QMetaProperty mpro, VRep& rep);
 #ifdef QT_GUI_LIB
-  virtual bool createTreeWidgetItems(VTreeWidgetItem* parent, _VObject* object, QMetaProperty mpro);
+  virtual bool createTreeWidgetItems(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro);
 #endif // QT_GUI_LIB
 };
 
 class VBoolSerializer : public VSerializer
 {
 public:
-  virtual bool load(_VObject* object, QMetaProperty mpro, VRep& rep);
-  virtual bool save(_VObject* object, QMetaProperty mpro, VRep& rep);
+  virtual bool load(VObject* object, QMetaProperty mpro, VRep& rep);
+  virtual bool save(VObject* object, QMetaProperty mpro, VRep& rep);
 #ifdef QT_GUI_LIB
-  virtual bool createTreeWidgetItems(VTreeWidgetItem* parent, _VObject* object, QMetaProperty mpro);
+  virtual bool createTreeWidgetItems(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro);
 #endif // QT_GUI_LIB
 };
 
 class VEnumSerializer : public VSerializer
 {
 public:
-  virtual bool load(_VObject* object, QMetaProperty mpro, VRep& rep);
-  virtual bool save(_VObject* object, QMetaProperty mpro, VRep& rep);
+  virtual bool load(VObject* object, QMetaProperty mpro, VRep& rep);
+  virtual bool save(VObject* object, QMetaProperty mpro, VRep& rep);
 #ifdef QT_GUI_LIB
-  virtual bool createTreeWidgetItems(VTreeWidgetItem* parent, _VObject* object, QMetaProperty mpro);
+  virtual bool createTreeWidgetItems(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro);
 #endif // QT_GUI_LIB
 };
 
@@ -52,30 +52,30 @@ public:
   static QVariant convert(QVariant from, int type);
 
 public:
-  virtual bool load(_VObject* object, QMetaProperty mpro, VRep& rep);
-  virtual bool save(_VObject* object, QMetaProperty mpro, VRep& rep);
+  virtual bool load(VObject* object, QMetaProperty mpro, VRep& rep);
+  virtual bool save(VObject* object, QMetaProperty mpro, VRep& rep);
 #ifdef QT_GUI_LIB
-  virtual bool createTreeWidgetItems(VTreeWidgetItem* parent, _VObject* object, QMetaProperty mpro);
+  virtual bool createTreeWidgetItems(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro);
 #endif // QT_GUI_LIB
 };
 
 class VObjectSerializer : public VSerializer
 {
 public:
-  virtual bool load(_VObject* object, QMetaProperty mpro, VRep& rep);
-  virtual bool save(_VObject* object, QMetaProperty mpro, VRep& rep);
+  virtual bool load(VObject* object, QMetaProperty mpro, VRep& rep);
+  virtual bool save(VObject* object, QMetaProperty mpro, VRep& rep);
 #ifdef QT_GUI_LIB
-  virtual bool createTreeWidgetItems(VTreeWidgetItem* parent, _VObject* object, QMetaProperty mpro);
+  virtual bool createTreeWidgetItems(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro);
 #endif // QT_GUI_LIB
 };
 
 class VObjectListSerializer : public VSerializer
 {
 public:
-  virtual bool load(_VObject* object, QMetaProperty mpro, VRep& rep);
-  virtual bool save(_VObject* object, QMetaProperty mpro, VRep& rep);
+  virtual bool load(VObject* object, QMetaProperty mpro, VRep& rep);
+  virtual bool save(VObject* object, QMetaProperty mpro, VRep& rep);
 #ifdef QT_GUI_LIB
-  virtual bool createTreeWidgetItems(VTreeWidgetItem* parent, _VObject* object, QMetaProperty mpro);
+  virtual bool createTreeWidgetItems(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro);
 #endif // QT_GUI_LIB
 };
 
@@ -85,10 +85,10 @@ protected:
   QList<VSerializer*> serializerList;
 
 public:
-  virtual bool load(_VObject* object, QMetaProperty mpro, VRep& rep);
-  virtual bool save(_VObject* object, QMetaProperty mpro, VRep& rep);
+  virtual bool load(VObject* object, QMetaProperty mpro, VRep& rep);
+  virtual bool save(VObject* object, QMetaProperty mpro, VRep& rep);
 #ifdef QT_GUI_LIB
-  virtual bool createTreeWidgetItems(VTreeWidgetItem* parent, _VObject* object, QMetaProperty mpro);
+  virtual bool createTreeWidgetItems(VTreeWidgetItem* parent, VObject* object, QMetaProperty mpro);
 #endif // QT_GUI_LIB
 
 public:

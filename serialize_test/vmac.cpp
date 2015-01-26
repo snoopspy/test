@@ -5,7 +5,7 @@
 
 TEST(VMacTest, commonTest)
 {
-  _VMac mac = QString("123456");
+  VMac mac = QString("123456");
   QString s = mac;
   printf("%s\n", qPrintable(s));
 }

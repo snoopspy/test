@@ -5,16 +5,16 @@
 #include "vserializable.h"
 #include "vwidget.h"
 
-class _VObject : public QObject, public VSerializable
+class VObject : public QObject, public VSerializable
 {
   Q_OBJECT
 
   friend class VTreeWidget;
 
 public:
-  _VObject(_VObject* parent = 0) : QObject(parent) {}
-  _VObject(const _VObject& rhs) : QObject(0) { Q_UNUSED(rhs) }
-  virtual ~_VObject() {}
+  VObject(VObject* parent = 0) : QObject(parent) {}
+  VObject(const VObject& rhs) : QObject(0) { Q_UNUSED(rhs) }
+  virtual ~VObject() {}
 
 public:
   bool loadFromFile(QString fileName);
@@ -38,12 +38,12 @@ public slots:
   void pbDelClicked();
 #endif // QT_GUI_LIB
 };
-Q_DECLARE_METATYPE(_VObject*)
+Q_DECLARE_METATYPE(VObject*)
 
-class VObjectList : public QList<_VObject*>
+class VObjectList : public QList<VObject*>
 {
 public:
-  virtual _VObject* createObject() { return new _VObject; }
+  virtual VObject* createObject() { return new VObject; }
   virtual ~VObjectList() {}
 };
 Q_DECLARE_METATYPE(VObjectList*)
@@ -51,7 +51,8 @@ Q_DECLARE_METATYPE(VObjectList*)
 template <class T>
 class _VObjectList : public VObjectList
 {
-  virtual _VObject* createObject() { return new T; }
+public:
+  virtual VObject* createObject() { return new T; }
 };
 
 #endif // VOBJECT_H

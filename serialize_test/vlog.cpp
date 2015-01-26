@@ -6,25 +6,25 @@
 
 TEST(VLogTest, sizeTest)
 {
-  printf("sizeof(_VLog) is %zu\n", sizeof(_VLog));
+  printf("sizeof(_VLog) is %zu\n", sizeof(VLog));
 }
 
 TEST(VLogTest, dumpTest)
 {
-  _VLog log;
-  log.showDateTime = _VLog::DateTime;
+  VLog log;
+  log.showDateTime = VLog::DateTime;
   VMetaDump::dump(&log);
 }
 
 TEST(VLogTest, saveLoadTest)
 {
-  _VLog log;
-  log.showDateTime = _VLog::DateTime;
+  VLog log;
+  log.showDateTime = VLog::DateTime;
   log.saveToFile("log.json");
 
-  _VLog newLog;
+  VLog newLog;
   newLog.loadFromFile("log.json");
-  EXPECT_TRUE(newLog.showDateTime == _VLog::DateTime);
+  EXPECT_TRUE(newLog.showDateTime == VLog::DateTime);
 }
 
 #endif // GTEST

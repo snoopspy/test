@@ -1,10 +1,9 @@
 #include <QApplication>
-#include "VTcpClient"
 #include "vtcpclient.h"
-_VObject* createTcpClient()
+VObject* createTcpClient()
 {
-  _VIp::_initialize();
-  _VTcpClient* tcpClient = new _VTcpClient;
+  VIp::_initialize();
+  VTcpClient* tcpClient = new VTcpClient;
   tcpClient->setObjectName("tcpClient1");
   tcpClient->ip = 1111;
   tcpClient->port = 222;
@@ -12,7 +11,7 @@ _VObject* createTcpClient()
 }
 
 #include "other.h"
-_VObject* createNestedClient()
+VObject* createNestedClient()
 {
   NestedClient* nc = new NestedClient;
   nc->setObjectName("nestedClient1");
@@ -21,14 +20,14 @@ _VObject* createNestedClient()
 }
 
 #include "vlog.h"
-_VObject* createLog()
+VObject* createLog()
 {
-  _VLog* log = new _VLog;
+  VLog* log = new VLog;
   log->setObjectName("log1");
   return log;
 }
 
-_VObject* createNetInfo()
+VObject* createNetInfo()
 {
   VNetInfo* netInfo = new VNetInfo;
   netInfo->setObjectName("newInfo1");
@@ -37,29 +36,29 @@ _VObject* createNetInfo()
   return netInfo;
 }
 
-_VObject* createObjList()
+VObject* createObjList()
 {
   ObjList* objList = new ObjList;
   objList->setObjectName("objList1");
-  objList->tcpClientList.append(new _VTcpClient);
-  objList->tcpClientList.append(new _VTcpClient);
+  objList->tcpClientList.append(new VTcpClient);
+  objList->tcpClientList.append(new VTcpClient);
   return objList;
 }
 
+/*
 #include "vserializer.h"
 int main(int argc, char* argv[])
 {
   QApplication a(argc, argv);
-  _VIp::_initialize();
-  _VMac::_initialize();
+  VIp::_initialize();
+  VMac::_initialize();
   VSerializerMgr::_initialize();
 
-  //_VObject* object = createLog();
-  //_VObject* object = createTcpClient();
-  //_VObject* object = createNestedClient();
-  //_VObject* object = createNetInfo();
-  _VObject* object = createObjList();
-  //QObject* object = new VTcpClient;
+  //VObject* object = createLog();
+  //VObject* object = createTcpClient();
+  //VObject* object = createNestedClient();
+  //VObject* object = createNetInfo();
+  VObject* object = createObjList();
 
   QWidget* widget = object->createWidget(NULL);
   widget->show();
@@ -68,3 +67,4 @@ int main(int argc, char* argv[])
   delete object;
   return res;
 }
+*/

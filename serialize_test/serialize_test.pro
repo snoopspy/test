@@ -8,7 +8,6 @@ QT += core
 QT += gui widgets
 #QT -= gui
 
-include(../../../vdream/vdream91/lib/vdream.pri)
 include(../../../google/gtest/gtest.pri)
 
 TARGET = serialize_test
