@@ -16,22 +16,6 @@
 #include "vserializer.h"
 #include "vwidget.h"
 
-bool VObject::loadFromFile(QString fileName)
-{
-  VRep rep;
-  if (!rep.loadFromFile(fileName))
-    return false;
-  this->load(rep);
-  return true;
-}
-
-bool VObject::saveToFile(QString fileName)
-{
-  VRep rep;
-  this->save(rep);
-  return rep.saveToFile(fileName);
-}
-
 void VObject::load(VRep& rep)
 {
   const QMetaObject *mobj = this->metaObject();

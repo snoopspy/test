@@ -8,6 +8,9 @@ class VSerializable
 public:
   virtual void load(VRep& rep) = 0;
   virtual void save(VRep& rep) = 0;
+
+  bool loadFromFile(QString fileName, QString path = "");
+  bool saveToFile(const QString fileName, QString path = "");
 };
 
 #endif // VSERIALIZABLE_H

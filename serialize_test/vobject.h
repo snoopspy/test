@@ -17,10 +17,6 @@ public:
   virtual ~VObject() {}
 
 public:
-  bool loadFromFile(QString fileName);
-  bool saveToFile(QString fileName);
-
-public:
   virtual void load(VRep& rep);
   virtual void save(VRep& rep);
 
