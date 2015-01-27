@@ -4,7 +4,8 @@
 
 bool VSerializable::loadFromFile(QString fileName, QString path)
 {
-  VRep rep;
+  VRep src;
+  VRep &rep = src;
   if (!rep.loadFromFile(fileName))
   {
     // log // gilgil temp 2015.01.26
@@ -28,24 +29,29 @@ bool VSerializable::loadFromFile(QString fileName, QString path)
 
 bool VSerializable::saveToFile(const QString fileName, QString path)
 {
-  VRep rep;
-  if (QFile::exists(fileName) && !rep.loadFromFile(fileName))
+  VRep root;
+  VRep* rep = &root;
+  if (QFile::exists(fileName) && !root.loadFromFile(fileName))
   {
     // log // gilgil temp 2015.01.26
     return false;
   }
   QStringList nodes = path.split("/");
-  VRep& tempRep = rep;
   foreach (QString node, nodes)
   {
     if (node == "") continue;
-    VRep::iterator it = tempRep.find(node);
-    if (it == rep.end())
-      it = rep.insert(node, node);
-    tempRep = it.value().toMap();
+    VRep::iterator it = rep->find(node);
+    if (it == rep->end())
+    {
+      VRep childRep;
+      rep->insert(node, childRep);
+      it = rep->find(node);
+    }
+    QVariant& val = it.value();
+    rep = (VRep*)(&val);
   }
-  this->save(rep);
-  return rep.saveToFile(fileName);
+  this->save(*rep);
+  return root.saveToFile(fileName);
 }
 
 #ifdef GTEST
@@ -91,10 +97,10 @@ TEST(SerializeTest, saveLoadTest)
   obj.i = 999;
   obj.s = "hello";
 
-  EXPECT_TRUE(obj.saveToFile("obj.json", "myobj/mypath"));
+  EXPECT_TRUE(obj.saveToFile("obj.json", "mypath/myobj"));
 
   Obj obj2;
-  EXPECT_TRUE(obj2.loadFromFile("obj.json", "myobj/mypath"));
+  EXPECT_TRUE(obj2.loadFromFile("obj.json", "mypath/myobj"));
   EXPECT_EQ(obj2.i, 999);
   EXPECT_EQ(obj2.s, "hello");
 }
