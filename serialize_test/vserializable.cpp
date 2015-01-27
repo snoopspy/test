@@ -1,41 +1,18 @@
+#include <assert.h>
 #include <QDebug>
 #include <QFile>
 #include "vserializable.h"
 
 bool VSerializable::loadFromFile(QString fileName, QString path)
 {
-  VRep src;
-  VRep &rep = src;
-  if (!rep.loadFromFile(fileName))
-  {
-    // log // gilgil temp 2015.01.26
-    return false;
-  }
-  QStringList nodes = path.split("/");
-  foreach (QString node, nodes)
-  {
-    if (node == "") continue;
-    VRep::iterator it = rep.find(node);
-    if (it == rep.end())
-    {
-      // log // gilgil temp 2015.01.26
-      return false;
-    }
-    rep = it.value().toMap();
-  }
-  this->load(rep);
-  return true;
-}
-
-bool VSerializable::saveToFile(const QString fileName, QString path)
-{
   VRep root;
-  VRep* rep = &root;
-  if (QFile::exists(fileName) && !root.loadFromFile(fileName))
+  if (!root.loadFromFile(fileName))
   {
     // log // gilgil temp 2015.01.26
     return false;
   }
+
+  VRep* rep = &root;
   QStringList nodes = path.split("/");
   foreach (QString node, nodes)
   {
@@ -43,12 +20,38 @@ bool VSerializable::saveToFile(const QString fileName, QString path)
     VRep::iterator it = rep->find(node);
     if (it == rep->end())
     {
-      VRep childRep;
-      rep->insert(node, childRep);
+      // log // gilgil temp 2015.01.26
+      return false;
+    }
+    QVariant& val = *it;
+    rep = (VRep*)(val.data());
+  }
+  this->load(*rep);
+  return true;
+}
+
+bool VSerializable::saveToFile(const QString fileName, QString path)
+{
+  VRep root;
+  if (QFile::exists(fileName) && !root.loadFromFile(fileName))
+  {
+    // log // gilgil temp 2015.01.26
+    return false;
+  }
+
+  VRep* rep = &root;
+  QStringList nodes = path.split("/");
+  foreach (QString node, nodes)
+  {
+    if (node == "") continue;
+    VRep::iterator it = rep->find(node);
+    if (it == rep->end())
+    {
+      rep->insert(node, VRep());
       it = rep->find(node);
     }
-    QVariant& val = it.value();
-    rep = (VRep*)(&val);
+    QVariant& val = *it;
+    rep = (VRep*)(val.data());
   }
   this->save(*rep);
   return root.saveToFile(fileName);
