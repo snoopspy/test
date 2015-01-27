@@ -11,6 +11,8 @@ public:
 
   bool loadFromFile(QString fileName, QString path = "");
   bool saveToFile(const QString fileName, QString path = "");
+  bool loadFromDefaultDoc(QString path);
+  bool saveToDefaultDoc(QString path);
 };
 
 #endif // VSERIALIZABLE_H

@@ -12,6 +12,11 @@ public:
 public:
   bool loadFromFile(QString fileName);
   bool saveToFile(QString fileName);
+  VRep* move(QString path, bool createNode);
+
+public:
+  static QString defaultFileName();
+  static VRep& instance();
 };
 
 #endif // VREP_H

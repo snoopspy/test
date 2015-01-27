@@ -12,20 +12,8 @@ bool VSerializable::loadFromFile(QString fileName, QString path)
     return false;
   }
 
-  VRep* rep = &root;
-  QStringList nodes = path.split("/");
-  foreach (QString node, nodes)
-  {
-    if (node == "") continue;
-    VRep::iterator it = rep->find(node);
-    if (it == rep->end())
-    {
-      // log // gilgil temp 2015.01.26
-      return false;
-    }
-    QVariant& val = *it;
-    rep = (VRep*)(val.data());
-  }
+  VRep* rep = root.move(path, false);
+  if (rep == NULL) return false;
   this->load(*rep);
   return true;
 }
@@ -39,22 +27,28 @@ bool VSerializable::saveToFile(const QString fileName, QString path)
     return false;
   }
 
-  VRep* rep = &root;
-  QStringList nodes = path.split("/");
-  foreach (QString node, nodes)
-  {
-    if (node == "") continue;
-    VRep::iterator it = rep->find(node);
-    if (it == rep->end())
-    {
-      rep->insert(node, VRep());
-      it = rep->find(node);
-    }
-    QVariant& val = *it;
-    rep = (VRep*)(val.data());
-  }
+  VRep* rep = root.move(path, true);
+  if (rep == NULL) return false;
   this->save(*rep);
   return root.saveToFile(fileName);
+}
+
+bool VSerializable::loadFromDefaultDoc(QString path)
+{
+  VRep& root = VRep::instance();
+  VRep* rep = root.move(path, false);
+  if (rep == NULL) return false;
+  this->load(*rep);
+  return true;
+}
+
+bool VSerializable::saveToDefaultDoc(QString path)
+{
+  VRep& root = VRep::instance();
+  VRep* rep = root.move(path, true);
+  if (rep == NULL) return false;
+  this->save(*rep);
+  return true;
 }
 
 #ifdef GTEST
