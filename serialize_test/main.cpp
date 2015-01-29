@@ -45,7 +45,6 @@ VObject* createObjList()
   return objList;
 }
 
-/*
 #include "vserializer.h"
 int main(int argc, char* argv[])
 {
@@ -67,4 +66,3 @@ int main(int argc, char* argv[])
   delete object;
   return res;
 }
-*/

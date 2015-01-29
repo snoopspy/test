@@ -37,21 +37,6 @@ void VFactory::registerCategory(QString categoryName, const QMetaObject* mobj)
     mobjList.push_back(mobj);
 }
 
-QObject* VFactory::createObject(QString className)
-{
-  VCreateMap::iterator it = createMap.find(className);
-  if (it == createMap.end())
-    return NULL;
-  const QMetaObject* mobj = it.value();
-  if (mobj == NULL)
-    return NULL;
-  QObject* obj = mobj->newInstance();
-  if (obj == NULL)
-    return NULL;
-  return obj;
-}
-
-
 VFactory::VMetaObjectList VFactory::getChildsByParentClassName(QString parentClassName)
 {
   for (VHierachyMap::iterator it = hierachyMap.begin(); it != hierachyMap.end(); it++)
@@ -95,6 +80,20 @@ VFactory::VMetaObjectList VFactory::getChildsByCategoryName(QString categoryName
     }
   }
   return VMetaObjectList();
+}
+
+QObject* VFactory::createByClassName(QString className)
+{
+  VCreateMap::iterator it = createMap.find(className);
+  if (it == createMap.end())
+    return NULL;
+  const QMetaObject* mobj = it.value();
+  if (mobj == NULL)
+    return NULL;
+  QObject* obj = mobj->newInstance();
+  if (obj == NULL)
+    return NULL;
+  return obj;
 }
 
 bool VFactory::isAncestor(const QMetaObject* mobj, QString className)
@@ -154,35 +153,35 @@ TEST_F(VFactoryTest, createObjectTest)
 {
   QObject* object;
 
-  object = factory.createObject("Obj");
+  object = factory.createByClassName("Obj");
   EXPECT_TRUE(dynamic_cast<Obj*>(object) != NULL);
   delete object;
 
-  object = factory.createObject("Obj1");
+  object = factory.createByClassName("Obj1");
   EXPECT_TRUE(dynamic_cast<Obj1*>(object) != NULL);
   delete object;
 
-  object = factory.createObject("Obj2");
+  object = factory.createByClassName("Obj2");
   EXPECT_TRUE(dynamic_cast<Obj2*>(object) != NULL);
   delete object;
 
-  object = factory.createObject("Obj3");
+  object = factory.createByClassName("Obj3");
   EXPECT_TRUE(dynamic_cast<Obj3*>(object) != NULL);
   delete object;
 
-  object = factory.createObject("Obj31");
+  object = factory.createByClassName("Obj31");
   EXPECT_TRUE(dynamic_cast<Obj31*>(object) != NULL);
   delete object;
 
-  object = factory.createObject("Obj32");
+  object = factory.createByClassName("Obj32");
   EXPECT_TRUE(dynamic_cast<Obj32*>(object) != NULL);
   delete object;
 
-  object = factory.createObject("Obj33");
+  object = factory.createByClassName("Obj33");
   EXPECT_TRUE(dynamic_cast<Obj33*>(object) != NULL);
   delete object;
 
-  object = factory.createObject("Obj34");
+  object = factory.createByClassName("Obj34");
   EXPECT_TRUE(dynamic_cast<Obj34*>(object) != NULL);
   delete object;
 }

@@ -7,6 +7,8 @@
 class VLog : public VObject
 {
   Q_OBJECT
+  Q_PROPERTY(VShowDateTime showDateTime MEMBER showDateTime)
+  Q_ENUMS(VShowDateTime)
 
 public:
   enum VShowDateTime
@@ -18,10 +20,6 @@ public:
 
 public:
   VLog(VObject *parent = 0) : VObject(parent) { showDateTime = None; }
-
-public:
-  Q_PROPERTY(VShowDateTime showDateTime MEMBER showDateTime)
-  Q_ENUMS(VShowDateTime)
 };
 //Q_DECLARE_METATYPE(_VLog::VShowDateTime)
 

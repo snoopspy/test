@@ -24,11 +24,13 @@ public:
 
   void registerObject(const QMetaObject* mobj);
   void registerCategory(QString categoryName, const QMetaObject* mobj);
-  QObject* createObject(QString className);
 
   VMetaObjectList getChildsByParentClassName(QString parentClassName);
   VMetaObjectList getChildsByAncestorClassName(QString ancestorClassName);
   VMetaObjectList getChildsByCategoryName(QString categoryName);
+
+  QObject* createByClassName(QString className);
+  static QObject* createByDefaultDoc(const QString& path); // gilgil temp 2015.01.29 serialize
 
 protected:
   static bool isAncestor(const QMetaObject* mobj, QString className);
