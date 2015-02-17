@@ -1,7 +1,7 @@
-SOURCES=main.cpp
-OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=$(shell basename $(PWD))
-LDFLAGS+=-lpthread
+SOURCES = main.cpp
+OBJECTS = $(SOURCES:.cpp=.o)
+EXECUTABLE = $(shell basename $(PWD))
+LDFLAGS += -lpthread
 
 all: $(SOURCES) $(EXECUTABLE)
 
