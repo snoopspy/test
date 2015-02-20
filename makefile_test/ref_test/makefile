@@ -1,6 +1,6 @@
 VAL=1
-REF1=$(VAL)
-CPY1:=$(VAL)
+REF1=$(VAL)  # recursively expanded variable
+CPY1:=$(VAL) # simply expanded variable
 VAL=2
 REF2=$(VAL)
 CPY2:=$(VAL)
