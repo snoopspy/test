@@ -2,7 +2,7 @@
 # debug and release
 #------------------------------------------------------------------------------
 CONFIG(debug, debug|release)   DEFINES += _DEBUG
-CONFIG(release, debug|release) DEFINES += _RELEASE
+CONFIG(release, debug|release) DEFINES += _RELEASE NDEBUG
 
 #------------------------------------------------------------------------------
 # library name
