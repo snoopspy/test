@@ -49,5 +49,5 @@ app_:
 clean:
 	find  -name '*.o' -delete
 	find  -name '*.pro.user' -delete
-	find  -name 'Makefile' -delete
+	find  -name 'Makefile*' -delete
 
